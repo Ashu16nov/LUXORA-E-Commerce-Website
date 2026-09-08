@@ -27,7 +27,7 @@ const products = [
   // Men
   {
     name: 'Classic White Shirt',
-    brand: 'ÉLAN',
+    brand: 'LUXORA',
     description: 'A crisp, classic white shirt tailored for a perfect fit.',
     category: 'Men',
     subCategory: 'Shirts',

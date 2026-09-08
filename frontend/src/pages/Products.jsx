@@ -94,7 +94,7 @@ const Products = () => {
             <h4>Brand</h4>
             <select name="brand" value={filters.brand} onChange={handleFilterChange} className="form-input">
               <option value="">All Brands</option>
-              <option value="ÉLAN">ÉLAN</option>
+              <option value="LUXORA">LUXORA</option>
               <option value="Nike">Nike</option>
               <option value="Zara">Zara</option>
               <option value="H&M">H&M</option>

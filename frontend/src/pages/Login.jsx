@@ -33,7 +33,7 @@ const Login = () => {
     <div className="auth-container">
       <div className="auth-box">
         <h2>Sign In</h2>
-        <p className="auth-subtitle">Welcome back to ÉLAN</p>
+        <p className="auth-subtitle">Welcome back to LUXORA</p>
         
         {error && <div className="auth-error">{error}</div>}
         

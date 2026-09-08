@@ -39,7 +39,7 @@ const Register = () => {
     <div className="auth-container">
       <div className="auth-box">
         <h2>Create Account</h2>
-        <p className="auth-subtitle">Join ÉLAN for exclusive benefits</p>
+        <p className="auth-subtitle">Join LUXORA for exclusive benefits</p>
         
         {error && <div className="auth-error">{error}</div>}
         

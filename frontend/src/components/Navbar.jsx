@@ -14,7 +14,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="container navbar-container">
         <Link to="/" className="navbar-logo">
-          ÉLAN
+          LUXORA
         </Link>
         
         <div className={`navbar-links ${isMenuOpen ? 'active' : ''}`}>

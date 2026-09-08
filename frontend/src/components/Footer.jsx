@@ -7,8 +7,8 @@ const Footer = () => {
     <footer className="footer">
       <div className="container grid grid-cols-4 footer-grid">
         <div className="footer-section brand-section">
-          <h2>ÉLAN</h2>
-          <p>Style Beyond Trends</p>
+          <h2>LUXORA</h2>
+          <p>Wear Your Confidence</p>
           <p className="mt-2">Discover the latest collections crafted for every version of you.</p>
         </div>
         
@@ -44,7 +44,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} LUXORA / ÉLAN. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} LUXORA. All rights reserved.</p>
       </div>
     </footer>
   );

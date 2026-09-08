@@ -1,6 +1,6 @@
 # LUXORA - "Wear Your Confidence" 🛍️
 
-LUXORA (branded as **ÉLAN**) is a complete, modern, responsive, and professional **Online Fashion Shopping Website** built using the **MERN Stack** (MongoDB, Express.js, React.js, Node.js). 
+LUXORA is a complete, modern, responsive, and professional **Online Fashion Shopping Website** built using the **MERN Stack** (MongoDB, Express.js, React.js, Node.js). 
 
 This project features a premium, fashion-editorial aesthetic, robust RESTful APIs, dynamic filtering, and a fully functional shopping cart.
 
