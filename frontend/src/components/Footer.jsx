@@ -7,8 +7,8 @@ const Footer = () => {
     <footer className="footer">
       <div className="container grid grid-cols-4 footer-grid">
         <div className="footer-section brand-section">
-          <h2>LUXORA</h2>
-          <p>Wear Your Confidence</p>
+          <h2 className="luxora-title">LUXORA</h2>
+          <p className="luxora-tagline">Wear Your Confidence</p>
           <p className="mt-2">Discover the latest collections crafted for every version of you.</p>
         </div>
         
