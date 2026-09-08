@@ -1,0 +1,49 @@
+.footer {
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: 4rem 0 0 0;
+  margin-top: 4rem;
+}
+
+.footer h2 {
+  color: var(--white);
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+}
+
+.footer h3 {
+  color: var(--white);
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.footer p {
+  color: #aaaaaa;
+  font-size: 0.875rem;
+}
+
+.footer ul li {
+  margin-bottom: 0.75rem;
+}
+
+.footer ul li a {
+  color: #aaaaaa;
+  font-size: 0.875rem;
+}
+
+.footer ul li a:hover {
+  color: var(--accent-color);
+}
+
+.footer-bottom {
+  border-top: 1px solid #333333;
+  padding: 1.5rem 0;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+@media (max-width: 768px) {
+  .footer-grid {
+    gap: 2rem;
+  }
+}
