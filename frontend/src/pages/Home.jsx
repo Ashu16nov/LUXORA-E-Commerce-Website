@@ -30,7 +30,7 @@ const Home = () => {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
-          <h1>DEFINE YOUR STYLE</h1>
+          <h1>Wear Your Confidence</h1>
           <p>Discover the latest collections crafted for every version of you.</p>
           <div className="hero-buttons">
             <Link to="/products?category=Men" className="btn btn-primary">Shop Men</Link>
