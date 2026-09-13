@@ -17,9 +17,9 @@ const Cart = () => {
 
   const handleCheckout = () => {
     if (!user) {
-      navigate('/login?redirect=cart');
+      navigate('/login?redirect=checkout');
     } else {
-      alert('Proceeding to checkout (Simulated)');
+      navigate('/checkout');
     }
   };
 

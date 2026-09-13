@@ -20,6 +20,12 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
+  address: {
+    street: { type: String, default: '' },
+    city: { type: String, default: '' },
+    postalCode: { type: String, default: '' },
+    country: { type: String, default: '' },
+  },
 }, {
   timestamps: true,
 });

@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
-import { Filter, X } from 'lucide-react';
+import { Filter, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Products.css';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -16,6 +19,8 @@ const Products = () => {
   
   const category = queryParams.get('category') || '';
   const search = queryParams.get('search') || '';
+  const pageParam = queryParams.get('page') || 1;
+  
   const [filters, setFilters] = useState({
     brand: '',
     minPrice: '',
@@ -24,14 +29,17 @@ const Products = () => {
     sort: ''
   });
 
+  const categoriesList = ['Men', 'Women', 'Kids', 'Accessories'];
+
   useEffect(() => {
     fetchProducts();
-  }, [category, search, filters]);
+    window.scrollTo(0, 0);
+  }, [category, search, filters, pageParam]);
 
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      let url = `http://localhost:5000/api/products?`;
+      let url = `http://localhost:5000/api/products?page=${pageParam}&`;
       if (category) url += `category=${category}&`;
       if (search) url += `search=${search}&`;
       if (filters.brand) url += `brand=${filters.brand}&`;
@@ -41,7 +49,14 @@ const Products = () => {
       if (filters.sort) url += `sort=${filters.sort}&`;
       
       const { data } = await axios.get(url);
-      setProducts(data);
+      if (data.products) {
+        setProducts(data.products);
+        setPage(data.page);
+        setPages(data.pages);
+        setTotalCount(data.count);
+      } else {
+        setProducts(data);
+      }
     } catch (error) {
       console.error('Error fetching products', error);
     }
@@ -50,6 +65,30 @@ const Products = () => {
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
+    // Reset page to 1 on filter change
+    updateURLParams({ page: 1 });
+  };
+
+  const handleCategoryClick = (cat) => {
+    updateURLParams({ category: cat, page: 1 });
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= pages) {
+      updateURLParams({ page: newPage });
+    }
+  };
+
+  const updateURLParams = (newParams) => {
+    const params = new URLSearchParams(location.search);
+    Object.keys(newParams).forEach(key => {
+      if (newParams[key]) {
+        params.set(key, newParams[key]);
+      } else {
+        params.delete(key);
+      }
+    });
+    navigate(`/products?${params.toString()}`);
   };
 
   const clearFilters = () => {
@@ -80,6 +119,30 @@ const Products = () => {
             <button onClick={() => setIsFilterOpen(false)}><X size={24} /></button>
           </div>
           
+          <div className="filter-group category-nav">
+            <h4>Categories</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              <li style={{ marginBottom: '8px' }}>
+                <button 
+                  onClick={() => handleCategoryClick('')}
+                  style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontWeight: category === '' ? 'bold' : 'normal', color: category === '' ? 'var(--primary-color)' : 'inherit', textAlign: 'left', fontSize: '1rem' }}
+                >
+                  All Categories
+                </button>
+              </li>
+              {categoriesList.map(cat => (
+                <li key={cat} style={{ marginBottom: '8px' }}>
+                  <button 
+                    onClick={() => handleCategoryClick(cat)}
+                    style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontWeight: category === cat ? 'bold' : 'normal', color: category === cat ? 'var(--primary-color)' : 'inherit', textAlign: 'left', fontSize: '1rem' }}
+                  >
+                    {cat}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <div className="filter-group">
             <h4>Sort By</h4>
             <select name="sort" value={filters.sort} onChange={handleFilterChange} className="form-input">
@@ -99,6 +162,9 @@ const Products = () => {
               <option value="Zara">Zara</option>
               <option value="H&M">H&M</option>
               <option value="Levi's">Levi's</option>
+              <option value="Coach">Coach</option>
+              <option value="Fossil">Fossil</option>
+              <option value="Ray-Ban">Ray-Ban</option>
             </select>
           </div>
 
@@ -138,11 +204,37 @@ const Products = () => {
               <button className="btn btn-primary mt-4" onClick={clearFilters}>Clear Filters</button>
             </div>
           ) : (
-            <div className="grid grid-cols-3">
-              {products.map(product => (
-                <ProductCard key={product._id} product={product} />
-              ))}
-            </div>
+            <>
+              <p className="mb-4 text-sm" style={{ color: '#666' }}>Showing {products.length} of {totalCount} products</p>
+              <div className="grid grid-cols-4">
+                {products.map(product => (
+                  <ProductCard key={product._id} product={product} />
+                ))}
+              </div>
+              
+              {/* Pagination */}
+              {pages > 1 && (
+                <div className="pagination flex justify-center items-center mt-8 gap-4">
+                  <button 
+                    className="btn btn-secondary" 
+                    disabled={page === 1}
+                    onClick={() => handlePageChange(page - 1)}
+                    style={{ padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <span className="font-bold">Page {page} of {pages}</span>
+                  <button 
+                    className="btn btn-secondary" 
+                    disabled={page === pages}
+                    onClick={() => handlePageChange(page + 1)}
+                    style={{ padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </main>
       </div>

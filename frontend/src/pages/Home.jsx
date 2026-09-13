@@ -8,21 +8,29 @@ import './Home.css';
 
 const Home = () => {
   const [trendingProducts, setTrendingProducts] = useState([]);
+  const [offerProducts, setOfferProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTrending = async () => {
+    const fetchProducts = async () => {
       try {
-        // Just fetch some products for home, can use a specific endpoint or query in real app
         const { data } = await axios.get('http://localhost:5000/api/products');
-        setTrendingProducts(data.slice(0, 4));
+        
+        // Filter trending products
+        const trending = data.filter(p => p.trending);
+        setTrendingProducts(trending.length > 0 ? trending.slice(0, 4) : data.slice(0, 4));
+        
+        // Filter products with offers
+        const offers = data.filter(p => p.offer);
+        setOfferProducts(offers.length > 0 ? offers.slice(0, 4) : data.slice(4, 8));
+        
         setLoading(false);
       } catch (error) {
         console.error('Error fetching trending products', error);
         setLoading(false);
       }
     };
-    fetchTrending();
+    fetchProducts();
   }, []);
 
   return (
@@ -35,6 +43,7 @@ const Home = () => {
           <div className="hero-buttons">
             <Link to="/products?category=Men" className="btn btn-primary">Shop Men</Link>
             <Link to="/products?category=Women" className="btn btn-secondary">Shop Women</Link>
+            <Link to="/products?category=Kids" className="btn btn-primary" style={{ marginLeft: '1rem' }}>Shop Kids</Link>
           </div>
         </div>
       </section>
@@ -81,6 +90,20 @@ const Home = () => {
         ) : (
           <div className="grid grid-cols-4">
             {trendingProducts.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Special Offers Section */}
+      <section className="container offers-section" style={{ padding: '4rem 0', backgroundColor: '#f9f9f9', marginTop: '2rem' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>Exclusive Offers</h2>
+        {loading ? (
+          <div className="loader"></div>
+        ) : (
+          <div className="grid grid-cols-4">
+            {offerProducts.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
           </div>

@@ -25,7 +25,7 @@ const reviewSchema = new mongoose.Schema({
 const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   brand: { type: String, required: true },
-  description: { type: String, required: true },
+  description: { type: String, default: 'A premium quality product.' },
   category: { type: String, required: true }, // Men, Women, Kids, Accessories
   subCategory: { type: String }, // Shirts, T-Shirts, Dresses, etc.
   gender: { type: String },

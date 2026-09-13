@@ -39,6 +39,7 @@ const Navbar = () => {
               <span className="icon-link" style={{ cursor: 'pointer' }}><User size={20} /></span>
               <div className="dropdown-content">
                 <span>{user.name}</span>
+                <Link to="/profile">My Profile</Link>
                 <Link to="/myorders">Orders</Link>
                 <button onClick={logout}>Logout</button>
               </div>

@@ -1,0 +1,54 @@
+.offers-page {
+  min-height: 80vh;
+}
+
+.offer-section {
+  margin-bottom: 4rem;
+}
+
+.offer-banner {
+  padding: 2rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  color: white;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.offer-banner h2 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.offer-banner p {
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+/* Specific banner backgrounds */
+.banner-clearance {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+}
+
+.banner-trending {
+  background: linear-gradient(135deg, #f39c12 0%, #d35400 100%);
+}
+
+.banner-steal {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+}
+
+.no-offers-msg {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  background-color: var(--secondary-color);
+  border-radius: 8px;
+  color: var(--text-light);
+  font-style: italic;
+}

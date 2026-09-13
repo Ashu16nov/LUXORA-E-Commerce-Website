@@ -25,6 +25,7 @@ const registerUser = async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      address: user.address,
       token: generateToken(user._id),
     });
   } else {
@@ -46,6 +47,7 @@ const authUser = async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      address: user.address,
       token: generateToken(user._id),
     });
   } else {
@@ -65,10 +67,46 @@ const getUserProfile = async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      address: user.address,
     });
   } else {
     res.status(404).json({ message: 'User not found' });
   }
 };
 
-module.exports = { registerUser, authUser, getUserProfile };
+// @desc    Update user profile
+// @route   PUT /api/auth/me
+// @access  Private
+const updateUserProfile = async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+    if (req.body.address) {
+      user.address = {
+        street: req.body.address.street || user.address?.street,
+        city: req.body.address.city || user.address?.city,
+        postalCode: req.body.address.postalCode || user.address?.postalCode,
+        country: req.body.address.country || user.address?.country,
+      };
+    }
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      address: updatedUser.address,
+      token: generateToken(updatedUser._id),
+    });
+  } else {
+    res.status(404).json({ message: 'User not found' });
+  }
+};
+
+module.exports = { registerUser, authUser, getUserProfile, updateUserProfile };

@@ -1,16 +1,23 @@
 .product-details-page {
-  padding: 4rem 0;
+  padding: 1.5rem 0;
 }
 
 .product-details-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  gap: 2rem;
+  max-height: 75vh;
 }
 
 .product-gallery {
   background-color: var(--secondary-color);
-  aspect-ratio: 3/4;
+  height: 100%;
+  max-height: 65vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 8px;
 }
 
 .main-image {
@@ -28,8 +35,8 @@
 }
 
 .product-info-details h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
 }
 
 .price-wrap {
@@ -39,7 +46,7 @@
 }
 
 .current-price {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
 }
 
@@ -59,8 +66,8 @@
 }
 
 .size-btn {
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   border: 1px solid var(--border-color);
   display: flex;
   align-items: center;
@@ -86,27 +93,27 @@
 }
 
 .qty-controls button {
-  width: 40px;
-  height: 40px;
-  font-size: 1.2rem;
+  width: 35px;
+  height: 35px;
+  font-size: 1.1rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .qty-controls span {
-  width: 40px;
+  width: 35px;
   text-align: center;
   font-weight: 600;
 }
 
 .flex-1 { flex: 1; }
-.mt-1 { margin-top: 0.5rem; }
-.mt-2 { margin-top: 1rem; }
-.mt-3 { margin-top: 1.5rem; }
-.mt-4 { margin-top: 2rem; }
-.mt-5 { margin-top: 3rem; }
-.mb-1 { margin-bottom: 0.5rem; }
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 0.75rem; }
+.mt-4 { margin-top: 1rem; }
+.mt-5 { margin-top: 1.5rem; }
+.mb-1 { margin-bottom: 0.25rem; }
 
 .additional-info {
   border-top: 1px solid var(--border-color);

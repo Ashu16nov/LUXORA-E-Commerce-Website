@@ -5,7 +5,10 @@ const Product = require('../models/Product');
 // @access  Public
 const getProducts = async (req, res) => {
   try {
-    const { category, brand, minPrice, maxPrice, size, search, sort } = req.query;
+    const { category, brand, minPrice, maxPrice, size, search, sort, page: pageQuery } = req.query;
+
+    const pageSize = 8; // Number of products per page
+    const page = Number(pageQuery) || 1;
 
     let query = {};
 
@@ -54,8 +57,13 @@ const getProducts = async (req, res) => {
         break;
     }
 
-    const products = await Product.find(query).sort(sortOption);
-    res.json(products);
+    const count = await Product.countDocuments(query);
+    const products = await Product.find(query)
+      .sort(sortOption)
+      .limit(pageSize)
+      .skip(pageSize * (page - 1));
+
+    res.json({ products, page, pages: Math.ceil(count / pageSize), count });
   } catch (error) {
     res.status(500).json({ message: 'Server Error' });
   }
