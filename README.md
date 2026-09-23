@@ -1,16 +1,16 @@
-# LUXORA - "Wear Your Confidence" 🛍️
+# LUXORA - "Wear Your Confidence" 
 
 LUXORA is a complete, modern, responsive, and professional **Online Fashion Shopping Website** built using the **MERN Stack** (MongoDB, Express.js, React.js, Node.js). 
 
 This project features a premium, fashion-editorial aesthetic, robust RESTful APIs, dynamic filtering, and a fully functional shopping cart.
 
-## 🚀 Tech Stack
+##  Tech Stack
 
 - **Frontend:** React.js, Vite, React Router DOM, Axios, Context API, Vanilla CSS.
 - **Backend:** Node.js, Express.js, JWT Authentication, BcryptJS.
 - **Database:** MongoDB & Mongoose.
 
-## ✨ Features
+##  Features
 
 - **Premium UI/UX:** Responsive, component-based design with smooth animations and a minimalist fashion-focused aesthetic.
 - **Product Catalog:** Extensive product browsing with advanced filtering (by Category, Brand, Size, Price) and sorting options.
@@ -19,7 +19,7 @@ This project features a premium, fashion-editorial aesthetic, robust RESTful API
 - **Product Details:** Dedicated product pages featuring image galleries, size selectors, and customer reviews.
 - **Database Seeding:** Pre-configured script to instantly populate the database with realistic fashion products.
 
-## 📂 Project Structure
+##  Project Structure
 
 ```text
 LUXORA/
@@ -41,7 +41,7 @@ LUXORA/
         └── index.css   # Global premium styling
 ```
 
-## 🛠️ Installation & Setup
+##  Installation & Setup
 
 ### Prerequisites
 - Node.js (v16+)
@@ -87,10 +87,10 @@ npm run dev
 ```
 The React app will typically be running at `http://localhost:5173`.
 
-## 🔐 Default Test Credentials
+##  Default Test Credentials
 If you seeded the database using the provided script, you can log in immediately with:
 - **Email:** `test@gmail.com`
 - **Password:** `test@123`
 
-## 📄 License
+##  License
 This project was created for an academic MERN stack evaluation. All fashion imagery used belongs to their respective owners on Unsplash.
