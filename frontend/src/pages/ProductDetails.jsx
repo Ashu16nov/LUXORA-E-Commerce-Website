@@ -109,6 +109,19 @@ const ProductDetails = () => {
             <p><strong>Category:</strong> {product.category} {'>'} {product.subCategory}</p>
             <p><strong>Stock:</strong> {product.stock > 0 ? 'In Stock' : 'Out of Stock'}</p>
           </div>
+
+          {/* Rental Cross-Promo Widget */}
+          <div className="rental-crosspromo-widget" style={{ marginTop: '1.5rem', background: 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)', border: '1px solid #fde68a', padding: '1.2rem', borderRadius: '10px' }}>
+            <h4 style={{ margin: 0, color: '#92400e', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1rem' }}>
+              👑 Looking to Rent Outfits for a Special Event?
+            </h4>
+            <p style={{ margin: '0.4rem 0 0.8rem', fontSize: '0.85rem', color: '#b45309', lineHeight: '1.4' }}>
+              Rent luxury tuxedos, wedding lehengas, silk sarees & gala gowns starting at <strong>₹699/day</strong> with refundable security deposit & free return pickup!
+            </p>
+            <Link to="/rentals" style={{ display: 'inline-block', background: '#d97706', color: 'white', padding: '0.5rem 1rem', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 'bold', textDecoration: 'none' }}>
+              Explore Luxora Rental Closet ➔
+            </Link>
+          </div>
         </div>
       </div>
 

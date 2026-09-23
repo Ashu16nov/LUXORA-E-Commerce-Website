@@ -20,6 +20,9 @@ const Navbar = () => {
         <div className={`navbar-links ${isMenuOpen ? 'active' : ''}`}>
           <Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
           <Link to="/products" onClick={() => setIsMenuOpen(false)}>Products</Link>
+          <Link to="/rentals" onClick={() => setIsMenuOpen(false)} style={{ color: '#d97706', fontWeight: 'bold' }}>
+            Rentals 👑
+          </Link>
           <Link to="/products?category=Men" onClick={() => setIsMenuOpen(false)}>Men</Link>
           <Link to="/products?category=Women" onClick={() => setIsMenuOpen(false)}>Women</Link>
           <Link to="/offers" onClick={() => setIsMenuOpen(false)}>Offers</Link>
@@ -40,7 +43,8 @@ const Navbar = () => {
               <div className="dropdown-content">
                 <span>{user.name}</span>
                 <Link to="/profile">My Profile</Link>
-                <Link to="/myorders">Orders</Link>
+                <Link to="/my-rentals">My Rentals 👑</Link>
+                <Link to="/myorders">My Orders</Link>
                 <button onClick={logout}>Logout</button>
               </div>
             </div>

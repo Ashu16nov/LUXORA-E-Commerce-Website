@@ -3,16 +3,17 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Carousel from '../components/Carousel';
 import ProductCard from '../components/ProductCard';
-import { ShieldCheck, Truck, RefreshCcw, Star } from 'lucide-react';
+import { ShieldCheck, Truck, RefreshCcw, Star, Sparkles, Calendar, RotateCcw } from 'lucide-react';
 import './Home.css';
 
 const Home = () => {
   const [trendingProducts, setTrendingProducts] = useState([]);
   const [offerProducts, setOfferProducts] = useState([]);
+  const [rentalProducts, setRentalProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
         const { data } = await axios.get('http://localhost:5000/api/products');
         
@@ -23,14 +24,18 @@ const Home = () => {
         // Filter products with offers
         const offers = data.filter(p => p.offer);
         setOfferProducts(offers.length > 0 ? offers.slice(0, 4) : data.slice(4, 8));
+
+        // Fetch rental products for homepage feature
+        const rentalRes = await axios.get('http://localhost:5000/api/rentals/products');
+        setRentalProducts(rentalRes.data.slice(0, 3));
         
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching trending products', error);
+        console.error('Error fetching homepage products', error);
         setLoading(false);
       }
     };
-    fetchProducts();
+    fetchData();
   }, []);
 
   return (
@@ -39,11 +44,53 @@ const Home = () => {
       <section className="hero-section">
         <div className="hero-content">
           <h1>Wear Your Confidence</h1>
-          <p>Discover the latest collections crafted for every version of you.</p>
+          <p>Discover the latest collections & luxury designer rentals for every version of you.</p>
           <div className="hero-buttons">
             <Link to="/products?category=Men" className="btn btn-primary">Shop Men</Link>
             <Link to="/products?category=Women" className="btn btn-secondary">Shop Women</Link>
-            <Link to="/products?category=Kids" className="btn btn-primary" style={{ marginLeft: '1rem' }}>Shop Kids</Link>
+            <Link to="/rentals" className="btn btn-gold" style={{ marginLeft: '1rem', background: '#d97706', color: '#fff', border: 'none' }}>
+              <Sparkles size={16} /> Explore Cloth Rentals
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* LUXORA CLOTH RENTAL SHOWCASE BANNER */}
+      <section className="home-rental-banner">
+        <div className="container home-rental-grid">
+          <div className="home-rental-text">
+            <span className="gold-badge"><Sparkles size={14} /> NEW FEATURE MODULE</span>
+            <h2>Luxora Designer Cloth Rental</h2>
+            <p>
+              Why buy expensive wedding lehengas or black-tie tuxedos for a single event? Rent high fashion at <strong>1/10th of the retail price</strong> for fixed periods (3, 7, 14+ days) and return back hassle-free!
+            </p>
+            <div className="rental-highlights">
+              <div className="hl-item"><Calendar size={18} /> Flexible Rental Periods</div>
+              <div className="hl-item"><ShieldCheck size={18} /> Refundable Security Deposit</div>
+              <div className="hl-item"><RotateCcw size={18} /> 3 Inventory Units for Instant Multi-User Renting</div>
+            </div>
+            <Link to="/rentals" className="btn-explore-rentals">
+              Browse Rental Collection ➔
+            </Link>
+          </div>
+
+          <div className="home-rental-cards">
+            {rentalProducts.map(item => (
+              <div key={item._id} className="home-rental-card-mini">
+                <img src={item.images[0]} alt={item.name} />
+                <div className="mini-card-info">
+                  <span className="mini-brand">{item.brand}</span>
+                  <h4>{item.name}</h4>
+                  <div className="mini-pricing">
+                    <span className="mini-rate">₹{item.dailyRate} / day</span>
+                    <span className="mini-deposit">Deposit: ₹{item.securityDeposit}</span>
+                  </div>
+                  <Link to={`/rentals/${item._id}`} className="mini-rent-link">
+                    Rent This Outfit
+                  </Link>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -140,7 +187,7 @@ const Home = () => {
       <section className="newsletter-section">
         <div className="container text-center newsletter-content">
           <h2>Stay Ahead of the Trends</h2>
-          <p>Get updates on new collections, exclusive offers and fashion inspiration.</p>
+          <p>Get updates on new collections, exclusive rental drops and fashion inspiration.</p>
           <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
             <input type="email" placeholder="Enter your email address" required />
             <button type="submit" className="btn btn-primary">Subscribe</button>

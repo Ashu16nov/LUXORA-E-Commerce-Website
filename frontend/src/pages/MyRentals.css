@@ -1,0 +1,322 @@
+.my-rentals-page {
+  background-color: #fcfcfc;
+  padding: 3rem 0;
+  min-height: 90vh;
+}
+
+.page-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.page-header-row h1 {
+  font-size: 2.2rem;
+  font-family: 'Playfair Display', Georgia, serif;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.4rem;
+}
+
+.page-header-row p {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.btn-explore-more {
+  background: #111827;
+  color: white;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.success-banner {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.return-success-banner {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.empty-rentals-card {
+  text-align: center;
+  padding: 5rem 2rem;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.empty-rentals-card h3 {
+  font-size: 1.4rem;
+  margin: 1rem 0 0.5rem;
+  color: #111827;
+}
+
+.empty-rentals-card p {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.btn-rent-now {
+  background: #111827;
+  color: white;
+  padding: 0.8rem 1.6rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Rental Cards */
+.rentals-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.3rem;
+  color: #111827;
+  margin-bottom: 1.2rem;
+  font-weight: 700;
+}
+
+.rental-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.user-rental-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1.8rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.garment-thumb {
+  width: 140px;
+  height: 180px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f3f4f6;
+  flex-shrink: 0;
+}
+
+.garment-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rental-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #9ca3af;
+  letter-spacing: 1px;
+}
+
+.garment-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0.2rem 0;
+}
+
+.size-badge {
+  display: inline-block;
+  background: #f3f4f6;
+  color: #374151;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.tracking-lbl {
+  display: block;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.tracking-num {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Timeline Box */
+.rental-timeline-box {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  margin: 1rem 0;
+}
+
+.timeline-col span {
+  display: block;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.timeline-col strong {
+  font-size: 0.9rem;
+  color: #111827;
+}
+
+.return-date-highlight {
+  color: #b45309 !important;
+}
+
+.timeline-arrow {
+  color: #9ca3af;
+  font-size: 1.2rem;
+}
+
+/* Status Tracker */
+.status-progress-tracker {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+  position: relative;
+  padding: 0 1rem;
+}
+
+.status-progress-tracker::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 1rem;
+  right: 1rem;
+  height: 2px;
+  background: #e5e7eb;
+  z-index: 1;
+}
+
+.status-progress-tracker .step {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.status-progress-tracker .dot {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #d1d5db;
+  margin: 0 auto 0.4rem;
+}
+
+.status-progress-tracker .step.active .dot {
+  background: #059669;
+}
+
+.status-progress-tracker .step.highlight .dot {
+  background: #f59e0b;
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+}
+
+.status-progress-tracker .lbl {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.rental-price-summary-bar {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.price-details {
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.deposit-tag {
+  margin-left: 1.5rem;
+  color: #b45309;
+}
+
+.btn-return-cloth {
+  background: #111827;
+  color: #ffffff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.2s;
+}
+
+.btn-return-cloth:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.returned-card {
+  opacity: 0.85;
+  background: #f9fafb;
+}
+
+.returned-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #059669;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+
+.my-rentals-loader {
+  text-align: center;
+  padding: 5rem 0;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

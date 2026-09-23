@@ -11,6 +11,10 @@ import Register from './pages/Register';
 import Offers from './pages/Offers';
 import Profile from './pages/Profile';
 import Checkout from './pages/Checkout';
+import RentalProducts from './pages/RentalProducts';
+import RentalDetails from './pages/RentalDetails';
+import RentalCheckout from './pages/RentalCheckout';
+import MyRentals from './pages/MyRentals';
 
 function App() {
   return (
@@ -22,6 +26,10 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Products />} />
             <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/rentals" element={<RentalProducts />} />
+            <Route path="/rentals/:id" element={<RentalDetails />} />
+            <Route path="/rentals/checkout" element={<RentalCheckout />} />
+            <Route path="/my-rentals" element={<MyRentals />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
