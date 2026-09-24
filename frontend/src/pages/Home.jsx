@@ -3,13 +3,15 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Carousel from '../components/Carousel';
 import ProductCard from '../components/ProductCard';
-import { ShieldCheck, Truck, RefreshCcw, Star, Sparkles, Calendar, RotateCcw } from 'lucide-react';
+import { ShieldCheck, Truck, RefreshCcw, Star, Sparkles, Calendar, RotateCcw, ArrowRight, Clock, Award } from 'lucide-react';
 import './Home.css';
 
 const Home = () => {
   const [trendingProducts, setTrendingProducts] = useState([]);
   const [offerProducts, setOfferProducts] = useState([]);
-  const [rentalProducts, setRentalProducts] = useState([]);
+  const [allRentals, setAllRentals] = useState([]);
+  const [filteredRentals, setFilteredRentals] = useState([]);
+  const [activeRentalCategory, setActiveRentalCategory] = useState('All');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,7 +29,8 @@ const Home = () => {
 
         // Fetch rental products for homepage feature
         const rentalRes = await axios.get('http://localhost:5000/api/rentals/products');
-        setRentalProducts(rentalRes.data.slice(0, 3));
+        setAllRentals(rentalRes.data);
+        setFilteredRentals(rentalRes.data.slice(0, 4));
         
         setLoading(false);
       } catch (error) {
@@ -37,6 +40,16 @@ const Home = () => {
     };
     fetchData();
   }, []);
+
+  const handleFilterRentals = (cat) => {
+    setActiveRentalCategory(cat);
+    if (cat === 'All') {
+      setFilteredRentals(allRentals.slice(0, 4));
+    } else {
+      const filtered = allRentals.filter(r => r.category.toLowerCase().includes(cat.toLowerCase()));
+      setFilteredRentals(filtered.slice(0, 4));
+    }
+  };
 
   return (
     <div>
@@ -55,42 +68,87 @@ const Home = () => {
         </div>
       </section>
 
-      {/* LUXORA CLOTH RENTAL SHOWCASE BANNER */}
-      <section className="home-rental-banner">
-        <div className="container home-rental-grid">
-          <div className="home-rental-text">
-            <span className="gold-badge"><Sparkles size={14} /> NEW FEATURE MODULE</span>
+      {/* ENHANCED LUXORA CLOTH RENTAL SHOWCASE BANNER */}
+      <section className="home-rental-showcase-section">
+        <div className="container">
+          {/* Section Header */}
+          <div className="rental-showcase-header">
+            <span className="gold-pill-badge">
+              <Sparkles size={14} /> LUXORA CLOSET RENTAL MODULE
+            </span>
             <h2>Luxora Designer Cloth Rental</h2>
-            <p>
-              Why buy expensive wedding lehengas or black-tie tuxedos for a single event? Rent high fashion at <strong>1/10th of the retail price</strong> for fixed periods (3, 7, 14+ days) and return back hassle-free!
+            <p className="showcase-subtitle">
+              Why spend lakhs buying high-end bridal lehengas, tuxedo suits or Rolex timepieces for a single day? Rent authentic designer fashion at <strong>1/10th of retail price</strong> for fixed periods with 100% refundable deposit & free doorstep returns.
             </p>
-            <div className="rental-highlights">
-              <div className="hl-item"><Calendar size={18} /> Flexible Rental Periods</div>
-              <div className="hl-item"><ShieldCheck size={18} /> Refundable Security Deposit</div>
-              <div className="hl-item"><RotateCcw size={18} /> 3 Inventory Units for Instant Multi-User Renting</div>
+
+            {/* Feature Highlights Grid */}
+            <div className="rental-feature-pills-row">
+              <div className="feature-pill"><Calendar size={16} /> Flexible 3 to 30 Day Rentals</div>
+              <div className="feature-pill"><ShieldCheck size={16} /> Refundable Security Deposit Guarantee</div>
+              <div className="feature-pill"><RotateCcw size={16} /> 3 Stock Units for Concurrent Renting</div>
+              <div className="feature-pill"><Award size={16} /> Steam-Sanitized & Dry-Cleaned</div>
             </div>
-            <Link to="/rentals" className="btn-explore-rentals">
-              Browse Rental Collection ➔
-            </Link>
+
+            {/* Quick Category Filter Tabs */}
+            <div className="home-rental-tabs">
+              {['All', 'Wedding', 'Gala', 'Suits', 'Accessories'].map((cat) => (
+                <button
+                  key={cat}
+                  className={`home-tab-btn ${activeRentalCategory === cat ? 'active' : ''}`}
+                  onClick={() => handleFilterRentals(cat)}
+                >
+                  {cat === 'All' ? 'All Luxury Rentals' : cat}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="home-rental-cards">
-            {rentalProducts.map(item => (
-              <div key={item._id} className="home-rental-card-mini">
-                <img src={item.images[0]} alt={item.name} />
-                <div className="mini-card-info">
-                  <span className="mini-brand">{item.brand}</span>
-                  <h4>{item.name}</h4>
-                  <div className="mini-pricing">
-                    <span className="mini-rate">₹{item.dailyRate} / day</span>
-                    <span className="mini-deposit">Deposit: ₹{item.securityDeposit}</span>
+          {/* Cards Showcase Grid */}
+          <div className="home-rental-grid-4">
+            {filteredRentals.map((item) => (
+              <div key={item._id} className="home-rental-card-enhanced">
+                <div className="home-rental-img-wrap">
+                  <img src={item.images[0]} alt={item.name} />
+                  <span className="stock-tag">⚡ 3 Units Available</span>
+                  <span className="category-tag">{item.category}</span>
+                </div>
+
+                <div className="home-rental-card-body">
+                  <div className="card-brand-row">
+                    <span className="brand-name">{item.brand}</span>
+                    <span className="rating-pill"><Star size={12} fill="#f59e0b" color="#f59e0b" /> {item.rating || 4.9}</span>
                   </div>
-                  <Link to={`/rentals/${item._id}`} className="mini-rent-link">
-                    Rent This Outfit
+
+                  <h3 className="card-item-name">{item.name}</h3>
+
+                  <div className="card-price-box">
+                    <div className="daily-price">
+                      <span className="price-label">Rental Charge</span>
+                      <span className="price-amount">₹{item.dailyRate} <small>/ day</small></span>
+                    </div>
+                    <div className="retail-price">
+                      <span className="price-label">Original Retail</span>
+                      <span className="original-amount">₹{item.originalValue.toLocaleString()}</span>
+                    </div>
+                  </div>
+
+                  <div className="deposit-info-row">
+                    <span>Refundable Deposit: <strong>₹{item.securityDeposit.toLocaleString()}</strong></span>
+                  </div>
+
+                  <Link to={`/rentals/${item._id}`} className="btn-rent-card-action">
+                    <Calendar size={15} /> Rent Outfit Now
                   </Link>
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Bottom Call to Action */}
+          <div className="home-rental-bottom-cta">
+            <Link to="/rentals" className="btn-explore-full-closet">
+              Explore Full Luxury Rental Collection (18+ Designer Items) <ArrowRight size={18} />
+            </Link>
           </div>
         </div>
       </section>
