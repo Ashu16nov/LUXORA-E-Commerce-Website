@@ -173,6 +173,31 @@ const RentalDetails = () => {
 
           <p className="description-text">{rentalData.description}</p>
 
+          {/* Fashion Rental Specifications Box */}
+          <div className="fashion-specs-box" style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1.2rem', marginBottom: '1.5rem' }}>
+            <h4 style={{ margin: '0 0 0.8rem', fontSize: '0.95rem', color: '#0f172a', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              👔 Fashion Rental Specifications
+            </h4>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem', fontSize: '0.85rem' }}>
+              <div>
+                <span style={{ color: '#64748b', display: 'block' }}>Fabric Composition</span>
+                <strong style={{ color: '#0f172a' }}>{rentalData.fabric || 'Pure Silk & Premium Velvet'}</strong>
+              </div>
+              <div>
+                <span style={{ color: '#64748b', display: 'block' }}>Fit & Silhouette</span>
+                <strong style={{ color: '#0f172a' }}>{rentalData.fitType || 'Custom Tailored Fit'}</strong>
+              </div>
+              <div style={{ gridColumn: 'span 2' }}>
+                <span style={{ color: '#64748b', display: 'block' }}>Included Package Components</span>
+                <strong style={{ color: '#0f172a' }}>{rentalData.includedComponents || 'Full Outfit + Garment Dust Bag + Hanger'}</strong>
+              </div>
+              <div style={{ gridColumn: 'span 2' }}>
+                <span style={{ color: '#64748b', display: 'block' }}>Hygiene & Sanitization Guarantee</span>
+                <strong style={{ color: '#059669' }}>✨ {rentalData.careGuide || '5-Star Steam Sterilized & Sanitized'}</strong>
+              </div>
+            </div>
+          </div>
+
           {/* Availability Status Badge */}
           <div className={`stock-status-banner ${availabilityCheck.isAvailable ? 'available' : 'unavailable'}`}>
             {availabilityCheck.checking ? (

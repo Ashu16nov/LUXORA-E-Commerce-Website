@@ -7,6 +7,7 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const rentalRoutes = require('./routes/rentalRoutes');
 
 dotenv.config();
 
@@ -23,7 +24,6 @@ app.use(cors());
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
-const rentalRoutes = require('./routes/rentalRoutes');
 app.use('/api/rentals', rentalRoutes);
 
 const Product = require('./models/Product');
@@ -46,7 +46,7 @@ app.get('/api/seed-db', async (req, res) => {
     await RentalProduct.deleteMany();
     await RentalProduct.insertMany(sampleRentalProducts);
 
-    res.json({ message: 'DB Seeded Successfully with standard and rental products' });
+    res.json({ message: 'DB Seeded Successfully with standard and 22 luxury rental products' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -58,13 +58,12 @@ setTimeout(async () => {
     const count = await RentalProduct.countDocuments();
     if (count === 0) {
       await RentalProduct.insertMany(sampleRentalProducts);
-      console.log('Auto-seeded 6 luxury rental products with 3 stock units each!');
+      console.log('Auto-seeded 22 luxury rental products into MongoDB!');
     }
   } catch (err) {
     console.log('Rental auto-seed note:', err.message);
   }
 }, 3000);
-
 
 // Base route
 app.get('/', (req, res) => {
