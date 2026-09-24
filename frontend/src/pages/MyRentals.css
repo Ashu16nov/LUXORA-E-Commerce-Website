@@ -1,5 +1,5 @@
 .my-rentals-page {
-  background-color: #fcfcfc;
+  background-color: #FAF5EF;
   padding: 3rem 0;
   min-height: 90vh;
 }
@@ -14,7 +14,7 @@
 .page-header-row h1 {
   font-size: 2.2rem;
   font-family: 'Playfair Display', Georgia, serif;
-  color: #111827;
+  color: #1B1917;
   display: flex;
   align-items: center;
   gap: 0.8rem;
@@ -22,18 +22,24 @@
 }
 
 .page-header-row p {
-  color: #6b7280;
+  color: #786F66;
   font-size: 1rem;
 }
 
 .btn-explore-more {
-  background: #111827;
-  color: white;
+  background: #1B1917;
+  color: #FFFDF9;
   padding: 0.7rem 1.4rem;
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
   font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.btn-explore-more:hover {
+  background: #C5A059;
+  color: #1B1917;
 }
 
 .success-banner {
@@ -65,29 +71,35 @@
 .empty-rentals-card {
   text-align: center;
   padding: 5rem 2rem;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  background: #FFFDF9;
+  border-radius: 14px;
+  border: 1px solid #E6DFD5;
+  box-shadow: var(--shadow-warm);
 }
 
 .empty-rentals-card h3 {
   font-size: 1.4rem;
   margin: 1rem 0 0.5rem;
-  color: #111827;
+  color: #1B1917;
 }
 
 .empty-rentals-card p {
-  color: #6b7280;
+  color: #786F66;
   margin-bottom: 1.5rem;
 }
 
 .btn-rent-now {
-  background: #111827;
-  color: white;
+  background: #1B1917;
+  color: #FFFDF9;
   padding: 0.8rem 1.6rem;
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
+}
+
+.btn-rent-now:hover {
+  background: #C5A059;
+  color: #1B1917;
 }
 
 /* Rental Cards */
@@ -97,7 +109,7 @@
 
 .section-title {
   font-size: 1.3rem;
-  color: #111827;
+  color: #1B1917;
   margin-bottom: 1.2rem;
   font-weight: 700;
 }
@@ -109,13 +121,18 @@
 }
 
 .user-rental-card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  background: #FFFDF9;
+  border: 1px solid #E6DFD5;
+  border-radius: 14px;
   padding: 1.5rem;
   display: flex;
   gap: 1.8rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  box-shadow: var(--shadow-warm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-rental-card:hover {
+  border-color: #C5A059;
 }
 
 .garment-thumb {
@@ -123,7 +140,7 @@
   height: 180px;
   border-radius: 10px;
   overflow: hidden;
-  background: #f3f4f6;
+  background: #F3ECE2;
   flex-shrink: 0;
 }
 
@@ -143,21 +160,21 @@
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #9ca3af;
+  color: #786F66;
   letter-spacing: 1px;
 }
 
 .garment-name {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #111827;
+  color: #1B1917;
   margin: 0.2rem 0;
 }
 
 .size-badge {
   display: inline-block;
-  background: #f3f4f6;
-  color: #374151;
+  background: #F3ECE2;
+  color: #2C2723;
   padding: 0.2rem 0.6rem;
   border-radius: 4px;
   font-size: 0.8rem;
@@ -167,13 +184,13 @@
 .tracking-lbl {
   display: block;
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: #786F66;
 }
 
 .tracking-num {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #111827;
+  color: #1B1917;
 }
 
 /* Timeline Box */
@@ -181,7 +198,8 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  background: #f9fafb;
+  background: #F8F3EC;
+  border: 1px solid #EADFD3;
   border-radius: 8px;
   padding: 0.8rem 1.2rem;
   margin: 1rem 0;
@@ -190,12 +208,12 @@
 .timeline-col span {
   display: block;
   font-size: 0.75rem;
-  color: #6b7280;
+  color: #786F66;
 }
 
 .timeline-col strong {
   font-size: 0.9rem;
-  color: #111827;
+  color: #1B1917;
 }
 
 .return-date-highlight {
@@ -203,7 +221,7 @@
 }
 
 .timeline-arrow {
-  color: #9ca3af;
+  color: #A89F95;
   font-size: 1.2rem;
 }
 
@@ -223,7 +241,7 @@
   left: 1rem;
   right: 1rem;
   height: 2px;
-  background: #e5e7eb;
+  background: #E6DFD5;
   z-index: 1;
 }
 
@@ -238,7 +256,7 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #d1d5db;
+  background: #C5BDB2;
   margin: 0 auto 0.4rem;
 }
 
@@ -253,14 +271,14 @@
 
 .status-progress-tracker .lbl {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: #786F66;
   font-weight: 500;
 }
 
 .rental-price-summary-bar {
   margin-top: auto;
   padding-top: 1rem;
-  border-top: 1px solid #f3f4f6;
+  border-top: 1px solid #E6DFD5;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -268,7 +286,7 @@
 
 .price-details {
   font-size: 0.9rem;
-  color: #374151;
+  color: #2C2723;
 }
 
 .deposit-tag {
@@ -277,8 +295,8 @@
 }
 
 .btn-return-cloth {
-  background: #111827;
-  color: #ffffff;
+  background: #1B1917;
+  color: #FFFDF9;
   border: none;
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
@@ -292,12 +310,23 @@
 }
 
 .btn-return-cloth:hover:not(:disabled) {
-  background: #2563eb;
+  background: #C5A059;
+  color: #1B1917;
 }
 
 .returned-card {
-  opacity: 0.85;
-  background: #f9fafb;
+  opacity: 0.88;
+  background: #F8F3EC;
+}
+
+.returned-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #059669;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
 }
 
 .returned-badge {

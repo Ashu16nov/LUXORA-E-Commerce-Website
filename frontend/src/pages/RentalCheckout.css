@@ -1,5 +1,5 @@
 .rental-checkout-page {
-  background-color: #fcfcfc;
+  background-color: #FAF5EF;
   padding: 3rem 0;
   min-height: 90vh;
 }
@@ -7,7 +7,7 @@
 .checkout-page-title {
   font-size: 2rem;
   font-family: 'Playfair Display', Georgia, serif;
-  color: #111827;
+  color: #1B1917;
   display: flex;
   align-items: center;
   gap: 0.8rem;
@@ -22,18 +22,18 @@
 }
 
 .checkout-section-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  background: #FFFDF9;
+  border: 1px solid #E6DFD5;
+  border-radius: 14px;
   padding: 1.8rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  box-shadow: var(--shadow-warm);
 }
 
 .checkout-section-card h3 {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #111827;
+  color: #1B1917;
   display: flex;
   align-items: center;
   gap: 0.6rem;
@@ -48,17 +48,23 @@
   display: block;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #374151;
+  color: #2C2723;
   margin-bottom: 0.4rem;
 }
 
 .form-group input {
   width: 100%;
-  padding: 0.7rem 0.9rem;
-  border: 1px solid #d1d5db;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #E6DFD5;
+  background: #FAF5EF;
+  color: #2C2723;
   border-radius: 8px;
   outline: none;
   font-size: 0.95rem;
+}
+
+.form-group input:focus {
+  border-color: #C5A059;
 }
 
 .form-row-2 {
@@ -78,22 +84,24 @@
   align-items: center;
   gap: 0.8rem;
   padding: 0.9rem 1.2rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #E6DFD5;
+  background: #FAF5EF;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.95rem;
   font-weight: 500;
+  color: #2C2723;
   transition: all 0.2s;
 }
 
 .payment-option.active {
-  border-color: #111827;
-  background: #f9fafb;
+  border-color: #C5A059;
+  background: #F8F3EC;
 }
 
 .terms-agreement-card {
-  background: #fffbeb;
-  border: 1px solid #fef3c7;
+  background: #FEF8EC;
+  border: 1px solid #F5E6C8;
 }
 
 .terms-checkbox {
@@ -114,8 +122,8 @@
 
 .btn-confirm-booking {
   width: 100%;
-  background: #059669;
-  color: white;
+  background: #1B1917;
+  color: #FFFDF9;
   padding: 1.1rem;
   border-radius: 10px;
   font-size: 1.1rem;
@@ -130,22 +138,24 @@
 }
 
 .btn-confirm-booking:hover:not(:disabled) {
-  background: #047857;
+  background: #C5A059;
+  color: #1B1917;
 }
 
 /* Order Summary */
 .rental-summary-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  background: #FFFDF9;
+  border: 1px solid #E6DFD5;
+  border-radius: 14px;
   padding: 1.8rem;
   position: sticky;
   top: 100px;
+  box-shadow: var(--shadow-warm);
 }
 
 .rental-summary-card h3 {
   font-size: 1.2rem;
-  color: #111827;
+  color: #1B1917;
   margin-bottom: 1.5rem;
 }
 
@@ -166,22 +176,23 @@
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #9ca3af;
+  color: #786F66;
 }
 
 .summary-garment-details h4 {
   font-size: 1rem;
-  color: #111827;
+  color: #1B1917;
   margin: 0.2rem 0;
 }
 
 .summary-size {
   font-size: 0.85rem;
-  color: #4b5563;
+  color: #585047;
 }
 
 .summary-dates-box {
-  background: #f9fafb;
+  background: #F8F3EC;
+  border: 1px solid #EADFD3;
   border-radius: 8px;
   padding: 1rem;
   display: grid;
@@ -193,17 +204,17 @@
 .date-summary-item span {
   display: block;
   font-size: 0.75rem;
-  color: #6b7280;
+  color: #786F66;
 }
 
 .date-summary-item strong {
   font-size: 0.85rem;
-  color: #111827;
+  color: #1B1917;
 }
 
 .date-summary-item.full-width {
   grid-column: span 2;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #EADFD3;
   padding-top: 0.5rem;
 }
 
@@ -224,7 +235,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.9rem;
-  color: #4b5563;
+  color: #585047;
   margin-bottom: 0.6rem;
 }
 
@@ -236,7 +247,9 @@
 .summary-price-table .summary-row.total {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #111827;
+  color: #1B1917;
+  padding-top: 0.8rem;
+  border-top: 1px solid #E6DFD5;
 }
 
 .checkout-error-banner {

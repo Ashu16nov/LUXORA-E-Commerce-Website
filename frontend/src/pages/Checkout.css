@@ -1,7 +1,7 @@
 .checkout-page {
   padding: 3rem 0;
   min-height: calc(100vh - 80px);
-  background-color: #fcfaf8;
+  background-color: #FAF5EF;
 }
 
 .checkout-header {
@@ -13,6 +13,7 @@
   font-family: 'Playfair Display', serif;
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
+  color: #1B1917;
 }
 
 .checkout-grid {
@@ -24,10 +25,11 @@
 }
 
 .checkout-section {
-  background: white;
+  background: #FFFDF9;
+  border: 1px solid #E6DFD5;
   padding: 2.5rem;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border-radius: 14px;
+  box-shadow: var(--shadow-warm);
   margin-bottom: 2rem;
 }
 
@@ -35,7 +37,7 @@
   font-family: 'Playfair Display', serif;
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
-  color: #111;
+  color: #1B1917;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -50,21 +52,23 @@
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #444;
+  color: #2C2723;
 }
 
 .checkout-form .form-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
+  border: 1px solid #E6DFD5;
+  background: #FAF5EF;
+  color: #2C2723;
+  border-radius: 8px;
   font-size: 0.9rem;
   transition: border-color 0.2s;
 }
 
 .checkout-form .form-input:focus {
   outline: none;
-  border-color: #111;
+  border-color: #C5A059;
 }
 
 .address-grid {
@@ -81,29 +85,34 @@
 
 .payment-method {
   flex: 1;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #E6DFD5;
+  background: #FAF5EF;
   padding: 1rem;
   border-radius: 8px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
+  color: #2C2723;
+  font-weight: 500;
 }
 
 .payment-method.active {
-  border-color: var(--primary-color);
-  background-color: rgba(212, 175, 122, 0.05);
-  color: var(--primary-color);
+  border-color: #C5A059;
+  background-color: #F8F3EC;
+  color: #1B1917;
+  font-weight: 700;
 }
 
 .credit-card-ui {
-  background: #111;
-  color: white;
+  background: #161412;
+  color: #FFFDF9;
   padding: 1.5rem;
-  border-radius: 12px;
+  border-radius: 14px;
   margin-bottom: 2rem;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  box-shadow: 0 15px 30px rgba(22, 20, 18, 0.3);
 }
 
 .credit-card-ui::before {
@@ -113,14 +122,14 @@
   right: -50px;
   width: 150px;
   height: 150px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(197, 160, 89, 0.15);
   border-radius: 50%;
 }
 
 .card-chip {
   width: 40px;
   height: 30px;
-  background: linear-gradient(135deg, #e5b976 0%, #c19b58 100%);
+  background: linear-gradient(135deg, #d4af37 0%, #c5a059 100%);
   border-radius: 4px;
   margin-bottom: 1rem;
 }
@@ -152,8 +161,8 @@
 }
 
 .order-summary-items {
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
+  border-top: 1px solid #E6DFD5;
+  border-bottom: 1px solid #E6DFD5;
   padding: 1.5rem 0;
   margin: 1.5rem 0;
   max-height: 200px;
@@ -172,11 +181,12 @@
 }
 
 .summary-item-name {
-  color: #444;
+  color: #585047;
 }
 
 .summary-item-price {
   font-weight: 600;
+  color: #1B1917;
 }
 
 .summary-totals .row {
@@ -184,27 +194,27 @@
   justify-content: space-between;
   margin-bottom: 0.75rem;
   font-size: 0.9rem;
-  color: #666;
+  color: #786F66;
 }
 
 .summary-totals .row.grand-total {
   font-size: 1.25rem;
-  color: #111;
+  color: #1B1917;
   font-weight: 700;
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #E6DFD5;
 }
 
 .place-order-btn {
   width: 100%;
-  background: var(--primary-color);
-  color: white;
+  background: #1B1917;
+  color: #FFFDF9;
   border: none;
   padding: 1.2rem;
   border-radius: 30px;
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -215,11 +225,12 @@
 }
 
 .place-order-btn:hover {
-  background: #c19b58;
+  background: #C5A059;
+  color: #1B1917;
 }
 
 .place-order-btn:disabled {
-  background: #ccc;
+  background: #C5BDB2;
   cursor: not-allowed;
 }
 

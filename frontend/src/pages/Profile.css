@@ -1,32 +1,35 @@
 .profile-page {
   padding: 4rem 0;
   min-height: calc(100vh - 80px);
+  background-color: #FAF5EF;
 }
 
 .profile-container {
   max-width: 800px;
   margin: 0 auto;
-  background: white;
+  background: #FFFDF9;
+  border: 1px solid #E6DFD5;
   padding: 2.5rem;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border-radius: 16px;
+  box-shadow: var(--shadow-warm);
 }
 
 .profile-header {
   text-align: center;
   margin-bottom: 2.5rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid #E6DFD5;
 }
 
 .profile-header h1 {
   font-family: 'Playfair Display', serif;
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
+  color: #1B1917;
 }
 
 .profile-header p {
-  color: var(--text-light);
+  color: #786F66;
 }
 
 .profile-form .form-section {
@@ -36,7 +39,7 @@
 .profile-form .form-section h3 {
   font-family: 'Playfair Display', serif;
   margin-bottom: 1.5rem;
-  color: var(--primary-color);
+  color: #1B1917;
   font-size: 1.5rem;
 }
 
@@ -49,21 +52,23 @@
   font-size: 0.875rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: #2C2723;
 }
 
 .profile-form .form-input {
   width: 100%;
   padding: 0.8rem 1rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
+  border: 1px solid #E6DFD5;
+  background: #FAF5EF;
+  color: #2C2723;
+  border-radius: 8px;
   font-size: 0.95rem;
   transition: border-color 0.2s;
 }
 
 .profile-form .form-input:focus {
   outline: none;
-  border-color: #111;
+  border-color: #C5A059;
 }
 
 .address-grid {
@@ -74,8 +79,8 @@
 
 .profile-submit-btn {
   width: 100%;
-  background: var(--primary-color);
-  color: white;
+  background: #1B1917;
+  color: #FFFDF9;
   border: none;
   padding: 1rem;
   border-radius: 30px;
@@ -91,7 +96,8 @@
 }
 
 .profile-submit-btn:hover {
-  background: #000;
+  background: #C5A059;
+  color: #1B1917;
 }
 
 .profile-message {

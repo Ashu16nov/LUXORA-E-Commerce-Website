@@ -1,24 +1,25 @@
 .rental-page {
-  background-color: #fcfcfc;
+  background-color: #FAF5EF;
   min-height: 100vh;
   padding-bottom: 4rem;
 }
 
 .rental-hero {
-  background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+  background: linear-gradient(135deg, #161412 0%, #292524 100%);
   color: #ffffff;
-  padding: 4rem 1rem;
+  padding: 4.5rem 1rem;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   position: relative;
   overflow: hidden;
+  border-bottom: 1px solid rgba(197, 160, 89, 0.25);
 }
 
 .rental-hero::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(circle at center, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(197, 160, 89, 0.18) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -31,29 +32,29 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(212, 175, 55, 0.2);
-  color: #f59e0b;
-  border: 1px solid rgba(245, 158, 11, 0.4);
-  padding: 0.4rem 1rem;
+  background: rgba(197, 160, 89, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  padding: 0.4rem 1.2rem;
   border-radius: 50px;
   font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 1px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
   margin-bottom: 1.5rem;
   text-transform: uppercase;
 }
 
 .rental-hero h1 {
-  font-size: 2.8rem;
+  font-size: 3rem;
   font-family: 'Playfair Display', Georgia, serif;
   margin-bottom: 1rem;
-  color: #ffffff;
+  color: #FFFDF9;
   letter-spacing: -0.5px;
 }
 
 .rental-hero p {
   font-size: 1.15rem;
-  color: #d1d5db;
+  color: #E2D9CF;
   line-height: 1.7;
   margin-bottom: 2rem;
 }
@@ -69,11 +70,12 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 253, 249, 0.08);
   padding: 0.5rem 1rem;
   border-radius: 8px;
   font-size: 0.9rem;
-  color: #e5e7eb;
+  color: #FAF5EF;
+  border: 1px solid rgba(230, 223, 213, 0.15);
 }
 
 /* Toolbar & Filters */
@@ -93,32 +95,34 @@
 }
 
 .tab-btn {
-  padding: 0.6rem 1.2rem;
+  padding: 0.64rem 1.3rem;
   border-radius: 30px;
-  border: 1px solid #e5e7eb;
-  background-color: #ffffff;
-  color: #374151;
+  border: 1px solid #E6DFD5;
+  background-color: #FFFDF9;
+  color: #2C2723;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
 }
 
 .tab-btn:hover, .tab-btn.active {
-  background-color: #111827;
-  color: #ffffff;
-  border-color: #111827;
-  box-shadow: 0 4px 12px rgba(17, 24, 39, 0.15);
+  background-color: #1B1917;
+  color: #FFFDF9;
+  border-color: #1B1917;
+  box-shadow: 0 4px 14px rgba(27, 25, 23, 0.2);
 }
 
 .rental-search-box {
   display: flex;
   align-items: center;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
+  background: #FFFDF9;
+  border: 1px solid #E6DFD5;
   border-radius: 30px;
-  padding: 0.3rem 0.4rem 0.3rem 1rem;
+  padding: 0.35rem 0.4rem 0.35rem 1.1rem;
   width: 320px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
 }
 
 .rental-search-box input {
@@ -127,17 +131,25 @@
   width: 100%;
   font-size: 0.9rem;
   padding-left: 0.5rem;
+  background: transparent;
+  color: #2C2723;
 }
 
 .rental-search-box .search-btn {
-  background: #111827;
-  color: white;
+  background: #1B1917;
+  color: #FFFDF9;
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 0.55rem 1.1rem;
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s;
+}
+
+.rental-search-box .search-btn:hover {
+  background: #C5A059;
+  color: #1B1917;
 }
 
 .rental-filters-row {
@@ -146,7 +158,7 @@
   gap: 2rem;
   margin-bottom: 2rem;
   font-size: 0.9rem;
-  color: #4b5563;
+  color: #585047;
 }
 
 .filter-group {
@@ -156,12 +168,14 @@
 }
 
 .filter-group select {
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  background: white;
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #E6DFD5;
+  background: #FFFDF9;
   outline: none;
   font-size: 0.85rem;
+  color: #2C2723;
+  font-weight: 500;
 }
 
 /* Grid & Cards */
@@ -172,62 +186,63 @@
 }
 
 .rental-card {
-  background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  background: #FFFDF9;
+  border-radius: 14px;
+  border: 1px solid #E6DFD5;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-warm);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   display: flex;
   flex-direction: column;
 }
 
 .rental-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+  transform: translateY(-5px);
+  box-shadow: 0 14px 30px rgba(197, 160, 89, 0.18);
+  border-color: #C5A059;
 }
 
 .rental-card-image-wrapper {
   position: relative;
   height: 340px;
   overflow: hidden;
-  background: #f3f4f6;
+  background: #F3ECE2;
 }
 
 .rental-card-image-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition: transform 0.5s ease;
 }
 
 .rental-card:hover .rental-card-image-wrapper img {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 .rental-stock-badge {
   position: absolute;
   top: 12px;
   left: 12px;
-  background: rgba(17, 24, 39, 0.85);
+  background: rgba(27, 25, 23, 0.88);
   backdrop-filter: blur(4px);
   color: #fbbf24;
   padding: 0.3rem 0.7rem;
   border-radius: 20px;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .rental-category-badge {
   position: absolute;
   bottom: 12px;
   right: 12px;
-  background: rgba(255, 255, 255, 0.9);
-  color: #111827;
+  background: rgba(255, 253, 249, 0.95);
+  color: #1B1917;
   padding: 0.25rem 0.6rem;
   border-radius: 4px;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
 }
 
@@ -241,7 +256,7 @@
 .rental-card-brand {
   font-size: 0.8rem;
   font-weight: 700;
-  color: #9ca3af;
+  color: #786F66;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 0.3rem;
@@ -250,25 +265,26 @@
 .rental-card-title {
   font-size: 1.15rem;
   font-weight: 600;
-  color: #111827;
+  color: #2C2723;
   margin-bottom: 1rem;
+  line-height: 1.35;
 }
 
 .rental-pricing-box {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #f9fafb;
+  background: #F8F3EC;
   padding: 0.8rem 1rem;
   border-radius: 8px;
-  border: 1px solid #f3f4f6;
+  border: 1px solid #EADFD3;
   margin-bottom: 0.8rem;
 }
 
 .daily-rate-lbl, .retail-lbl {
   display: block;
   font-size: 0.75rem;
-  color: #6b7280;
+  color: #786F66;
 }
 
 .daily-rate-val {
@@ -279,13 +295,13 @@
 
 .retail-val {
   font-size: 0.9rem;
-  color: #9ca3af;
+  color: #A89F95;
   text-decoration: line-through;
 }
 
 .rental-deposit-row {
   font-size: 0.85rem;
-  color: #4b5563;
+  color: #585047;
   margin-bottom: 1.2rem;
 }
 
@@ -295,19 +311,20 @@
   justify-content: center;
   gap: 0.5rem;
   width: 100%;
-  background: #111827;
-  color: #ffffff;
-  padding: 0.75rem;
+  background: #1B1917;
+  color: #FFFDF9;
+  padding: 0.8rem;
   border-radius: 8px;
   font-weight: 600;
   font-size: 0.9rem;
   text-decoration: none;
-  transition: background 0.2s;
+  transition: background 0.2s ease, transform 0.2s ease;
   margin-top: auto;
 }
 
 .btn-rent-details:hover {
-  background: #2563eb;
+  background: #C5A059;
+  color: #1B1917;
 }
 
 .rental-loader {
@@ -318,8 +335,8 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #e5e7eb;
-  border-top-color: #111827;
+  border: 4px solid #E6DFD5;
+  border-top-color: #C5A059;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 1rem;
@@ -332,17 +349,24 @@
 .no-rentals-card {
   text-align: center;
   padding: 4rem 2rem;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  background: #FFFDF9;
+  border-radius: 14px;
+  border: 1px solid #E6DFD5;
+  box-shadow: var(--shadow-warm);
 }
 
 .btn-reset {
   margin-top: 1rem;
-  padding: 0.6rem 1.2rem;
-  background: #111827;
-  color: white;
+  padding: 0.65rem 1.4rem;
+  background: #1B1917;
+  color: #FFFDF9;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
+}
+
+.btn-reset:hover {
+  background: #C5A059;
+  color: #1B1917;
 }

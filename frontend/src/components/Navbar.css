@@ -1,8 +1,11 @@
 .navbar {
   position: sticky;
   top: 0;
-  background-color: var(--white);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  background-color: rgba(250, 245, 239, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(197, 160, 89, 0.25);
+  box-shadow: 0 4px 20px rgba(44, 39, 35, 0.04);
   z-index: 100;
   padding: 1rem 0;
 }
@@ -15,10 +18,10 @@
 
 .navbar-logo {
   font-family: var(--font-heading);
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.6rem;
+  font-weight: 800;
   color: var(--primary-color);
-  letter-spacing: 2px;
+  letter-spacing: 3px;
 }
 
 .navbar-links {
@@ -28,9 +31,14 @@
 
 .navbar-links a {
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
+  color: var(--text-dark);
+}
+
+.navbar-links a:hover {
+  color: var(--accent-color);
 }
 
 .navbar-icons {
@@ -47,16 +55,21 @@
   align-items: center;
 }
 
+.icon-link:hover {
+  color: var(--accent-color);
+}
+
 .cart-icon .cart-badge {
   position: absolute;
   top: -8px;
   right: -8px;
-  background-color: var(--primary-color);
-  color: var(--white);
+  background-color: var(--accent-color);
+  color: #FFFDF9;
   font-size: 0.65rem;
+  font-weight: 700;
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -71,27 +84,34 @@
   display: none;
   position: absolute;
   right: 0;
-  background-color: var(--white);
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
-  z-index: 1;
-  border-radius: 4px;
+  background-color: #FFFDF9;
+  min-width: 180px;
+  box-shadow: var(--shadow-warm);
+  z-index: 10;
+  border-radius: 10px;
+  border: 1px solid #E6DFD5;
+  overflow: hidden;
 }
 
 .dropdown-content span {
   display: block;
   padding: 12px 16px;
-  font-weight: 600;
-  border-bottom: 1px solid var(--border-color);
+  font-weight: 700;
+  color: #1B1917;
+  border-bottom: 1px solid #E6DFD5;
+  background: #F8F3EC;
 }
 
 .dropdown-content a, .dropdown-content button {
-  color: black;
+  color: #2C2723;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
   text-align: left;
   width: 100%;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .dropdown:hover .dropdown-content {
@@ -99,7 +119,8 @@
 }
 
 .dropdown-content a:hover, .dropdown-content button:hover {
-  background-color: var(--secondary-color);
+  background-color: #F3ECE2;
+  color: #C5A059;
 }
 
 .mobile-menu-btn {

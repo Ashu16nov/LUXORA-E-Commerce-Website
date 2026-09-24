@@ -1,15 +1,19 @@
 /* Global CSS for LUXORA - Premium Fashion Aesthetic */
 
 :root {
-  --primary-color: #111111;
-  --secondary-color: #f7f7f7;
-  --accent-color: #d1b08b;
-  --text-dark: #222222;
-  --text-light: #666666;
-  --border-color: #e5e5e5;
-  --white: #ffffff;
+  --primary-color: #1B1917;
+  --secondary-color: #F3ECE2;
+  --bg-main: #FAF5EF;
+  --surface-card: #FFFDF9;
+  --accent-color: #C5A059;
+  --accent-gold-gradient: linear-gradient(135deg, #d4af37 0%, #c5a059 50%, #9a7b38 100%);
+  --text-dark: #2C2723;
+  --text-light: #786F66;
+  --border-color: #E6DFD5;
+  --white: #FFFDF9;
   --error: #e74c3c;
-  --success: #2ecc71;
+  --success: #059669;
+  --shadow-warm: 0 10px 30px rgba(197, 160, 89, 0.08), 0 4px 12px rgba(44, 39, 35, 0.04);
   --font-main: 'Inter', sans-serif;
   --font-heading: 'Manrope', sans-serif;
 }
@@ -23,7 +27,7 @@
 body {
   font-family: var(--font-main);
   color: var(--text-dark);
-  background-color: var(--white);
+  background-color: var(--bg-main);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
@@ -130,12 +134,19 @@ button {
 /* Product Card */
 .product-card {
   position: relative;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   overflow: hidden;
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-warm);
+  padding-bottom: 0.8rem;
 }
 
 .product-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 14px 30px rgba(197, 160, 89, 0.18);
+  border-color: var(--accent-color);
 }
 
 .product-image-container {
@@ -164,15 +175,17 @@ button {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: white;
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
   border-radius: 50%;
   width: 36px;
   height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   z-index: 2;
+  color: var(--primary-color);
 }
 
 .product-badge {
@@ -180,16 +193,17 @@ button {
   top: 1rem;
   left: 1rem;
   background: var(--primary-color);
-  color: white;
-  padding: 0.2rem 0.8rem;
+  color: #FFFDF9;
+  padding: 0.25rem 0.8rem;
   font-size: 0.75rem;
   font-weight: 600;
   z-index: 2;
   text-transform: uppercase;
+  border-radius: 4px;
 }
 
 .product-info {
-  padding: 1rem 0;
+  padding: 1rem 1rem 0;
 }
 
 .product-brand {
@@ -198,6 +212,7 @@ button {
   letter-spacing: 1px;
   color: var(--text-light);
   margin-bottom: 0.2rem;
+  font-weight: 600;
 }
 
 .product-title {
@@ -207,6 +222,7 @@ button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--text-dark);
 }
 
 .product-price {
@@ -214,6 +230,7 @@ button {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: var(--primary-color);
 }
 
 .product-original-price {
@@ -237,21 +254,25 @@ button {
   display: block;
   margin-bottom: 0.5rem;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
+  color: var(--text-dark);
 }
 
 .form-input {
   width: 100%;
   padding: 0.75rem 1rem;
+  background-color: var(--surface-card);
   border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: 8px;
   font-family: var(--font-main);
+  color: var(--text-dark);
   outline: none;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .form-input:focus {
-  border-color: var(--primary-color);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.15);
 }
 
 /* Loaders */

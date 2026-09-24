@@ -1,5 +1,7 @@
 .products-page {
   padding: 3rem 0;
+  background-color: #FAF5EF;
+  min-height: 90vh;
 }
 
 .products-header {
@@ -7,7 +9,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid #E6DFD5;
   padding-bottom: 1rem;
 }
 
@@ -18,8 +20,13 @@
 }
 
 .filters-sidebar {
-  width: 250px;
+  width: 260px;
   flex-shrink: 0;
+  background: #FFFDF9;
+  border: 1px solid #E6DFD5;
+  padding: 1.5rem;
+  border-radius: 14px;
+  box-shadow: var(--shadow-warm);
 }
 
 .filter-group {
@@ -29,6 +36,8 @@
 .filter-group h4 {
   font-size: 1rem;
   margin-bottom: 0.75rem;
+  color: #1B1917;
+  font-weight: 700;
 }
 
 .gap-2 {
@@ -43,7 +52,11 @@
   display: none;
   align-items: center;
   gap: 0.5rem;
-  font-weight: 500;
+  font-weight: 600;
+  background: #1B1917;
+  color: #FFFDF9;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
 }
 
 .filter-header-mobile {
@@ -52,7 +65,7 @@
   align-items: center;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid #E6DFD5;
 }
 
 .overlay {
@@ -76,12 +89,13 @@
     left: -300px;
     width: 300px;
     height: 100vh;
-    background: white;
+    background: #FFFDF9;
     z-index: 1000;
     padding: 2rem;
     overflow-y: auto;
     transition: left 0.3s ease;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+    border-radius: 0;
   }
   
   .filters-sidebar.open {
@@ -99,7 +113,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0,0,0,0.5);
+    background: rgba(22,20,18,0.6);
     z-index: 999;
   }
 }
