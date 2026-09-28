@@ -806,6 +806,96 @@ const seedRentalProducts = async (req, res) => {
   }
 };
 
+// @desc    Create new rental product (Admin)
+// @route   POST /api/rentals/products
+// @access  Private/Admin
+const createRentalProduct = async (req, res) => {
+  try {
+    const item = new RentalProduct({
+      name: req.body.name || 'Sample Designer Rental Outfit',
+      brand: req.body.brand || 'LUXORA RENTALS',
+      category: req.body.category || 'Gala',
+      gender: req.body.gender || 'Unisex',
+      dailyRate: req.body.dailyRate || 999,
+      originalValue: req.body.originalValue || 45000,
+      securityDeposit: req.body.securityDeposit || 2500,
+      fabric: req.body.fabric || 'Pure Silk / Velvet',
+      fitType: req.body.fitType || 'Tailored Fit',
+      occasionTag: req.body.occasionTag || 'Gala & Reception',
+      description: req.body.description || 'Exclusive luxury rental garment.',
+      images: req.body.images && req.body.images.length > 0 ? req.body.images : ['https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800'],
+      sizes: req.body.sizes || ['S', 'M', 'L', 'XL'],
+      stockUnits: req.body.stockUnits !== undefined ? req.body.stockUnits : 3,
+    });
+    const created = await item.save();
+    res.status(201).json(created);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error creating rental product' });
+  }
+};
+
+// @desc    Update rental product (Admin)
+// @route   PUT /api/rentals/products/:id
+// @access  Private/Admin
+const updateRentalProduct = async (req, res) => {
+  try {
+    const item = await RentalProduct.findById(req.params.id);
+    if (item) {
+      item.name = req.body.name ?? item.name;
+      item.brand = req.body.brand ?? item.brand;
+      item.category = req.body.category ?? item.category;
+      item.gender = req.body.gender ?? item.gender;
+      item.dailyRate = req.body.dailyRate ?? item.dailyRate;
+      item.originalValue = req.body.originalValue ?? item.originalValue;
+      item.securityDeposit = req.body.securityDeposit ?? item.securityDeposit;
+      item.stockUnits = req.body.stockUnits ?? item.stockUnits;
+      item.description = req.body.description ?? item.description;
+      if (req.body.images) item.images = req.body.images;
+      if (req.body.sizes) item.sizes = req.body.sizes;
+
+      const updated = await item.save();
+      res.json(updated);
+    } else {
+      res.status(404).json({ message: 'Rental product not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating rental product' });
+  }
+};
+
+// @desc    Delete rental product (Admin)
+// @route   DELETE /api/rentals/products/:id
+// @access  Private/Admin
+const deleteRentalProduct = async (req, res) => {
+  try {
+    const item = await RentalProduct.findById(req.params.id);
+    if (item) {
+      await item.deleteOne();
+      res.json({ message: 'Rental product removed' });
+    } else {
+      res.status(404).json({ message: 'Rental product not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting rental product' });
+  }
+};
+
+// @desc    Get all rental orders (Admin)
+// @route   GET /api/rentals/admin/all-orders
+// @access  Private/Admin
+const getAllRentalOrders = async (req, res) => {
+  try {
+    const orders = await RentalOrder.find({})
+      .populate('user', 'name email')
+      .populate('rentalProduct')
+      .sort({ createdAt: -1 });
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching rental orders' });
+  }
+};
+
 module.exports = {
   getRentalProducts,
   getRentalProductById,
@@ -813,5 +903,10 @@ module.exports = {
   getMyRentals,
   returnRentalOrder,
   seedRentalProducts,
-  sampleRentalProducts
+  sampleRentalProducts,
+  createRentalProduct,
+  updateRentalProduct,
+  deleteRentalProduct,
+  getAllRentalOrders
 };
+

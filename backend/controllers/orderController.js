@@ -1,10 +1,5 @@
 const Order = require('../models/Order');
 
-// Cart endpoints are simulated as Orders with status for this project.
-// Alternatively, since cart is often client-side, we can just save it or process it as an Order.
-// The prompt mentions Cart APIs, so let's make a dedicated Cart model or just manage it in the client and then push to Order.
-// Actually, creating an Order is better for a simple flow.
-
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
@@ -47,11 +42,46 @@ const addOrderItems = async (req, res) => {
 // @access  Private
 const getMyOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.user._id });
+    const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 });
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: 'Server Error' });
   }
 };
 
-module.exports = { addOrderItems, getMyOrders };
+// @desc    Get all orders (Admin)
+// @route   GET /api/orders
+// @access  Private/Admin
+const getOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({}).populate('user', 'id name email').sort({ createdAt: -1 });
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error fetching all orders' });
+  }
+};
+
+// @desc    Update order to delivered or update status (Admin)
+// @route   PUT /api/orders/:id/deliver
+// @access  Private/Admin
+const updateOrderToDelivered = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (order) {
+      order.isDelivered = true;
+      order.deliveredAt = Date.now();
+      order.isPaid = true;
+      order.paidAt = Date.now();
+
+      const updatedOrder = await order.save();
+      res.json(updatedOrder);
+    } else {
+      res.status(404).json({ message: 'Order not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error updating order' });
+  }
+};
+
+module.exports = { addOrderItems, getMyOrders, getOrders, updateOrderToDelivered };

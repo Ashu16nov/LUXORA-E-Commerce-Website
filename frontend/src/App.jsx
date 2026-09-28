@@ -18,6 +18,14 @@ import MyRentals from './pages/MyRentals';
 import Wishlist from './pages/Wishlist';
 import MyOrders from './pages/MyOrders';
 
+// Admin Module imports
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminProducts from './pages/admin/AdminProducts';
+import AdminRentals from './pages/admin/AdminRentals';
+import AdminOrders from './pages/admin/AdminOrders';
+import AdminUsers from './pages/admin/AdminUsers';
+
 import { WishlistProvider } from './context/WishlistContext';
 import { ToastProvider } from './context/ToastContext';
 import { CurrencyProvider } from './context/CurrencyContext';
@@ -32,6 +40,7 @@ function App() {
               <Navbar />
               <main style={{ flex: 1 }}>
                 <Routes>
+                  {/* Public & Customer Routes */}
                   <Route path="/" element={<Home />} />
                   <Route path="/products" element={<Products />} />
                   <Route path="/product/:id" element={<ProductDetails />} />
@@ -47,6 +56,15 @@ function App() {
                   <Route path="/offers" element={<Offers />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/checkout" element={<Checkout />} />
+
+                  {/* Admin Module Routes */}
+                  <Route path="/admin" element={<AdminLayout />}>
+                    <Route index element={<AdminDashboard />} />
+                    <Route path="products" element={<AdminProducts />} />
+                    <Route path="rentals" element={<AdminRentals />} />
+                    <Route path="orders" element={<AdminOrders />} />
+                    <Route path="users" element={<AdminUsers />} />
+                  </Route>
                 </Routes>
               </main>
               <Footer />

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingBag, Search, Heart, User, Menu, X, Sparkles, Globe, ChevronDown, Package } from 'lucide-react';
+import { ShoppingBag, Search, Heart, User, Menu, X, Sparkles, Globe, ChevronDown, Package, ShieldCheck } from 'lucide-react';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import { WishlistContext } from '../context/WishlistContext';
@@ -137,6 +137,13 @@ const Navbar = () => {
                     <strong>{user.name}</strong>
                     <small>{user.email}</small>
                   </div>
+                  
+                  {user.isAdmin && (
+                    <Link to="/admin" className="admin-link-highlight" style={{ color: '#D4AF37', fontWeight: 'bold' }}>
+                      <ShieldCheck size={15} style={{ marginRight: '6px' }} /> Control Panel (Admin)
+                    </Link>
+                  )}
+
                   <Link to="/profile">My Profile</Link>
                   <Link to="/wishlist">My Wishlist ({wishlistItems.length})</Link>
                   <Link to="/myorders">

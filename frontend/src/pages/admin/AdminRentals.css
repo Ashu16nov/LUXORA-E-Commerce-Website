@@ -1,0 +1,62 @@
+/* Admin Rental Stock Manager Styling */
+
+.admin-rentals-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.btn-add-rental-garment {
+  background: linear-gradient(135deg, #D4AF37, #C5A059);
+  color: #111827;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.25);
+}
+
+.btn-add-rental-garment:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+}
+
+.cat-chip {
+  display: block;
+  font-size: 0.7rem;
+  color: #9CA3AF;
+  margin-top: 0.2rem;
+}
+
+.brand-tag-gold {
+  background: rgba(212, 175, 55, 0.2);
+  color: #D4AF37;
+  border: 1px solid #D4AF37;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-block;
+  margin-bottom: 0.2rem;
+}
+
+.block-text {
+  display: block;
+  color: #9CA3AF;
+  font-size: 0.75rem;
+}
+
+.text-gold {
+  color: #D4AF37 !important;
+}
+
+.strike-retail {
+  text-decoration: line-through;
+  color: #6B7280;
+}
