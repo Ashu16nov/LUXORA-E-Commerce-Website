@@ -1,29 +1,34 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext';
-import { useNavigate } from 'react-router-dom';
-import { MapPin, CreditCard, Lock, CheckCircle2 } from 'lucide-react';
+import { CurrencyContext } from '../context/CurrencyContext';
+import { ToastContext } from '../context/ToastContext';
+import { useNavigate, Link } from 'react-router-dom';
+import { MapPin, CreditCard, Lock, CheckCircle2, ShoppingBag, ShieldCheck, ArrowRight } from 'lucide-react';
+import axios from 'axios';
 import './Checkout.css';
 
 const Checkout = () => {
   const { user, updateProfile } = useContext(AuthContext);
   const { cartItems, clearCart } = useContext(CartContext);
+  const { formatPrice } = useContext(CurrencyContext);
+  const { addToast } = useContext(ToastContext);
   const navigate = useNavigate();
 
   // Address State
   const [street, setStreet] = useState('');
   const [city, setCity] = useState('');
   const [postalCode, setPostalCode] = useState('');
-  const [country, setCountry] = useState('');
+  const [country, setCountry] = useState('India');
   
   // Payment State
-  const [paymentMethod, setPaymentMethod] = useState('card');
+  const [paymentMethod, setPaymentMethod] = useState('Credit Card');
   const [cardNumber, setCardNumber] = useState('');
   const [expiry, setExpiry] = useState('');
   const [cvc, setCvc] = useState('');
   
   const [loading, setLoading] = useState(false);
-  const [orderPlaced, setOrderPlaced] = useState(false);
+  const [createdOrder, setCreatedOrder] = useState(null);
 
   useEffect(() => {
     if (!user) {
@@ -32,11 +37,11 @@ const Checkout = () => {
       setStreet(user.address.street || '');
       setCity(user.address.city || '');
       setPostalCode(user.address.postalCode || '');
-      setCountry(user.address.country || '');
+      setCountry(user.address.country || 'India');
     }
   }, [user, navigate]);
 
-  if (cartItems.length === 0 && !orderPlaced) {
+  if (cartItems.length === 0 && !createdOrder) {
     navigate('/cart');
     return null;
   }
@@ -51,34 +56,71 @@ const Checkout = () => {
     setLoading(true);
     
     try {
-      // 1. Optionally save the address back to profile if user wants (we'll just do it automatically here for convenience)
+      // 1. Update user address
       await updateProfile({
         name: user.name,
         address: { street, city, postalCode, country }
       });
 
-      // 2. Simulate Payment processing delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // 2. Prepare Order Payload for Backend
+      const formattedItems = cartItems.map((item) => ({
+        name: item.name,
+        qty: item.qty,
+        image: item.image,
+        price: item.price,
+        product: item.product,
+        size: item.size || 'Standard',
+      }));
 
-      // 3. Clear cart and show success
+      const config = {
+        headers: { Authorization: `Bearer ${user.token}` },
+      };
+
+      const orderPayload = {
+        orderItems: formattedItems,
+        shippingAddress: { street, city, postalCode, country },
+        paymentMethod,
+        itemsPrice: subtotal,
+        taxPrice: tax,
+        shippingPrice: shipping,
+        totalPrice: total,
+      };
+
+      const { data } = await axios.post('http://localhost:5000/api/orders', orderPayload, config);
+
       if (clearCart) clearCart();
-      setOrderPlaced(true);
+      setCreatedOrder(data);
       setLoading(false);
+      addToast('✨ Order Placed Successfully! Thank you for shopping with LUXORA.', 'success', 'Order Confirmed');
       
     } catch (error) {
-      console.error("Failed to place order", error);
-      alert("Failed to process payment. Please try again.");
+      console.error('Failed to place order', error);
+      addToast(error.response?.data?.message || 'Failed to process order. Please try again.', 'error');
       setLoading(false);
     }
   };
 
-  if (orderPlaced) {
+  if (createdOrder) {
     return (
-      <div className="checkout-page flex flex-col items-center justify-center text-center" style={{ minHeight: '60vh' }}>
-        <CheckCircle2 size={64} color="var(--primary-color)" className="mb-4 mx-auto" />
-        <h1 className="mb-2" style={{ fontFamily: 'Playfair Display', fontSize: '2.5rem' }}>Order Confirmed</h1>
-        <p className="text-gray-600 mb-6">Thank you for your purchase. Your luxury items will be shipped soon.</p>
-        <button className="btn btn-primary" onClick={() => navigate('/products')}>Continue Shopping</button>
+      <div className="checkout-page container flex flex-col items-center justify-center text-center" style={{ minHeight: '65vh', paddingTop: '4rem' }}>
+        <div className="success-icon-wrap" style={{ color: '#059669', marginBottom: '1.5rem' }}>
+          <CheckCircle2 size={72} />
+        </div>
+        <h1 className="mb-2" style={{ fontFamily: 'Playfair Display', fontSize: '2.8rem' }}>Order Confirmed!</h1>
+        <p className="text-gray-600 mb-2" style={{ fontSize: '1.1rem' }}>
+          Order ID: <strong>#{createdOrder._id?.substring(0, 10).toUpperCase()}</strong>
+        </p>
+        <p className="text-gray-600 mb-6" style={{ maxWidth: '500px', margin: '0 auto 2rem' }}>
+          Thank you for choosing LUXORA Haute Couture. A confirmation email and tracking link have been dispatched to <strong>{user.email}</strong>.
+        </p>
+        <div className="flex gap-4 justify-center">
+          <Link to="/myorders" className="btn btn-primary">
+            Track My Order Status 📦
+          </Link>
+          <Link to="/products" className="btn btn-secondary">
+            Continue Shopping
+          </Link>
+        </div>
       </div>
     );
   }
@@ -87,8 +129,8 @@ const Checkout = () => {
     <div className="checkout-page">
       <div className="container">
         <div className="checkout-header">
-          <h1>Secure Checkout</h1>
-          <p>Complete your purchase securely.</p>
+          <h1>Express Checkout</h1>
+          <p>Provide your delivery information and payment details below.</p>
         </div>
 
         <form onSubmit={handlePlaceOrder} className="checkout-grid">
@@ -96,16 +138,16 @@ const Checkout = () => {
           {/* Left Column: Address & Details */}
           <div className="checkout-left">
             <div className="checkout-section">
-              <h3><MapPin size={22} /> Delivery Address</h3>
+              <h3><MapPin size={22} /> Shipping Address</h3>
               <div className="checkout-form">
                 <div className="form-group">
-                  <label className="form-label">Street Address</label>
+                  <label className="form-label">Street Address / Apartment</label>
                   <input 
                     type="text" 
                     className="form-input" 
                     value={street} 
                     onChange={(e) => setStreet(e.target.value)} 
-                    placeholder="123 Luxury Avenue"
+                    placeholder="123 Luxury Boulevard, Penthouse 4B"
                     required
                   />
                 </div>
@@ -118,7 +160,7 @@ const Checkout = () => {
                       className="form-input" 
                       value={city} 
                       onChange={(e) => setCity(e.target.value)} 
-                      placeholder="Paris"
+                      placeholder="Mumbai / Paris / New York"
                       required
                     />
                   </div>
@@ -129,7 +171,7 @@ const Checkout = () => {
                       className="form-input" 
                       value={postalCode} 
                       onChange={(e) => setPostalCode(e.target.value)} 
-                      placeholder="75008"
+                      placeholder="400001"
                       required
                     />
                   </div>
@@ -142,7 +184,7 @@ const Checkout = () => {
                     className="form-input" 
                     value={country} 
                     onChange={(e) => setCountry(e.target.value)} 
-                    placeholder="France"
+                    placeholder="India"
                     required
                   />
                 </div>
@@ -154,20 +196,26 @@ const Checkout = () => {
               
               <div className="payment-methods">
                 <div 
-                  className={`payment-method ${paymentMethod === 'card' ? 'active' : ''}`}
-                  onClick={() => setPaymentMethod('card')}
+                  className={`payment-method ${paymentMethod === 'Credit Card' ? 'active' : ''}`}
+                  onClick={() => setPaymentMethod('Credit Card')}
                 >
-                  Credit Card
+                  Credit / Debit Card
                 </div>
                 <div 
-                  className={`payment-method ${paymentMethod === 'paypal' ? 'active' : ''}`}
-                  onClick={() => setPaymentMethod('paypal')}
+                  className={`payment-method ${paymentMethod === 'UPI' ? 'active' : ''}`}
+                  onClick={() => setPaymentMethod('UPI')}
                 >
-                  PayPal
+                  UPI / GPay
+                </div>
+                <div 
+                  className={`payment-method ${paymentMethod === 'COD' ? 'active' : ''}`}
+                  onClick={() => setPaymentMethod('COD')}
+                >
+                  Cash on Delivery
                 </div>
               </div>
 
-              {paymentMethod === 'card' && (
+              {paymentMethod === 'Credit Card' && (
                 <div>
                   <div className="credit-card-ui">
                     <div className="card-chip"></div>
@@ -177,7 +225,7 @@ const Checkout = () => {
                     <div className="card-details">
                       <div>
                         <span>Cardholder Name</span>
-                        {user ? user.name : 'LUXORA ATELIER'}
+                        {user ? user.name : 'LUXORA CLIENT'}
                       </div>
                       <div>
                         <span>Expires</span>
@@ -194,7 +242,7 @@ const Checkout = () => {
                         className="form-input" 
                         value={cardNumber} 
                         onChange={(e) => setCardNumber(e.target.value)} 
-                        placeholder="0000 0000 0000 0000"
+                        placeholder="4532 0000 0000 0000"
                         maxLength="19"
                         required
                       />
@@ -213,7 +261,7 @@ const Checkout = () => {
                         />
                       </div>
                       <div className="form-group">
-                        <label className="form-label">CVC</label>
+                        <label className="form-label">CVC Security Code</label>
                         <input 
                           type="text" 
                           className="form-input" 
@@ -228,9 +276,16 @@ const Checkout = () => {
                   </div>
                 </div>
               )}
-              {paymentMethod === 'paypal' && (
-                <div className="p-4 text-center border rounded">
-                  <p>You will be redirected to PayPal to complete your purchase securely.</p>
+
+              {paymentMethod === 'UPI' && (
+                <div className="p-4 text-center border rounded" style={{ padding: '1.5rem', background: '#FFFDF9', borderRadius: '10px' }}>
+                  <p>Scan QR code or enter your VPA / UPI ID during step-2 verification.</p>
+                </div>
+              )}
+
+              {paymentMethod === 'COD' && (
+                <div className="p-4 text-center border rounded" style={{ padding: '1.5rem', background: '#FFFDF9', borderRadius: '10px' }}>
+                  <p>Pay cash or via UPI QR code upon doorstep delivery.</p>
                 </div>
               )}
             </div>
@@ -244,8 +299,8 @@ const Checkout = () => {
               <div className="order-summary-items">
                 {cartItems.map((item, index) => (
                   <div key={index} className="summary-item">
-                    <span className="summary-item-name">{item.qty}x {item.name}</span>
-                    <span className="summary-item-price">₹{item.price * item.qty}</span>
+                    <span className="summary-item-name">{item.qty}x {item.name} ({item.size})</span>
+                    <span className="summary-item-price">{formatPrice(item.price * item.qty)}</span>
                   </div>
                 ))}
               </div>
@@ -253,24 +308,24 @@ const Checkout = () => {
               <div className="summary-totals">
                 <div className="row">
                   <span>Subtotal</span>
-                  <span>₹{subtotal.toFixed(2)}</span>
+                  <span>{formatPrice(subtotal)}</span>
                 </div>
                 <div className="row">
                   <span>Shipping</span>
-                  <span>{shipping === 0 ? 'FREE' : `₹${shipping.toFixed(2)}`}</span>
+                  <span>{shipping === 0 ? <strong style={{ color: '#059669' }}>FREE</strong> : formatPrice(shipping)}</span>
                 </div>
                 <div className="row">
-                  <span>Estimated Tax</span>
-                  <span>₹{tax.toFixed(2)}</span>
+                  <span>Estimated Tax (18%)</span>
+                  <span>{formatPrice(tax)}</span>
                 </div>
                 <div className="row grand-total">
-                  <span>Total</span>
-                  <span>₹{total.toFixed(2)}</span>
+                  <span>Grand Total</span>
+                  <span>{formatPrice(total)}</span>
                 </div>
               </div>
 
               <button type="submit" className="place-order-btn" disabled={loading}>
-                {loading ? 'Processing Securely...' : <><Lock size={18}/> Place Order - ₹{total.toFixed(2)}</>}
+                {loading ? 'Processing Order...' : <><Lock size={18}/> Authorize & Place Order ({formatPrice(total)})</>}
               </button>
             </div>
           </div>

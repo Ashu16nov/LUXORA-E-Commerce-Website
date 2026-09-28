@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Calendar, ShieldCheck, Sparkles, Filter, Search, RotateCcw, Clock, Star, PackageCheck, Award, Layers } from 'lucide-react';
+import { Calendar, ShieldCheck, Sparkles, Filter, Search, RotateCcw, Clock, Star, Award, Layers, Heart, Eye } from 'lucide-react';
+import { CurrencyContext } from '../context/CurrencyContext';
+import { WishlistContext } from '../context/WishlistContext';
+import { ToastContext } from '../context/ToastContext';
+import QuickViewModal from '../components/QuickViewModal';
 import './RentalProducts.css';
 
 const RentalProducts = () => {
@@ -11,6 +15,11 @@ const RentalProducts = () => {
   const [gender, setGender] = useState('');
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('');
+  const [quickViewItem, setQuickViewItem] = useState(null);
+
+  const { formatPrice } = useContext(CurrencyContext);
+  const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
+  const { addToast } = useContext(ToastContext);
 
   const fetchRentals = async () => {
     setLoading(true);
@@ -22,7 +31,7 @@ const RentalProducts = () => {
       if (sort) params.append('sort', sort);
 
       const { data } = await axios.get(`http://localhost:5000/api/rentals/products?${params.toString()}`);
-      setRentals(data);
+      setRentals(Array.isArray(data) ? data : []);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching rental products:', error);
@@ -49,13 +58,13 @@ const RentalProducts = () => {
           </div>
           <h1>Rent High Fashion, Pay a Fraction</h1>
           <p>
-            Experience pure luxury without commitment. Rent designer tuxedos, bridal lehengas, silk sarees, gala gowns & Rolex timepieces starting from <strong>₹699 / day</strong>.
+            Experience pure luxury without commitment. Rent designer tuxedos, bridal lehengas, silk sarees, gala gowns & Rolex timepieces starting from <strong>{formatPrice(699)} / day</strong>.
           </p>
           <div className="rental-features-bar">
             <div className="rental-feature-tag"><ShieldCheck size={18} /> 100% Refundable Security Deposit</div>
             <div className="rental-feature-tag"><RotateCcw size={18} /> Free Doorstep Return Pickup</div>
-            <div className="rental-feature-tag"><Clock size={18} /> 3 Inventory Units Kept for Express Multi-User Renting</div>
-            <div className="rental-feature-tag"><Award size={18} /> 5-Star Steam Sterilized & Sanitized</div>
+            <div className="rental-feature-tag"><Clock size={18} /> 3 Inventory Units Kept for Express Renting</div>
+            <div className="rental-feature-tag"><Award size={18} /> Steam Sterilized & Sanitized</div>
           </div>
         </div>
       </section>
@@ -68,7 +77,7 @@ const RentalProducts = () => {
           <button className={`tab-btn ${category === 'Gala' ? 'active' : ''}`} onClick={() => setCategory('Gala')}>Gala & Evening</button>
           <button className={`tab-btn ${category === 'Suit' ? 'active' : ''}`} onClick={() => setCategory('Suit')}>Luxury Suits</button>
           <button className={`tab-btn ${category === 'Ethnic' ? 'active' : ''}`} onClick={() => setCategory('Ethnic')}>Festival & Ethnic</button>
-          <button className={`tab-btn ${category === 'Accessories' ? 'active' : ''}`} onClick={() => setCategory('Accessories')}>Jewelry & Accessories</button>
+          <button className={`tab-btn ${category === 'Accessories' ? 'active' : ''}`} onClick={() => setCategory('Accessories')}>Jewelry & Watches</button>
         </div>
 
         <form onSubmit={handleSearchSubmit} className="rental-search-box">
@@ -128,9 +137,20 @@ const RentalProducts = () => {
                 <div className="rental-card-image-wrapper">
                   <img src={item.images[0]} alt={item.name} />
                   <span className="rental-stock-badge">
-                    ⚡ {item.stockUnits || 3} Stock Units Available
+                    ⚡ {item.stockUnits || 3} Units Available
                   </span>
                   <span className="rental-category-badge">{item.category}</span>
+                  
+                  <button
+                    className={`rental-card-heart ${isInWishlist(item._id) ? 'active' : ''}`}
+                    onClick={() => {
+                      toggleWishlist(item);
+                      addToast(isInWishlist(item._id) ? `Removed from Wishlist` : `Saved "${item.name}" to Wishlist!`, 'info');
+                    }}
+                    title="Wishlist outfit"
+                  >
+                    <Heart size={16} fill={isInWishlist(item._id) ? '#e11d48' : 'none'} color={isInWishlist(item._id) ? '#e11d48' : '#fff'} />
+                  </button>
                 </div>
                 
                 <div className="rental-card-info">
@@ -141,7 +161,6 @@ const RentalProducts = () => {
 
                   <h3 className="rental-card-title">{item.name}</h3>
 
-                  {/* Fashion E-Commerce Specification Badges */}
                   <div className="fashion-spec-tags">
                     {item.fabric && (
                       <span className="spec-tag"><Layers size={12} /> {item.fabric}</span>
@@ -154,22 +173,25 @@ const RentalProducts = () => {
                   <div className="rental-pricing-box">
                     <div className="rate-container">
                       <span className="daily-rate-lbl">Daily Rental</span>
-                      <span className="daily-rate-val">₹{item.dailyRate} <small>/ day</small></span>
+                      <span className="daily-rate-val">{formatPrice(item.dailyRate)} <small>/ day</small></span>
                     </div>
                     <div className="retail-val-box">
                       <span className="retail-lbl">Original Retail Value</span>
-                      <span className="retail-val">₹{item.originalValue.toLocaleString()}</span>
+                      <span className="retail-val">{formatPrice(item.originalValue)}</span>
                     </div>
                   </div>
 
                   <div className="rental-deposit-row">
-                    <span>Refundable Deposit: <strong>₹{item.securityDeposit.toLocaleString()}</strong></span>
+                    <span>Refundable Deposit: <strong>{formatPrice(item.securityDeposit)}</strong></span>
                   </div>
 
                   <div className="rental-card-actions">
                     <Link to={`/rentals/${item._id}`} className="btn-rent-details">
                       <Calendar size={16} /> Choose Rent Dates & Book
                     </Link>
+                    <button className="btn-rent-qv" onClick={() => setQuickViewItem(item)} title="Quick View">
+                      <Eye size={16} />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -177,6 +199,10 @@ const RentalProducts = () => {
           </div>
         )}
       </div>
+
+      {quickViewItem && (
+        <QuickViewModal product={quickViewItem} onClose={() => setQuickViewItem(null)} />
+      )}
     </div>
   );
 };

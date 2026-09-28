@@ -1,11 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { Save } from 'lucide-react';
+import { ToastContext } from '../context/ToastContext';
+import { useNavigate, Link } from 'react-router-dom';
+import { Save, User, Package, Calendar, Heart, ShieldCheck } from 'lucide-react';
 import './Profile.css';
 
 const Profile = () => {
   const { user, updateProfile } = useContext(AuthContext);
+  const { addToast } = useContext(ToastContext);
   const navigate = useNavigate();
 
   const [name, setName] = useState('');
@@ -15,9 +17,8 @@ const Profile = () => {
   const [street, setStreet] = useState('');
   const [city, setCity] = useState('');
   const [postalCode, setPostalCode] = useState('');
-  const [country, setCountry] = useState('');
+  const [country, setCountry] = useState('India');
 
-  const [message, setMessage] = useState({ type: '', text: '' });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const Profile = () => {
         setStreet(user.address.street || '');
         setCity(user.address.city || '');
         setPostalCode(user.address.postalCode || '');
-        setCountry(user.address.country || '');
+        setCountry(user.address.country || 'India');
       }
     }
   }, [user, navigate]);
@@ -44,10 +45,10 @@ const Profile = () => {
         password: password ? password : undefined,
         address: { street, city, postalCode, country }
       });
-      setMessage({ type: 'success', text: 'Profile updated successfully!' });
-      setPassword(''); // clear password field after successful update
+      addToast('Profile and address preferences updated successfully!', 'success', 'Profile Updated');
+      setPassword('');
     } catch (err) {
-      setMessage({ type: 'error', text: 'Failed to update profile. Please try again.' });
+      addToast('Failed to update profile. Please try again.', 'error');
     }
     setLoading(false);
   };
@@ -56,17 +57,41 @@ const Profile = () => {
 
   return (
     <div className="profile-page">
-      <div className="profile-container">
+      <div className="profile-container container">
         <div className="profile-header">
-          <h1>My Profile</h1>
-          <p>Manage your account details and delivery address.</p>
+          <div className="user-avatar-circle font-gold">
+            {name.substring(0, 2).toUpperCase()}
+          </div>
+          <div>
+            <h1>Welcome, {name}</h1>
+            <p>Manage your account settings, saved addresses, and active orders.</p>
+          </div>
         </div>
 
-        {message.text && (
-          <div className={`profile-message ${message.type}`}>
-            {message.text}
-          </div>
-        )}
+        {/* Quick Dashboard Links */}
+        <div className="profile-quick-nav">
+          <Link to="/myorders" className="p-nav-card">
+            <Package size={24} className="p-nav-icon" />
+            <div>
+              <strong>Order History & Tracking</strong>
+              <span>Track retail & rental deliveries</span>
+            </div>
+          </Link>
+          <Link to="/my-rentals" className="p-nav-card">
+            <Calendar size={24} className="p-nav-icon" />
+            <div>
+              <strong>My Active Rentals 👑</strong>
+              <span>Manage rental returns & deposit status</span>
+            </div>
+          </Link>
+          <Link to="/wishlist" className="p-nav-card">
+            <Heart size={24} className="p-nav-icon" />
+            <div>
+              <strong>Saved Wishlist</strong>
+              <span>View your favorite luxury pieces</span>
+            </div>
+          </Link>
+        </div>
 
         <form onSubmit={submitHandler} className="profile-form">
           <div className="form-section">
@@ -82,13 +107,13 @@ const Profile = () => {
               />
             </div>
             <div className="form-group">
-              <label className="form-label">Email Address (Cannot be changed)</label>
+              <label className="form-label">Email Address (Account ID)</label>
               <input 
                 type="email" 
                 className="form-input" 
                 value={email} 
                 disabled 
-                style={{ backgroundColor: '#f5f5f5', color: '#888' }}
+                style={{ backgroundColor: '#f3ece2', color: '#786F66' }}
               />
             </div>
             <div className="form-group">
@@ -104,9 +129,9 @@ const Profile = () => {
           </div>
 
           <div className="form-section">
-            <h3>Default Delivery Address</h3>
+            <h3>Default Shipping & Return Address</h3>
             <div className="form-group">
-              <label className="form-label">Street Address</label>
+              <label className="form-label">Street Address / Suite</label>
               <input 
                 type="text" 
                 className="form-input" 
@@ -124,7 +149,7 @@ const Profile = () => {
                   className="form-input" 
                   value={city} 
                   onChange={(e) => setCity(e.target.value)} 
-                  placeholder="Paris"
+                  placeholder="Mumbai / Delhi / Paris"
                 />
               </div>
               <div className="form-group">
@@ -134,7 +159,7 @@ const Profile = () => {
                   className="form-input" 
                   value={postalCode} 
                   onChange={(e) => setPostalCode(e.target.value)} 
-                  placeholder="75008"
+                  placeholder="400001"
                 />
               </div>
             </div>
@@ -146,13 +171,13 @@ const Profile = () => {
                 className="form-input" 
                 value={country} 
                 onChange={(e) => setCountry(e.target.value)} 
-                placeholder="France"
+                placeholder="India"
               />
             </div>
           </div>
 
           <button type="submit" className="profile-submit-btn" disabled={loading}>
-            {loading ? 'Saving...' : <><Save size={20} /> Save Changes</>}
+            {loading ? 'Saving...' : <><Save size={20} /> Save Profile Changes</>}
           </button>
         </form>
       </div>

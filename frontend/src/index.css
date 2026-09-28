@@ -1,4 +1,5 @@
 /* Global CSS for LUXORA - Premium Fashion Aesthetic */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
 
 :root {
   --primary-color: #1B1917;
@@ -6,6 +7,7 @@
   --bg-main: #FAF5EF;
   --surface-card: #FFFDF9;
   --accent-color: #C5A059;
+  --accent-gold: #D4AF37;
   --accent-gold-gradient: linear-gradient(135deg, #d4af37 0%, #c5a059 50%, #9a7b38 100%);
   --text-dark: #2C2723;
   --text-light: #786F66;
@@ -30,6 +32,21 @@ body {
   background-color: var(--bg-main);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF5EF;
+}
+::-webkit-scrollbar-thumb {
+  background: #C5A059;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9a7b38;
 }
 
 .luxora-title {
@@ -86,11 +103,11 @@ button {
 .btn {
   display: inline-block;
   padding: 0.75rem 1.5rem;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: all 0.3s ease;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .btn-primary {
@@ -100,8 +117,10 @@ button {
 }
 
 .btn-primary:hover {
-  background-color: transparent;
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
   color: var(--primary-color);
+  box-shadow: 0 6px 20px rgba(197, 160, 89, 0.3);
 }
 
 .btn-secondary {
@@ -138,14 +157,16 @@ button {
   overflow: hidden;
   background-color: var(--surface-card);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 16px;
   box-shadow: var(--shadow-warm);
   padding-bottom: 0.8rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 14px 30px rgba(197, 160, 89, 0.18);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 35px rgba(197, 160, 89, 0.2);
   border-color: var(--accent-color);
 }
 
@@ -168,14 +189,19 @@ button {
 }
 
 .product-card:hover .product-image {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
-.product-wishlist {
+.card-top-actions {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: var(--surface-card);
+  z-index: 5;
+}
+
+.product-wishlist {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
   border: 1px solid var(--border-color);
   border-radius: 50%;
   width: 36px;
@@ -183,9 +209,14 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  z-index: 2;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   color: var(--primary-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.product-wishlist:hover, .product-wishlist.active {
+  transform: scale(1.1);
 }
 
 .product-badge {
@@ -195,29 +226,76 @@ button {
   background: var(--primary-color);
   color: #FFFDF9;
   padding: 0.25rem 0.8rem;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.7rem;
+  font-weight: 700;
   z-index: 2;
   text-transform: uppercase;
   border-radius: 4px;
 }
 
+.badge-gold {
+  background: var(--accent-gold-gradient);
+}
+
+.quick-view-btn {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(27, 25, 23, 0.9);
+  backdrop-filter: blur(6px);
+  color: #FFFDF9;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  cursor: pointer;
+  z-index: 4;
+}
+
+.product-card:hover .quick-view-btn {
+  bottom: 1rem;
+}
+
 .product-info {
-  padding: 1rem 1rem 0;
+  padding: 1.2rem 1.2rem 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.brand-rating-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
 }
 
 .product-brand {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--text-light);
-  margin-bottom: 0.2rem;
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+.card-star-rating {
+  font-size: 0.78rem;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
 }
 
 .product-title {
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 1.05rem;
+  font-weight: 600;
   margin-bottom: 0.5rem;
   white-space: nowrap;
   overflow: hidden;
@@ -226,11 +304,13 @@ button {
 }
 
 .product-price {
-  font-weight: 600;
+  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-size: 1.1rem;
   color: var(--primary-color);
+  margin-bottom: 0.75rem;
 }
 
 .product-original-price {
@@ -242,7 +322,92 @@ button {
 
 .product-discount {
   color: var(--error);
-  font-size: 0.875rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.btn-add-cart-card {
+  margin-top: auto;
+  width: 100%;
+  background: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all 0.25s ease;
+}
+
+.btn-add-cart-card:hover {
+  background: var(--accent-color);
+  color: var(--primary-color);
+}
+
+/* Toast Container */
+.toast-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  pointer-events: none;
+}
+
+.toast-card {
+  pointer-events: auto;
+  background: #111827;
+  color: #FFF;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  min-width: 300px;
+  max-width: 420px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast-success { border-color: #059669; }
+.toast-error { border-color: #e11d48; }
+
+@keyframes toastSlideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.toast-title {
+  display: block;
+  font-size: 0.85rem;
+  color: #D4AF37;
+  margin-bottom: 0.15rem;
+}
+
+.toast-message {
+  font-size: 0.82rem;
+  color: #E5E7EB;
+  margin: 0;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: #9CA3AF;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding-left: 1rem;
+}
+
+.toast-close:hover {
+  color: #FFF;
 }
 
 /* Forms */
@@ -278,12 +443,12 @@ button {
 /* Loaders */
 .loader {
   border: 3px solid var(--secondary-color);
-  border-top: 3px solid var(--primary-color);
+  border-top: 3px solid var(--accent-color);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 2rem auto;
+  width: 44px;
+  height: 44px;
+  animation: spin 0.9s linear infinite;
+  margin: 3rem auto;
 }
 
 @keyframes spin {
@@ -299,7 +464,9 @@ button {
 @media (max-width: 768px) {
   .grid-cols-3 { grid-template-columns: repeat(2, 1fr); }
   .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
-  .container { padding: 0 1rem; }
+  .container { padding: 0 1.25rem; }
+  .toast-container { right: 1rem; bottom: 1rem; left: 1rem; }
+  .toast-card { min-width: auto; width: 100%; }
 }
 
 @media (max-width: 480px) {

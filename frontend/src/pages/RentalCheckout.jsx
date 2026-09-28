@@ -2,22 +2,36 @@ import React, { useState, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
-import { ShieldCheck, Calendar, MapPin, CreditCard, Lock, CheckCircle, AlertCircle } from 'lucide-react';
+import { CurrencyContext } from '../context/CurrencyContext';
+import { ToastContext } from '../context/ToastContext';
+import { ShieldCheck, MapPin, CreditCard, Lock, CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react';
 import './RentalCheckout.css';
 
 const RentalCheckout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const { formatPrice } = useContext(CurrencyContext);
+  const { addToast } = useContext(ToastContext);
 
-  const bookingState = location.state;
+  // Retrieve booking state from router state or localStorage
+  const savedBooking = (() => {
+    try {
+      return JSON.parse(localStorage.getItem('luxora_active_rental_booking'));
+    } catch (e) {
+      return null;
+    }
+  })();
 
-  if (!bookingState) {
+  const bookingData = location.state || savedBooking;
+
+  if (!bookingData || !bookingData.rentalProduct) {
     return (
-      <div className="container" style={{ padding: '5rem 0', textCenter: 'center' }}>
-        <h2>No active rental booking found.</h2>
-        <button onClick={() => navigate('/rentals')} className="btn-primary" style={{ marginTop: '1rem' }}>
-          Explore Rental Wardrobe
+      <div className="container text-center" style={{ padding: '5rem 0' }}>
+        <h2>No Active Rental Booking Selected</h2>
+        <p>Please select an outfit from our rental closet first.</p>
+        <button onClick={() => navigate('/rentals')} className="btn btn-primary mt-3">
+          Explore Rental Closet 👑
         </button>
       </div>
     );
@@ -27,14 +41,23 @@ const RentalCheckout = () => {
     rentalProduct,
     size,
     startDate,
-    endDate,
-    totalDays,
-    rentSubtotal,
+    rentalDays,
+    rentalChargeTotal,
     securityDeposit,
-    shippingFee,
-    grandTotal,
-    emergencyRequest
-  } = bookingState;
+    grandTotalPayable
+  } = bookingData;
+
+  const totalDays = rentalDays || 3;
+  const rentSubtotal = rentalChargeTotal || (rentalProduct.dailyRate * totalDays);
+  const depositVal = securityDeposit || rentalProduct.securityDeposit;
+  const grandTotal = grandTotalPayable || (rentSubtotal + depositVal);
+
+  const calculateEndDate = () => {
+    const start = new Date(startDate || Date.now());
+    start.setDate(start.getDate() + totalDays);
+    return start.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+  const endDate = calculateEndDate();
 
   // Address State
   const [street, setStreet] = useState(user?.address?.street || '');
@@ -55,7 +78,7 @@ const RentalCheckout = () => {
     }
 
     if (!agreeTerms) {
-      alert('Please accept the Luxora Rental Terms & Return Policy to proceed.');
+      addToast('Please accept the Luxora Rental Terms & Security Deposit Policy.', 'error');
       return;
     }
 
@@ -63,24 +86,31 @@ const RentalCheckout = () => {
     setErrorMsg('');
 
     try {
+      const config = {
+        headers: { Authorization: `Bearer ${user.token}` },
+      };
+
       const payload = {
         rentalProductId: rentalProduct._id,
-        size,
+        size: size || 'Standard',
         startDate,
         endDate,
         shippingAddress: { street, city, postalCode, country },
         paymentMethod,
-        emergencyRequest
+        totalPrice: grandTotal,
+        securityDeposit: depositVal,
+        rentalDays: totalDays
       };
 
-      await axios.post('http://localhost:5000/api/rentals/book', payload);
+      await axios.post('http://localhost:5000/api/rentals/book', payload, config);
       setLoading(false);
+      localStorage.removeItem('luxora_active_rental_booking');
       
-      // Successfully booked! Navigate to My Rentals with success banner
+      addToast(`🎉 Rental Reserved! Outfit booked for ${totalDays} days.`, 'success', 'Booking Confirmed');
       navigate('/my-rentals', { state: { bookingSuccess: true, productName: rentalProduct.name } });
     } catch (err) {
       console.error('Error submitting rental booking:', err);
-      setErrorMsg(err.response?.data?.message || 'Failed to place rental booking.');
+      setErrorMsg(err.response?.data?.message || 'Failed to place rental booking. Please check details.');
       setLoading(false);
     }
   };
@@ -88,7 +118,7 @@ const RentalCheckout = () => {
   return (
     <div className="rental-checkout-page">
       <div className="container rental-checkout-container">
-        <h1 className="checkout-page-title"><ShieldCheck size={28} /> Complete Your Luxury Rental Booking</h1>
+        <h1 className="checkout-page-title"><ShieldCheck size={28} /> Reserve Your Luxury Outfit Rental</h1>
 
         {errorMsg && (
           <div className="checkout-error-banner">
@@ -97,11 +127,10 @@ const RentalCheckout = () => {
         )}
 
         <div className="checkout-grid">
-          {/* Left Column: Delivery & Terms Form */}
+          {/* Form */}
           <form onSubmit={handleConfirmRental} className="checkout-form-column">
-            {/* Delivery Address */}
             <div className="checkout-section-card">
-              <h3><MapPin size={20} /> Delivery & Return Pickup Address</h3>
+              <h3><MapPin size={20} /> Delivery & Doorstep Pickup Address</h3>
               
               <div className="form-group">
                 <label>Street Address / Suite</label>
@@ -110,6 +139,7 @@ const RentalCheckout = () => {
                   value={street} 
                   onChange={(e) => setStreet(e.target.value)} 
                   placeholder="e.g. 45 Park Avenue, Suite 12" 
+                  className="form-input"
                   required 
                 />
               </div>
@@ -122,6 +152,7 @@ const RentalCheckout = () => {
                     value={city} 
                     onChange={(e) => setCity(e.target.value)} 
                     placeholder="Mumbai / Delhi / Paris" 
+                    className="form-input"
                     required 
                   />
                 </div>
@@ -132,6 +163,7 @@ const RentalCheckout = () => {
                     value={postalCode} 
                     onChange={(e) => setPostalCode(e.target.value)} 
                     placeholder="400001" 
+                    className="form-input"
                     required 
                   />
                 </div>
@@ -143,14 +175,15 @@ const RentalCheckout = () => {
                   type="text" 
                   value={country} 
                   onChange={(e) => setCountry(e.target.value)} 
+                  className="form-input"
                   required 
                 />
               </div>
             </div>
 
-            {/* Payment Options */}
+            {/* Payment */}
             <div className="checkout-section-card">
-              <h3><CreditCard size={20} /> Payment Method</h3>
+              <h3><CreditCard size={20} /> Payment Option</h3>
               
               <div className="payment-options-list">
                 <label className={`payment-option ${paymentMethod === 'Credit / Debit Card' ? 'active' : ''}`}>
@@ -188,7 +221,7 @@ const RentalCheckout = () => {
               </div>
             </div>
 
-            {/* Terms & Return Agreement */}
+            {/* Terms */}
             <div className="checkout-section-card terms-agreement-card">
               <label className="terms-checkbox">
                 <input 
@@ -198,39 +231,38 @@ const RentalCheckout = () => {
                   required
                 />
                 <span>
-                  I agree to the <strong>Luxora Rental Agreement</strong>:
+                  I agree to the <strong>Luxora Rental & Refund Policy</strong>:
                   <ul className="terms-bullets">
-                    <li>I will return the outfit on or before <strong>{endDate}</strong> in good condition.</li>
-                    <li>The security deposit of <strong>₹{securityDeposit}</strong> will be refunded to my original payment method immediately upon return.</li>
-                    <li>Luxora maintains 3 stock units for emergency dispatch & seamless multi-user renting.</li>
+                    <li>Return scheduled on <strong>{endDate}</strong> in good condition.</li>
+                    <li>Refundable deposit of <strong>{formatPrice(depositVal)}</strong> is returned upon return inspection.</li>
                   </ul>
                 </span>
               </label>
             </div>
 
             <button type="submit" className="btn-confirm-booking" disabled={loading}>
-              {loading ? 'Processing Rental Booking...' : <><Lock size={18} /> Confirm & Pay ₹{grandTotal.toLocaleString()}</>}
+              {loading ? 'Confirming Reservation...' : <><Lock size={18} /> Confirm & Pay {formatPrice(grandTotal)}</>}
             </button>
           </form>
 
-          {/* Right Column: Order Summary */}
+          {/* Order Summary */}
           <div className="checkout-summary-column">
             <div className="rental-summary-card">
               <h3>Rental Order Summary</h3>
 
               <div className="summary-garment-item">
-                <img src={rentalProduct.images[0]} alt={rentalProduct.name} />
+                <img src={rentalProduct.images?.[0] || 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800'} alt={rentalProduct.name} />
                 <div className="summary-garment-details">
                   <span className="summary-brand">{rentalProduct.brand}</span>
                   <h4>{rentalProduct.name}</h4>
-                  <span className="summary-size">Size: <strong>{size}</strong></span>
+                  <span className="summary-size">Size: <strong>{size || 'Standard'}</strong></span>
                 </div>
               </div>
 
               <div className="summary-dates-box">
                 <div className="date-summary-item">
                   <span>Start Date (Delivery)</span>
-                  <strong>{startDate}</strong>
+                  <strong>{startDate || 'Selected Date'}</strong>
                 </div>
                 <div className="date-summary-item">
                   <span>End Date (Return Pickup)</span>
@@ -242,29 +274,23 @@ const RentalCheckout = () => {
                 </div>
               </div>
 
-              {emergencyRequest && (
-                <div className="emergency-badge-pill">
-                  <CheckCircle size={15} /> Emergency Express 4-Hour Dispatch Included
-                </div>
-              )}
-
               <div className="summary-price-table">
                 <div className="summary-row">
                   <span>Rental Charge ({totalDays} days)</span>
-                  <span>₹{rentSubtotal.toLocaleString()}</span>
+                  <span>{formatPrice(rentSubtotal)}</span>
                 </div>
                 <div className="summary-row highlight">
                   <span>Refundable Security Deposit</span>
-                  <span>₹{securityDeposit.toLocaleString()}</span>
+                  <span>{formatPrice(depositVal)}</span>
                 </div>
                 <div className="summary-row">
-                  <span>Dry Cleaning & Delivery Fee</span>
-                  <span>₹{shippingFee}</span>
+                  <span>Steam Cleaning & Delivery Fee</span>
+                  <span className="text-green">FREE</span>
                 </div>
                 <hr />
                 <div className="summary-row total">
                   <span>Grand Total</span>
-                  <span>₹{grandTotal.toLocaleString()}</span>
+                  <span>{formatPrice(grandTotal)}</span>
                 </div>
               </div>
             </div>

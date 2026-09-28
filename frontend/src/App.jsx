@@ -15,32 +15,46 @@ import RentalProducts from './pages/RentalProducts';
 import RentalDetails from './pages/RentalDetails';
 import RentalCheckout from './pages/RentalCheckout';
 import MyRentals from './pages/MyRentals';
+import Wishlist from './pages/Wishlist';
+import MyOrders from './pages/MyOrders';
+
+import { WishlistProvider } from './context/WishlistContext';
+import { ToastProvider } from './context/ToastContext';
+import { CurrencyProvider } from './context/CurrencyContext';
 
 function App() {
   return (
-    <Router>
-      <div className="app-container" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <Navbar />
-        <main style={{ flex: 1 }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/product/:id" element={<ProductDetails />} />
-            <Route path="/rentals" element={<RentalProducts />} />
-            <Route path="/rentals/:id" element={<RentalDetails />} />
-            <Route path="/rentals/checkout" element={<RentalCheckout />} />
-            <Route path="/my-rentals" element={<MyRentals />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/offers" element={<Offers />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/checkout" element={<Checkout />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <CurrencyProvider>
+      <WishlistProvider>
+        <ToastProvider>
+          <Router>
+            <div className="app-container" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+              <Navbar />
+              <main style={{ flex: 1 }}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/products" element={<Products />} />
+                  <Route path="/product/:id" element={<ProductDetails />} />
+                  <Route path="/rentals" element={<RentalProducts />} />
+                  <Route path="/rentals/:id" element={<RentalDetails />} />
+                  <Route path="/rentals/checkout" element={<RentalCheckout />} />
+                  <Route path="/my-rentals" element={<MyRentals />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/wishlist" element={<Wishlist />} />
+                  <Route path="/myorders" element={<MyOrders />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/offers" element={<Offers />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                </Routes>
+              </main>
+              <Footer />
+            </div>
+          </Router>
+        </ToastProvider>
+      </WishlistProvider>
+    </CurrencyProvider>
   );
 }
 

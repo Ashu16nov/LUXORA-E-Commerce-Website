@@ -1,0 +1,254 @@
+.myorders-container {
+  padding-top: 2.5rem;
+  padding-bottom: 4rem;
+  min-height: 75vh;
+}
+
+.myorders-header {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #E6DFD5;
+  padding-bottom: 1.25rem;
+}
+
+.myorders-header h1 {
+  font-size: 2.2rem;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 0.3rem;
+}
+
+.myorders-header p {
+  color: #786F66;
+}
+
+.myorders-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border: 1px solid #E6DFD5;
+  background: #FFFDF9;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #524B43;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.tab-btn:hover, .tab-btn.active {
+  background: #1B1917;
+  color: #FFFDF9;
+  border-color: #1B1917;
+}
+
+.empty-orders-card {
+  background: #FFFDF9;
+  border: 1px dashed #E6DFD5;
+  border-radius: 18px;
+  padding: 4rem 2rem;
+}
+
+.empty-icon {
+  color: #C5A059;
+  margin-bottom: 1rem;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.order-card {
+  background: #FFFDF9;
+  border: 1px solid #E6DFD5;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+
+.order-card.rental-order-card {
+  border-color: rgba(197, 160, 89, 0.4);
+  background: linear-gradient(180deg, #FFFDF9 0%, #FAF5EF 100%);
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #E6DFD5;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.order-id-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #1B1917;
+  display: block;
+}
+
+.order-id-label.gold {
+  color: #C5A059;
+}
+
+.order-date-text {
+  font-size: 0.8rem;
+  color: #786F66;
+}
+
+.order-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.order-status-pill.success {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.order-status-pill.active-rental {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.order-items-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.order-item-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.order-item-row img {
+  width: 64px;
+  height: 78px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #F3ECE2;
+}
+
+.order-item-row .item-info {
+  flex: 1;
+}
+
+.order-item-row h4 {
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.order-item-row p {
+  font-size: 0.8rem;
+  color: #786F66;
+}
+
+.order-tracker-bar {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin: 1.5rem 0;
+  padding: 0 1rem;
+}
+
+.order-tracker-bar::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 2rem;
+  right: 2rem;
+  height: 2px;
+  background: #E6DFD5;
+  z-index: 1;
+}
+
+.tracker-step {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #786F66;
+}
+
+.step-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #FFFDF9;
+  border: 2px solid #E6DFD5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+.tracker-step.completed .step-circle {
+  background: #059669;
+  border-color: #059669;
+  color: #fff;
+}
+
+.tracker-step.active .step-circle {
+  background: #C5A059;
+  border-color: #C5A059;
+  color: #fff;
+}
+
+.order-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #E6DFD5;
+  padding-top: 1rem;
+  font-size: 0.85rem;
+  color: #524B43;
+}
+
+.deposit-guarantee-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #15803d;
+}
+
+.btn-manage-rental {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #C5A059;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.btn-manage-rental:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .order-card-header, .order-card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

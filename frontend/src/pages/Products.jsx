@@ -1,18 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
-import { Filter, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import QuickViewModal from '../components/QuickViewModal';
+import { Filter, X, ChevronLeft, ChevronRight, LayoutGrid, List, Sparkles, SlidersHorizontal } from 'lucide-react';
+import { CurrencyContext } from '../context/CurrencyContext';
 import './Products.css';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [viewMode, setViewMode] = useState('grid');
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [quickViewProduct, setQuickViewProduct] = useState(null);
   
+  const { formatPrice } = useContext(CurrencyContext);
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
@@ -55,7 +60,7 @@ const Products = () => {
         setPages(data.pages);
         setTotalCount(data.count);
       } else {
-        setProducts(data);
+        setProducts(Array.isArray(data) ? data : []);
       }
     } catch (error) {
       console.error('Error fetching products', error);
@@ -65,7 +70,6 @@ const Products = () => {
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
-    // Reset page to 1 on filter change
     updateURLParams({ page: 1 });
   };
 
@@ -105,36 +109,59 @@ const Products = () => {
   return (
     <div className="container products-page">
       <div className="products-header">
-        <h1>{category ? `${category} Collection` : search ? `Search Results for "${search}"` : 'All Products'}</h1>
-        <button className="mobile-filter-btn" onClick={() => setIsFilterOpen(true)}>
-          <Filter size={20} /> Filters
-        </button>
+        <div>
+          <span className="products-subtag"><Sparkles size={14} /> LUXORA HAUTE COUTURE</span>
+          <h1>{category ? `${category} Collection` : search ? `Search Results for "${search}"` : 'All Retail Products'}</h1>
+        </div>
+
+        <div className="products-header-controls">
+          <div className="view-mode-toggle">
+            <button
+              className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
+              onClick={() => setViewMode('grid')}
+              title="Grid View"
+            >
+              <LayoutGrid size={18} />
+            </button>
+            <button
+              className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
+              onClick={() => setViewMode('list')}
+              title="List View"
+            >
+              <List size={18} />
+            </button>
+          </div>
+
+          <button className="mobile-filter-btn" onClick={() => setIsFilterOpen(true)}>
+            <Filter size={18} /> Filters
+          </button>
+        </div>
       </div>
 
       <div className="products-layout">
         {/* Sidebar Filters */}
         <aside className={`filters-sidebar ${isFilterOpen ? 'open' : ''}`}>
           <div className="filter-header-mobile">
-            <h3>Filters</h3>
+            <h3><SlidersHorizontal size={18} /> Filters</h3>
             <button onClick={() => setIsFilterOpen(false)}><X size={24} /></button>
           </div>
           
           <div className="filter-group category-nav">
             <h4>Categories</h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              <li style={{ marginBottom: '8px' }}>
+            <ul className="category-filter-list">
+              <li>
                 <button 
                   onClick={() => handleCategoryClick('')}
-                  style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontWeight: category === '' ? 'bold' : 'normal', color: category === '' ? 'var(--primary-color)' : 'inherit', textAlign: 'left', fontSize: '1rem' }}
+                  className={category === '' ? 'active' : ''}
                 >
                   All Categories
                 </button>
               </li>
               {categoriesList.map(cat => (
-                <li key={cat} style={{ marginBottom: '8px' }}>
+                <li key={cat}>
                   <button 
                     onClick={() => handleCategoryClick(cat)}
-                    style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontWeight: category === cat ? 'bold' : 'normal', color: category === cat ? 'var(--primary-color)' : 'inherit', textAlign: 'left', fontSize: '1rem' }}
+                    className={category === cat ? 'active' : ''}
                   >
                     {cat}
                   </button>
@@ -149,14 +176,14 @@ const Products = () => {
               <option value="">Recommended</option>
               <option value="price_asc">Price: Low to High</option>
               <option value="price_desc">Price: High to Low</option>
-              <option value="newest">Newest</option>
+              <option value="newest">Newest Arrivals</option>
             </select>
           </div>
 
           <div className="filter-group">
             <h4>Brand</h4>
             <select name="brand" value={filters.brand} onChange={handleFilterChange} className="form-input">
-              <option value="">All Brands</option>
+              <option value="">All Luxury Brands</option>
               <option value="LUXORA">LUXORA</option>
               <option value="Nike">Nike</option>
               <option value="Zara">Zara</option>
@@ -184,13 +211,13 @@ const Products = () => {
               <option value="M">M</option>
               <option value="L">L</option>
               <option value="XL">XL</option>
-              <option value="8">8 (Shoes)</option>
-              <option value="9">9 (Shoes)</option>
-              <option value="10">10 (Shoes)</option>
+              <option value="8">8 (Footwear)</option>
+              <option value="9">9 (Footwear)</option>
+              <option value="10">10 (Footwear)</option>
             </select>
           </div>
 
-          <button className="btn btn-primary" onClick={clearFilters} style={{ width: '100%' }}>Clear All</button>
+          <button className="btn btn-primary" onClick={clearFilters} style={{ width: '100%', marginTop: '1rem' }}>Clear All Filters</button>
         </aside>
 
         {/* Product Grid */}
@@ -199,14 +226,15 @@ const Products = () => {
             <div className="loader"></div>
           ) : products.length === 0 ? (
             <div className="empty-state text-center">
-              <h2>No products found</h2>
-              <p>We couldn't find anything matching your current filters.</p>
-              <button className="btn btn-primary mt-4" onClick={clearFilters}>Clear Filters</button>
+              <h2>No Products Found</h2>
+              <p>We couldn't find anything matching your current criteria.</p>
+              <button className="btn btn-primary mt-4" onClick={clearFilters}>Reset All Filters</button>
             </div>
           ) : (
             <>
-              <p className="mb-4 text-sm" style={{ color: '#666' }}>Showing {products.length} of {totalCount} products</p>
-              <div className="grid grid-cols-4">
+              <p className="mb-4 text-sm count-text">Showing <strong>{products.length}</strong> of <strong>{totalCount}</strong> luxury pieces</p>
+              
+              <div className={viewMode === 'grid' ? 'grid grid-cols-3' : 'list-view-container'}>
                 {products.map(product => (
                   <ProductCard key={product._id} product={product} />
                 ))}
@@ -219,7 +247,6 @@ const Products = () => {
                     className="btn btn-secondary" 
                     disabled={page === 1}
                     onClick={() => handlePageChange(page - 1)}
-                    style={{ padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                   >
                     <ChevronLeft size={20} />
                   </button>
@@ -228,7 +255,6 @@ const Products = () => {
                     className="btn btn-secondary" 
                     disabled={page === pages}
                     onClick={() => handlePageChange(page + 1)}
-                    style={{ padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                   >
                     <ChevronRight size={20} />
                   </button>
@@ -238,6 +264,11 @@ const Products = () => {
           )}
         </main>
       </div>
+
+      {quickViewProduct && (
+        <QuickViewModal product={quickViewProduct} onClose={() => setQuickViewProduct(null)} />
+      )}
+
       {isFilterOpen && <div className="overlay" onClick={() => setIsFilterOpen(false)}></div>}
     </div>
   );
