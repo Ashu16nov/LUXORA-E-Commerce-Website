@@ -1,6 +1,20 @@
-import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingBag, Search, Heart, User, Menu, X, Sparkles, Globe, ChevronDown, Package, ShieldCheck } from 'lucide-react';
+import React, { useContext, useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import {
+  ShoppingBag,
+  Search,
+  Heart,
+  User,
+  Menu,
+  X,
+  Sparkles,
+  Globe,
+  ChevronDown,
+  Package,
+  ShieldCheck,
+  Crown,
+  Compass
+} from 'lucide-react';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import { WishlistContext } from '../context/WishlistContext';
@@ -18,8 +32,22 @@ const Navbar = () => {
   const [isStylistOpen, setIsStylistOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchInput, setShowSearchInput] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -32,16 +60,26 @@ const Navbar = () => {
 
   const totalCartCount = cartItems.reduce((acc, item) => acc + (item.qty || 1), 0);
 
+  const isActive = (path) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname.startsWith(path);
+  };
+
   return (
     <>
-      {/* Top Banner Announcement Bar */}
+      {/* Top Announcement Bar */}
       <div className="top-announcement-bar">
         <div className="container announcement-content">
-          <span>✨ COMPLIMENTARY EXPRESS SHIPPING ON ORDERS OVER ₹999 & DESIGNER RENTALS</span>
+          <div className="announcement-left">
+            <span className="announcement-badge">VIP ACCESS</span>
+            <span className="announcement-text">
+              COMPLIMENTARY EXPRESS SHIPPING ON ORDERS OVER ₹999 & DESIGNER RENTALS
+            </span>
+          </div>
+
           <div className="announcement-right">
-            {/* Currency Selector */}
             <div className="currency-selector">
-              <Globe size={13} />
+              <Globe size={13} className="globe-icon" />
               <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
                 {Object.keys(currencies).map((curr) => (
                   <option key={curr} value={curr}>
@@ -54,23 +92,61 @@ const Navbar = () => {
         </div>
       </div>
 
-      <nav className="navbar">
+      {/* Main Navbar */}
+      <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
         <div className="container navbar-container">
-          <Link to="/" className="navbar-logo luxora-title">
-            LUXORA
+          {/* Brand Logo */}
+          <Link to="/" className="navbar-logo">
+            <span className="logo-brand-text">LUXORA</span>
+            <span className="logo-subtext">COUTURE & RENTALS</span>
           </Link>
 
+          {/* Navigation Links */}
           <div className={`navbar-links ${isMenuOpen ? 'active' : ''}`}>
-            <Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
-            <Link to="/products" onClick={() => setIsMenuOpen(false)}>Shop All</Link>
-            <Link to="/rentals" onClick={() => setIsMenuOpen(false)} className="nav-rental-link">
-              <Sparkles size={14} /> Luxury Rentals 👑
+            <Link
+              to="/"
+              onClick={() => setIsMenuOpen(false)}
+              className={isActive('/') ? 'active-link' : ''}
+            >
+              Home
             </Link>
-            <Link to="/products?category=Men" onClick={() => setIsMenuOpen(false)}>Men</Link>
-            <Link to="/products?category=Women" onClick={() => setIsMenuOpen(false)}>Women</Link>
-            <Link to="/offers" onClick={() => setIsMenuOpen(false)}>Offers</Link>
-            
-            {/* AI Stylist Button in Nav */}
+            <Link
+              to="/products"
+              onClick={() => setIsMenuOpen(false)}
+              className={location.pathname === '/products' && !location.search ? 'active-link' : ''}
+            >
+              Shop All
+            </Link>
+            <Link
+              to="/rentals"
+              onClick={() => setIsMenuOpen(false)}
+              className={`nav-rental-link ${isActive('/rentals') ? 'active-link' : ''}`}
+            >
+              <Sparkles size={14} className="sparkle-icon-pulse" /> Designer Rentals 👑
+            </Link>
+            <Link
+              to="/products?category=Women"
+              onClick={() => setIsMenuOpen(false)}
+              className={location.search.includes('Women') ? 'active-link' : ''}
+            >
+              Women
+            </Link>
+            <Link
+              to="/products?category=Men"
+              onClick={() => setIsMenuOpen(false)}
+              className={location.search.includes('Men') ? 'active-link' : ''}
+            >
+              Men
+            </Link>
+            <Link
+              to="/offers"
+              onClick={() => setIsMenuOpen(false)}
+              className={isActive('/offers') ? 'active-link' : ''}
+            >
+              Offers
+            </Link>
+
+            {/* AI Stylist Button */}
             <button
               className="nav-ai-btn"
               onClick={() => {
@@ -82,19 +158,25 @@ const Navbar = () => {
             </button>
           </div>
 
+          {/* Icon Actions */}
           <div className="navbar-icons">
             {/* Search Input Toggle */}
             <div className="search-wrap">
               {showSearchInput ? (
                 <form onSubmit={handleSearchSubmit} className="nav-search-form">
+                  <Search size={16} className="search-input-icon" />
                   <input
                     type="text"
-                    placeholder="Search fashion, tuxedos, lehengas..."
+                    placeholder="Search designer outfits, tuxedos, sarees..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     autoFocus
                   />
-                  <button type="button" onClick={() => setShowSearchInput(false)}>
+                  <button
+                    type="button"
+                    className="btn-search-close"
+                    onClick={() => setShowSearchInput(false)}
+                  >
                     <X size={16} />
                   </button>
                 </form>
@@ -128,34 +210,46 @@ const Navbar = () => {
             {/* User Profile */}
             {user ? (
               <div className="dropdown">
-                <span className="icon-link user-profile-trigger">
-                  <User size={20} />
+                <div className="icon-link user-profile-trigger">
+                  <div className="avatar-circle">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
                   <span className="user-name-inline">{user.name.split(' ')[0]}</span>
-                </span>
+                  <ChevronDown size={14} className="dropdown-caret" />
+                </div>
+
                 <div className="dropdown-content">
                   <div className="user-dropdown-header">
                     <strong>{user.name}</strong>
                     <small>{user.email}</small>
                   </div>
-                  
+
                   {user.isAdmin && (
-                    <Link to="/admin" className="admin-link-highlight" style={{ color: '#D4AF37', fontWeight: 'bold' }}>
-                      <ShieldCheck size={15} style={{ marginRight: '6px' }} /> Control Panel (Admin)
+                    <Link to="/admin" className="admin-link-highlight">
+                      <ShieldCheck size={15} /> Admin Dashboard
                     </Link>
                   )}
 
-                  <Link to="/profile">My Profile</Link>
-                  <Link to="/wishlist">My Wishlist ({wishlistItems.length})</Link>
-                  <Link to="/myorders">
-                    <Package size={14} style={{ marginRight: '6px' }} /> My Orders
+                  <Link to="/profile">
+                    <User size={14} /> My Profile
                   </Link>
-                  <Link to="/my-rentals">My Rentals 👑</Link>
-                  <button onClick={logout} className="logout-btn">Logout</button>
+                  <Link to="/wishlist">
+                    <Heart size={14} /> Saved Items ({wishlistItems.length})
+                  </Link>
+                  <Link to="/myorders">
+                    <Package size={14} /> Orders & Returns
+                  </Link>
+                  <Link to="/my-rentals">
+                    <Crown size={14} /> My Rentals 👑
+                  </Link>
+                  <button onClick={logout} className="logout-btn">
+                    Logout
+                  </button>
                 </div>
               </div>
             ) : (
-              <Link to="/login" className="icon-link" title="Account">
-                <User size={20} />
+              <Link to="/login" className="btn-nav-login" title="Account Login">
+                <User size={16} /> Login
               </Link>
             )}
 
@@ -177,3 +271,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
