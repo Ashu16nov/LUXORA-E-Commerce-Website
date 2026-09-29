@@ -186,33 +186,37 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 3. AI STYLIST PROMO BANNER SECTION */}
-      <section className="ai-stylist-promo-banner container">
-        <div className="ai-promo-content">
-          <div className="ai-promo-text">
-            <div className="ai-pill">
-              <Sparkles size={14} /> LUXORA AI VIRTUAL STYLIST
-            </div>
-            <h2>Looking for the perfect ensemble for an upcoming event?</h2>
-            <p>
-              Allow our AI Personal Stylist to curate tailored outfit combinations across our retail and luxury rental wardrobes.
-            </p>
-            <div className="ai-sample-chips">
-              <span className="chip-label">Try asking:</span>
-              <button className="ai-chip" onClick={() => setIsAiStylistOpen(true)}>
-                "Wedding Sangeet Lehenga"
-              </button>
-              <button className="ai-chip" onClick={() => setIsAiStylistOpen(true)}>
-                "Black Tie Gala Suit"
-              </button>
-              <button className="ai-chip" onClick={() => setIsAiStylistOpen(true)}>
-                "Cocktail Evening Dress"
+      {/* 3. AI STYLIST PROMO SECTION */}
+      <section className="ai-stylist-promo-section">
+        <div className="container">
+          <div className="ai-stylist-promo-card">
+            <div className="ai-promo-content">
+              <div className="ai-promo-text">
+                <div className="ai-pill">
+                  <Sparkles size={14} /> LUXORA AI VIRTUAL STYLIST
+                </div>
+                <h2>Looking for the perfect ensemble for an upcoming event?</h2>
+                <p>
+                  Allow our AI Personal Stylist to curate tailored outfit combinations across our retail and luxury rental wardrobes.
+                </p>
+                <div className="ai-sample-chips">
+                  <span className="chip-label">Try asking:</span>
+                  <button className="ai-chip" onClick={() => setIsAiStylistOpen(true)}>
+                    "Wedding Sangeet Lehenga"
+                  </button>
+                  <button className="ai-chip" onClick={() => setIsAiStylistOpen(true)}>
+                    "Black Tie Gala Suit"
+                  </button>
+                  <button className="ai-chip" onClick={() => setIsAiStylistOpen(true)}>
+                    "Cocktail Evening Dress"
+                  </button>
+                </div>
+              </div>
+              <button className="btn-ai-promo-trigger" onClick={() => setIsAiStylistOpen(true)}>
+                <Sparkles size={20} /> Launch AI Fashion Matcher
               </button>
             </div>
           </div>
-          <button className="btn-ai-promo-trigger" onClick={() => setIsAiStylistOpen(true)}>
-            <Sparkles size={20} /> Launch AI Fashion Matcher
-          </button>
         </div>
       </section>
 
