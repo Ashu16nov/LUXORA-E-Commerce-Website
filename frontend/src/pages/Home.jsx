@@ -4,7 +4,6 @@ import axios from 'axios';
 import Carousel from '../components/Carousel';
 import ProductCard from '../components/ProductCard';
 import QuickViewModal from '../components/QuickViewModal';
-import AiStylistModal from '../components/AiStylistModal';
 import { CurrencyContext } from '../context/CurrencyContext';
 import { ToastContext } from '../context/ToastContext';
 import { WishlistContext } from '../context/WishlistContext';
@@ -40,7 +39,6 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [quickViewProduct, setQuickViewProduct] = useState(null);
-  const [isAiStylistOpen, setIsAiStylistOpen] = useState(false);
 
   const { formatPrice } = useContext(CurrencyContext);
   const { addToast } = useContext(ToastContext);
@@ -186,39 +184,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 3. AI STYLIST PROMO SECTION */}
-      <section className="ai-stylist-promo-section">
-        <div className="container">
-          <div className="ai-stylist-promo-card">
-            <div className="ai-promo-content">
-              <div className="ai-promo-text">
-                <div className="ai-pill">
-                  <Sparkles size={14} /> LUXORA AI VIRTUAL STYLIST
-                </div>
-                <h2>Looking for the perfect ensemble for an upcoming event?</h2>
-                <p>
-                  Allow our AI Personal Stylist to curate tailored outfit combinations across our retail and luxury rental wardrobes.
-                </p>
-                <div className="ai-sample-chips">
-                  <span className="chip-label">Try asking:</span>
-                  <button className="ai-chip" onClick={() => setIsAiStylistOpen(true)}>
-                    "Wedding Sangeet Lehenga"
-                  </button>
-                  <button className="ai-chip" onClick={() => setIsAiStylistOpen(true)}>
-                    "Black Tie Gala Suit"
-                  </button>
-                  <button className="ai-chip" onClick={() => setIsAiStylistOpen(true)}>
-                    "Cocktail Evening Dress"
-                  </button>
-                </div>
-              </div>
-              <button className="btn-ai-promo-trigger" onClick={() => setIsAiStylistOpen(true)}>
-                <Sparkles size={20} /> Launch AI Fashion Matcher
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* 4. CURATED CATEGORIES SECTION */}
       <section className="container categories-section">
@@ -503,8 +469,7 @@ const Home = () => {
         <QuickViewModal product={quickViewProduct} onClose={() => setQuickViewProduct(null)} />
       )}
 
-      {/* AI Stylist Modal */}
-      <AiStylistModal isOpen={isAiStylistOpen} onClose={() => setIsAiStylistOpen(false)} />
+
     </div>
   );
 };
