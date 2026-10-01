@@ -38,7 +38,7 @@ const productSchema = new mongoose.Schema({
   reviews: [reviewSchema],
   rating: { type: Number, required: true, default: 0 },
   numReviews: { type: Number, required: true, default: 0 },
-  stock: { type: Number, required: true, default: 0 },
+  stock: { type: Number, required: true, default: 15 },
   featured: { type: Boolean, default: false },
   trending: { type: Boolean, default: false },
   offer: { type: Boolean, default: false },

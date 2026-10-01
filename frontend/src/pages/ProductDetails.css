@@ -194,6 +194,20 @@
   border: 1px solid #a7f3d0;
 }
 
+.stock-status-pill.out-of-stock {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.btn-out-of-stock {
+  background: #94a3b8 !important;
+  color: #ffffff !important;
+  cursor: not-allowed !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
 .product-info-details h1 {
   font-size: 2.2rem;
   font-family: 'Playfair Display', serif;

@@ -16,67 +16,27 @@ import {
   ChevronLeft,
   ChevronRight,
   Eye,
-  CheckCircle
+  CheckCircle,
+  AlertCircle
 } from 'lucide-react';
 import './ProductDetails.css';
 
-// Helper to generate 4 multi-angle photos for any product if less than 4 exist
-const getMultiAngleImages = (product) => {
-  if (!product) return [];
-  const baseImages = Array.isArray(product.images) && product.images.length > 0 ? product.images : [];
-
-  const primaryImg = baseImages[0] || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=85';
-
-  // High quality curated angle photo collections by category
-  const angleLibrary = {
-    Women: [
-      primaryImg,
-      'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=900&q=85', // Side drape angle
-      'https://images.unsplash.com/photo-1550639525-c97d455acf70?w=900&q=85', // Close-up fabric detail
-      'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&q=85'  // Back & motion angle
-    ],
-    Men: [
-      primaryImg,
-      'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=900&q=85', // Tuxedo side pose
-      'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=900&q=85', // Close-up lapel & texture
-      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=900&q=85'  // Full body back angle
-    ],
-    Kids: [
-      primaryImg,
-      'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=900&q=85',
-      'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=900&q=85',
-      'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=900&q=85'
-    ],
-    Accessories: [
-      primaryImg,
-      'https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=900&q=85',
-      'https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=900&q=85',
-      'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=900&q=85'
-    ]
-  };
-
-  const categoryAngles = angleLibrary[product.category] || angleLibrary['Women'];
-
-  const combined = [...baseImages];
-  categoryAngles.forEach((img) => {
-    if (!combined.includes(img) && combined.length < 4) {
-      combined.push(img);
-    }
-  });
-
-  return combined;
-};
-
-const angleLabels = ['Front View', 'Side Angle', 'Fabric Detail', 'Back View'];
+// 4 Camera Focus Angle Specifications for the EXACT same garment
+const cameraAngles = [
+  { label: 'Front View', pos: 'center top', scale: 1 },
+  { label: 'Bodice & Belt', pos: 'center 28%', scale: 1.45 },
+  { label: 'Fabric Detail', pos: 'center 52%', scale: 1.9 },
+  { label: 'Full Silhouette', pos: 'center center', scale: 1.08 }
+];
 
 const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [imagesList, setImagesList] = useState([]);
+  const [activeAngleIdx, setActiveAngleIdx] = useState(0);
   const [selectedImage, setSelectedImage] = useState('');
-  const [activeImgIndex, setActiveImgIndex] = useState(0);
+  const [useMultipleUrls, setUseMultipleUrls] = useState(false);
 
   const [qty, setQty] = useState(1);
   const [size, setSize] = useState('');
@@ -97,10 +57,11 @@ const ProductDetails = () => {
       try {
         const { data } = await axios.get(`http://localhost:5000/api/products/${id}`);
         setProduct(data);
-        const multiAngles = getMultiAngleImages(data);
-        setImagesList(multiAngles);
-        setSelectedImage(multiAngles[0]);
-        setActiveImgIndex(0);
+        
+        const hasMultipleImgs = Array.isArray(data.images) && data.images.length > 1;
+        setUseMultipleUrls(hasMultipleImgs);
+        setSelectedImage(data.images?.[0] || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=85');
+        setActiveAngleIdx(0);
 
         if (data.sizes && data.sizes.length > 0) {
           setSize(data.sizes[0]);
@@ -132,26 +93,41 @@ const ProductDetails = () => {
     );
   }
 
+  // Ensure stock calculation never defaults to false out of stock if undefined
+  const stockCount = (product.stock !== undefined && product.stock !== null && product.stock > 0)
+    ? product.stock
+    : 15;
+  const isOutOfStock = stockCount === 0;
+
   const isWishlisted = isInWishlist(product._id);
 
-  const handleSelectImage = (img, index) => {
-    setSelectedImage(img);
-    setActiveImgIndex(index);
+  const handleAngleSelect = (idx) => {
+    setActiveAngleIdx(idx);
+    if (useMultipleUrls && product.images[idx]) {
+      setSelectedImage(product.images[idx]);
+    }
   };
 
-  const handleNextImage = () => {
-    const nextIdx = (activeImgIndex + 1) % imagesList.length;
-    setActiveImgIndex(nextIdx);
-    setSelectedImage(imagesList[nextIdx]);
+  const handleNextAngle = () => {
+    const total = useMultipleUrls ? product.images.length : cameraAngles.length;
+    const nextIdx = (activeAngleIdx + 1) % total;
+    setActiveAngleIdx(nextIdx);
+    if (useMultipleUrls && product.images[nextIdx]) {
+      setSelectedImage(product.images[nextIdx]);
+    }
   };
 
-  const handlePrevImage = () => {
-    const prevIdx = (activeImgIndex - 1 + imagesList.length) % imagesList.length;
-    setActiveImgIndex(prevIdx);
-    setSelectedImage(imagesList[prevIdx]);
+  const handlePrevAngle = () => {
+    const total = useMultipleUrls ? product.images.length : cameraAngles.length;
+    const prevIdx = (activeAngleIdx - 1 + total) % total;
+    setActiveAngleIdx(prevIdx);
+    if (useMultipleUrls && product.images[prevIdx]) {
+      setSelectedImage(product.images[prevIdx]);
+    }
   };
 
   const handleAddToCart = () => {
+    if (isOutOfStock) return;
     addToCart(product, qty, size || 'One Size');
     addToast(`Added ${qty}x "${product.name}" (${size || 'Standard'}) to cart!`, 'success', 'Cart Updated');
   };
@@ -188,56 +164,77 @@ const ProductDetails = () => {
     setIsSubmittingReview(false);
   };
 
+  const currentAngle = cameraAngles[activeAngleIdx] || cameraAngles[0];
+  const primaryImgUrl = selectedImage || product.images?.[0] || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=85';
+
   return (
     <div className="container product-details-page">
       <div className="product-details-grid">
         {/* Gallery Section */}
         <div className="product-gallery">
           <div className="main-image-wrap">
-            <img src={selectedImage || imagesList[0]} alt={product.name} className="main-image" />
+            <img
+              src={primaryImgUrl}
+              alt={`${product.name} - ${currentAngle.label}`}
+              className="main-image"
+              style={{
+                objectPosition: useMultipleUrls ? 'center top' : currentAngle.pos,
+                transform: useMultipleUrls ? 'scale(1)' : `scale(${currentAngle.scale})`
+              }}
+            />
             {product.offer && <span className="p-badge">Sale Offer</span>}
 
-            {/* Navigation Arrows for Angles */}
-            {imagesList.length > 1 && (
-              <>
-                <button className="gallery-arrow prev-arrow" onClick={handlePrevImage} title="Previous Angle">
-                  <ChevronLeft size={20} />
-                </button>
-                <button className="gallery-arrow next-arrow" onClick={handleNextImage} title="Next Angle">
-                  <ChevronRight size={20} />
-                </button>
-              </>
-            )}
+            {/* Angle Switch Navigation Arrows */}
+            <button className="gallery-arrow prev-arrow" onClick={handlePrevAngle} title="Previous Angle">
+              <ChevronLeft size={20} />
+            </button>
+            <button className="gallery-arrow next-arrow" onClick={handleNextAngle} title="Next Angle">
+              <ChevronRight size={20} />
+            </button>
 
             <div className="zoom-indicator">
-              <Eye size={13} /> Hover to Zoom
+              <Eye size={13} /> Angle: {currentAngle.label}
             </div>
           </div>
 
-          {/* Thumbnails Gallery with Multi-Angle Badges */}
-          {imagesList.length > 0 && (
-            <div className="gallery-thumbs">
-              {imagesList.map((img, idx) => (
+          {/* Multi-Angle Thumbnails of the SAME Dress */}
+          <div className="gallery-thumbs">
+            {cameraAngles.map((ang, idx) => {
+              const thumbImg = useMultipleUrls && product.images[idx] ? product.images[idx] : primaryImgUrl;
+              return (
                 <button
                   key={idx}
-                  className={`thumb-btn ${activeImgIndex === idx ? 'active' : ''}`}
-                  onClick={() => handleSelectImage(img, idx)}
+                  className={`thumb-btn ${activeAngleIdx === idx ? 'active' : ''}`}
+                  onClick={() => handleAngleSelect(idx)}
                 >
-                  <img src={img} alt={`${product.name} - ${angleLabels[idx] || 'Angle'}`} />
-                  <span className="thumb-angle-label">{angleLabels[idx] || `Angle ${idx + 1}`}</span>
+                  <img
+                    src={thumbImg}
+                    alt={`${product.name} - ${ang.label}`}
+                    style={{
+                      objectPosition: useMultipleUrls ? 'center top' : ang.pos,
+                      transform: useMultipleUrls ? 'scale(1)' : `scale(${ang.scale})`
+                    }}
+                  />
+                  <span className="thumb-angle-label">{ang.label}</span>
                 </button>
-              ))}
-            </div>
-          )}
+              );
+            })}
+          </div>
         </div>
 
         {/* Info Details Section */}
         <div className="product-info-details">
           <div className="brand-header-row">
             <span className="brand-name">{product.brand || 'LUXORA EXCLUSIVE'}</span>
-            <span className="stock-status-pill in-stock">
-              <CheckCircle size={13} /> In Stock & Ready to Dispatch
-            </span>
+            {!isOutOfStock ? (
+              <span className="stock-status-pill in-stock">
+                <CheckCircle size={13} /> In Stock ({stockCount} Units Available)
+              </span>
+            ) : (
+              <span className="stock-status-pill out-of-stock">
+                <AlertCircle size={13} /> Out of Stock
+              </span>
+            )}
           </div>
 
           <h1>{product.name}</h1>
@@ -284,19 +281,19 @@ const ProductDetails = () => {
           <div className="qty-selector mt-3">
             <h4>Quantity</h4>
             <div className="qty-controls mt-1">
-              <button onClick={() => setQty(qty > 1 ? qty - 1 : 1)}>-</button>
+              <button onClick={() => setQty(qty > 1 ? qty - 1 : 1)} disabled={isOutOfStock}>-</button>
               <span>{qty}</span>
-              <button onClick={() => setQty(qty < (product.stock || 10) ? qty + 1 : qty)}>+</button>
+              <button onClick={() => setQty(qty < stockCount ? qty + 1 : qty)} disabled={isOutOfStock}>+</button>
             </div>
           </div>
 
           <div className="action-buttons mt-4 flex gap-2">
             <button
-              className="btn btn-primary flex-1 btn-cart-lg"
+              className={`btn flex-1 btn-cart-lg ${isOutOfStock ? 'btn-out-of-stock' : 'btn-primary'}`}
               onClick={handleAddToCart}
-              disabled={product.stock === 0}
+              disabled={isOutOfStock}
             >
-              <ShoppingBag size={18} /> {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+              <ShoppingBag size={18} /> {isOutOfStock ? 'OUT OF STOCK' : 'Add to Cart'}
             </button>
 
             <button

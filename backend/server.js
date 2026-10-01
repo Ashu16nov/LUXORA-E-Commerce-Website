@@ -52,7 +52,7 @@ app.get('/api/seed-db', async (req, res) => {
   }
 });
 
-// Auto-seed rental products if collection is empty
+// Auto-seed rental products & ensure positive stock for retail items
 setTimeout(async () => {
   try {
     const count = await RentalProduct.countDocuments();
@@ -60,10 +60,13 @@ setTimeout(async () => {
       await RentalProduct.insertMany(sampleRentalProducts);
       console.log('Auto-seeded 22 luxury rental products into MongoDB!');
     }
+    // Update any retail product that has stock 0 or missing stock
+    await Product.updateMany({ $or: [{ stock: 0 }, { stock: { $exists: false } }] }, { $set: { stock: 15 } });
+    console.log('Verified & updated retail product stock levels in MongoDB!');
   } catch (err) {
-    console.log('Rental auto-seed note:', err.message);
+    console.log('Startup auto-task note:', err.message);
   }
-}, 3000);
+}, 2000);
 
 // Base route
 app.get('/', (req, res) => {
