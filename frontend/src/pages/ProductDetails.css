@@ -1,4 +1,4 @@
-/* Product Details Styling */
+/* LUXORA Premium Product Details Styling */
 
 .product-details-page {
   padding-top: 3rem;
@@ -7,29 +7,43 @@
 
 .product-details-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 460px 1fr;
   gap: 3.5rem;
+  align-items: start;
 }
 
+/* 1. GALLERY & MULTI-ANGLE THUMBNAILS */
 .product-gallery {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 100%;
+  max-width: 460px;
 }
 
 .main-image-wrap {
   position: relative;
-  aspect-ratio: 4/5;
+  width: 100%;
+  max-width: 460px;
+  height: 480px;
+  aspect-ratio: 3/4;
   background: #F3ECE2;
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid #E6DFD5;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
 }
 
 .main-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top center;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-image-wrap:hover .main-image {
+  transform: scale(1.12);
 }
 
 .p-badge {
@@ -39,50 +53,153 @@
   background: #1B1917;
   color: #FFFDF9;
   padding: 0.3rem 0.8rem;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
-  border-radius: 4px;
+  border-radius: 6px;
+  letter-spacing: 0.8px;
+  z-index: 5;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-.gallery-thumbs {
+.zoom-indicator {
+  position: absolute;
+  bottom: 0.85rem;
+  right: 0.85rem;
+  background: rgba(15, 23, 42, 0.75);
+  color: #F8FAFC;
+  padding: 0.25rem 0.65rem;
+  border-radius: 50px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  backdrop-filter: blur(6px);
   display: flex;
-  gap: 0.8rem;
+  align-items: center;
+  gap: 0.35rem;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Gallery Arrows */
+.gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #1B1917;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: all 0.25s ease;
+  z-index: 6;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.prev-arrow { left: 0.75rem; }
+.next-arrow { right: 0.75rem; }
+
+.gallery-arrow:hover {
+  background: #1B1917;
+  color: #FFFDF9;
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Thumbnails Grid */
+.gallery-thumbs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
 }
 
 .thumb-btn {
-  width: 70px;
-  height: 85px;
-  border-radius: 8px;
+  position: relative;
+  height: 84px;
+  border-radius: 10px;
   overflow: hidden;
   border: 2px solid transparent;
   padding: 0;
   cursor: pointer;
   background: #F3ECE2;
+  transition: all 0.25s ease;
+}
+
+.thumb-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(197, 160, 89, 0.5);
 }
 
 .thumb-btn.active {
   border-color: #C5A059;
+  box-shadow: 0 4px 16px rgba(197, 160, 89, 0.35);
+  transform: translateY(-2px);
 }
 
 .thumb-btn img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top center;
+}
+
+.thumb-angle-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(15, 23, 42, 0.82);
+  color: #F8FAFC;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.15rem 0;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* 2. PRODUCT INFO DETAILS */
+.brand-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
 }
 
 .product-info-details .brand-name {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: #C5A059;
+  font-weight: 800;
+}
+
+.stock-status-pill {
+  font-size: 0.75rem;
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 50px;
+}
+
+.stock-status-pill.in-stock {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
 }
 
 .product-info-details h1 {
   font-size: 2.2rem;
   font-family: 'Playfair Display', serif;
-  margin: 0.3rem 0 0.8rem;
+  color: #1B1917;
+  margin: 0.2rem 0 0.75rem;
+  line-height: 1.25;
 }
 
 .reviews-count {
@@ -97,30 +214,32 @@
 }
 
 .current-price {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.1rem;
+  font-weight: 800;
   color: #1B1917;
+  letter-spacing: -0.5px;
 }
 
 .original-price {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   text-decoration: line-through;
-  color: #786F66;
+  color: #94A3B8;
 }
 
 .discount-tag {
   background: #fee2e2;
   color: #dc2626;
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.78rem;
+  font-weight: 800;
   padding: 0.2rem 0.6rem;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 .description {
   color: #524B43;
-  line-height: 1.6;
+  line-height: 1.65;
   font-size: 0.95rem;
+  margin-top: 0.75rem;
 }
 
 .size-btn {
@@ -128,14 +247,22 @@
   border: 1px solid #E6DFD5;
   background: #FFFDF9;
   border-radius: 8px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9rem;
+  color: #1B1917;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.size-btn:hover {
+  border-color: #C5A059;
 }
 
 .size-btn.active {
   background: #1B1917;
   color: #FFFDF9;
   border-color: #1B1917;
+  box-shadow: 0 4px 12px rgba(27, 25, 23, 0.2);
 }
 
 .qty-controls {
@@ -144,6 +271,7 @@
   border: 1px solid #E6DFD5;
   border-radius: 8px;
   overflow: hidden;
+  background: #FFFDF9;
 }
 
 .qty-controls button {
@@ -152,6 +280,7 @@
   background: #F3ECE2;
   font-size: 1.1rem;
   font-weight: 700;
+  cursor: pointer;
 }
 
 .qty-controls span {
@@ -166,6 +295,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  border-radius: 12px;
 }
 
 .active-wishlist {
@@ -177,58 +307,77 @@
   display: flex;
   gap: 1.5rem;
   border-top: 1px solid #E6DFD5;
-  padding-top: 1rem;
+  padding-top: 1.25rem;
   font-size: 0.85rem;
-  color: #786F66;
+  color: #64748B;
+  font-weight: 500;
 }
 
 .g-item {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
 }
 
 .rental-crosspromo-widget {
   margin-top: 2rem;
   background: linear-gradient(135deg, #FFFDF9 0%, #FAF5EF 100%);
   border: 1px solid #C5A059;
-  border-radius: 14px;
+  border-radius: 16px;
   padding: 1.5rem;
+  box-shadow: 0 6px 20px rgba(197, 160, 89, 0.1);
 }
 
 .rental-crosspromo-widget h4 {
-  font-size: 1rem;
+  font-size: 1.02rem;
   color: #1B1917;
   margin-bottom: 0.4rem;
+  font-weight: 700;
 }
 
 .rental-crosspromo-widget p {
   font-size: 0.88rem;
   color: #524B43;
   margin-bottom: 1rem;
+  line-height: 1.5;
 }
 
 .btn-crosspromo {
   display: inline-block;
   background: linear-gradient(135deg, #d4af37, #9a7b38);
-  color: #FFF;
-  padding: 0.6rem 1.25rem;
-  border-radius: 8px;
+  color: #111827;
+  padding: 0.65rem 1.35rem;
+  border-radius: 10px;
   font-weight: 700;
   font-size: 0.85rem;
   text-decoration: none;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  transition: all 0.25s ease;
 }
 
+.btn-crosspromo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.45);
+}
+
+/* 3. REVIEWS SECTION */
 .reviews-section {
   border-top: 1px solid #E6DFD5;
-  padding-top: 3rem;
+  padding-top: 3.5rem;
+}
+
+.reviews-section h2 {
+  font-size: 1.8rem;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 1.5rem;
 }
 
 .add-review-form {
   background: #FFFDF9;
   border: 1px solid #E6DFD5;
-  border-radius: 14px;
-  padding: 1.5rem;
+  border-radius: 16px;
+  padding: 1.75rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.03);
 }
 
 .add-review-form h3 {
@@ -251,9 +400,10 @@
 .review-item {
   background: #FFFDF9;
   border: 1px solid #E6DFD5;
-  border-radius: 12px;
-  padding: 1.25rem;
+  border-radius: 14px;
+  padding: 1.35rem;
   margin-bottom: 1rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02);
 }
 
 .review-author-row {
@@ -270,8 +420,18 @@
   margin-top: 0.5rem;
 }
 
-@media (max-width: 768px) {
+/* RESPONSIVE */
+@media (max-width: 1024px) {
   .product-details-grid {
     grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .product-gallery, .main-image-wrap {
+    max-width: 100%;
+  }
+
+  .main-image-wrap {
+    height: 440px;
   }
 }

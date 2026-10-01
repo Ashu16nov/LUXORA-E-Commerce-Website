@@ -5,8 +5,57 @@ import { AuthContext } from '../context/AuthContext';
 import { CurrencyContext } from '../context/CurrencyContext';
 import { WishlistContext } from '../context/WishlistContext';
 import { ToastContext } from '../context/ToastContext';
-import { Calendar, ShieldCheck, RotateCcw, Clock, Star, Award, Layers, Sparkles, CheckCircle2, ArrowRight, Heart } from 'lucide-react';
+import {
+  Calendar,
+  ShieldCheck,
+  RotateCcw,
+  Clock,
+  Star,
+  Award,
+  Layers,
+  Sparkles,
+  CheckCircle2,
+  ArrowRight,
+  Heart,
+  ChevronLeft,
+  ChevronRight,
+  Eye
+} from 'lucide-react';
 import './RentalDetails.css';
+
+// Multi-angle generator helper for luxury rentals
+const getMultiAngleImages = (item) => {
+  if (!item) return [];
+  const baseImages = Array.isArray(item.images) && item.images.length > 0 ? item.images : [];
+  const primaryImg = baseImages[0] || 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=900&q=85';
+
+  const angleLibrary = {
+    Women: [
+      primaryImg,
+      'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=900&q=85',
+      'https://images.unsplash.com/photo-1550639525-c97d455acf70?w=900&q=85',
+      'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&q=85'
+    ],
+    Men: [
+      primaryImg,
+      'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=900&q=85',
+      'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=900&q=85',
+      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=900&q=85'
+    ]
+  };
+
+  const categoryAngles = angleLibrary[item.category] || angleLibrary['Women'];
+  const combined = [...baseImages];
+  categoryAngles.forEach((img) => {
+    if (!combined.includes(img) && combined.length < 4) {
+      combined.push(img);
+    }
+  });
+
+  return combined;
+};
+
+const angleLabels = ['Front View', 'Side Angle', 'Fabric Detail', 'Back View'];
 
 const RentalDetails = () => {
   const { id } = useParams();
@@ -18,13 +67,16 @@ const RentalDetails = () => {
 
   const [rentalItem, setRentalItem] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const [imagesList, setImagesList] = useState([]);
   const [selectedImage, setSelectedImage] = useState('');
-  
+  const [activeImgIndex, setActiveImgIndex] = useState(0);
+
   // Rental configuration state
   const [rentalDays, setRentalDays] = useState(3);
   const [startDate, setStartDate] = useState(() => {
     const today = new Date();
-    today.setDate(today.getDate() + 2); // default start in 2 days
+    today.setDate(today.getDate() + 2);
     return today.toISOString().split('T')[0];
   });
   const [selectedSize, setSelectedSize] = useState('');
@@ -34,9 +86,11 @@ const RentalDetails = () => {
       try {
         const { data } = await axios.get(`http://localhost:5000/api/rentals/products/${id}`);
         setRentalItem(data);
-        if (data.images && data.images.length > 0) {
-          setSelectedImage(data.images[0]);
-        }
+        const multiAngles = getMultiAngleImages(data);
+        setImagesList(multiAngles);
+        setSelectedImage(multiAngles[0]);
+        setActiveImgIndex(0);
+
         if (data.sizes && data.sizes.length > 0) {
           setSelectedSize(data.sizes[0]);
         }
@@ -60,15 +114,31 @@ const RentalDetails = () => {
 
   if (!rentalItem) {
     return (
-      <div className="container text-center mt-5">
+      <div className="container text-center mt-5" style={{ padding: '5rem 0' }}>
         <h2>Rental Outfit Not Found</h2>
         <Link to="/rentals" className="btn btn-primary mt-3">Back to Rentals</Link>
       </div>
     );
   }
 
-  const images = rentalItem.images && rentalItem.images.length > 0 ? rentalItem.images : ['https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800'];
   const isWishlisted = isInWishlist(rentalItem._id);
+
+  const handleSelectImage = (img, index) => {
+    setSelectedImage(img);
+    setActiveImgIndex(index);
+  };
+
+  const handleNextImage = () => {
+    const nextIdx = (activeImgIndex + 1) % imagesList.length;
+    setActiveImgIndex(nextIdx);
+    setSelectedImage(imagesList[nextIdx]);
+  };
+
+  const handlePrevImage = () => {
+    const prevIdx = (activeImgIndex - 1 + imagesList.length) % imagesList.length;
+    setActiveImgIndex(prevIdx);
+    setSelectedImage(imagesList[prevIdx]);
+  };
 
   // Math calculations
   const rentalChargeTotal = rentalItem.dailyRate * rentalDays;
@@ -113,21 +183,39 @@ const RentalDetails = () => {
         {/* Left Column: Gallery */}
         <div className="rental-gallery-col">
           <div className="rental-main-image-box">
-            <img src={selectedImage || images[0]} alt={rentalItem.name} />
+            <img src={selectedImage || imagesList[0]} alt={rentalItem.name} />
             <span className="stock-counter-badge">
               ⚡ {rentalItem.stockUnits || 3} Concurrent Units Available
             </span>
+
+            {/* Navigation Arrows */}
+            {imagesList.length > 1 && (
+              <>
+                <button className="gallery-arrow prev-arrow" onClick={handlePrevImage} title="Previous Angle">
+                  <ChevronLeft size={20} />
+                </button>
+                <button className="gallery-arrow next-arrow" onClick={handleNextImage} title="Next Angle">
+                  <ChevronRight size={20} />
+                </button>
+              </>
+            )}
+
+            <div className="zoom-indicator">
+              <Eye size={13} /> Hover to Zoom
+            </div>
           </div>
 
-          {images.length > 1 && (
+          {/* Multi-Angle Thumbnails */}
+          {imagesList.length > 0 && (
             <div className="rental-thumbnails-row">
-              {images.map((img, idx) => (
+              {imagesList.map((img, idx) => (
                 <button
                   key={idx}
-                  className={`rental-thumb-btn ${selectedImage === img ? 'active' : ''}`}
-                  onClick={() => setSelectedImage(img)}
+                  className={`rental-thumb-btn ${activeImgIndex === idx ? 'active' : ''}`}
+                  onClick={() => handleSelectImage(img, idx)}
                 >
-                  <img src={img} alt={`Thumb ${idx}`} />
+                  <img src={img} alt={`${rentalItem.name} - ${angleLabels[idx] || 'Angle'}`} />
+                  <span className="thumb-angle-label">{angleLabels[idx] || `Angle ${idx + 1}`}</span>
                 </button>
               ))}
             </div>
@@ -144,7 +232,23 @@ const RentalDetails = () => {
 
         {/* Right Column: Specifications & Date Picker */}
         <div className="rental-spec-col">
-          <span className="rental-brand-tag">{rentalItem.brand}</span>
+          <div className="rental-brand-header">
+            <span className="rental-brand-tag">{rentalItem.brand}</span>
+            <button
+              className={`rental-wishlist-toggle ${isWishlisted ? 'active' : ''}`}
+              onClick={() => {
+                toggleWishlist(rentalItem);
+                addToast(
+                  isWishlisted ? `Removed from Wishlist` : `Saved ${rentalItem.name} to Wishlist!`,
+                  'info'
+                );
+              }}
+              title="Wishlist"
+            >
+              <Heart size={18} fill={isWishlisted ? '#e11d48' : 'none'} color={isWishlisted ? '#e11d48' : '#64748b'} />
+            </button>
+          </div>
+
           <h1 className="rental-item-title">{rentalItem.name}</h1>
 
           <div className="rental-rating-row">
@@ -165,7 +269,7 @@ const RentalDetails = () => {
 
           <p className="rental-description">{rentalItem.description}</p>
 
-          {/* Garment Tech Specifications */}
+          {/* Garment Specifications */}
           <div className="rental-specs-card">
             <h4>Garment Specifications & Material</h4>
             <div className="specs-pills-grid">
@@ -196,71 +300,51 @@ const RentalDetails = () => {
           {/* Rental Duration & Date Picker Box */}
           <div className="rental-booking-box">
             <h3><Calendar size={18} /> Select Rental Duration & Event Start Date</h3>
-            
+
             <div className="duration-selector-row">
-              <label>Rental Duration:</label>
-              <div className="days-options">
-                {[3, 5, 7, 14, 30].map((days) => (
-                  <button
-                    key={days}
-                    className={`day-btn ${rentalDays === days ? 'active' : ''}`}
-                    onClick={() => setRentalDays(days)}
-                  >
-                    {days} Days
-                  </button>
-                ))}
-              </div>
+              {[3, 7, 10, 14, 30].map((days) => (
+                <button
+                  key={days}
+                  className={`duration-chip ${rentalDays === days ? 'active' : ''}`}
+                  onClick={() => setRentalDays(days)}
+                >
+                  {days} Days
+                </button>
+              ))}
             </div>
 
-            <div className="date-picker-row">
-              <label htmlFor="startDate">Event Start Date (Delivery Date):</label>
+            <div className="date-input-group">
+              <label>Event Start / Delivery Date:</label>
               <input
                 type="date"
-                id="startDate"
                 value={startDate}
                 min={new Date().toISOString().split('T')[0]}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="form-input"
+                className="rental-date-picker"
               />
             </div>
 
-            <div className="booking-summary-row">
-              <span>Return Pick-up Date:</span>
-              <strong>{calculateEndDate()}</strong>
+            <div className="booking-summary-receipt">
+              <div className="receipt-line">
+                <span>Rental Charge ({rentalDays} Days @ {formatPrice(rentalItem.dailyRate)}/day):</span>
+                <strong>{formatPrice(rentalChargeTotal)}</strong>
+              </div>
+              <div className="receipt-line">
+                <span>100% Refundable Security Deposit:</span>
+                <strong className="text-gold">{formatPrice(securityDeposit)}</strong>
+              </div>
+              <div className="receipt-line total-line">
+                <span>Total Amount Payable Now:</span>
+                <span className="total-amount">{formatPrice(grandTotalPayable)}</span>
+              </div>
+              <p className="return-note-text">
+                <RotateCcw size={13} /> Scheduled Return Pickup on: <strong>{calculateEndDate()}</strong>
+              </p>
             </div>
 
-            {/* Price Breakdown */}
-            <div className="rental-breakdown-card">
-              <div className="breakdown-line">
-                <span>Rental Fee ({rentalDays} days @ {formatPrice(rentalItem.dailyRate)}/day):</span>
-                <span>{formatPrice(rentalChargeTotal)}</span>
-              </div>
-              <div className="breakdown-line deposit-line">
-                <span>Refundable Security Deposit (Returned on Item Return):</span>
-                <span>{formatPrice(securityDeposit)}</span>
-              </div>
-              <div className="breakdown-divider"></div>
-              <div className="breakdown-line total-payable-line">
-                <span>Total Due Now (Includes Refundable Deposit):</span>
-                <span>{formatPrice(grandTotalPayable)}</span>
-              </div>
-            </div>
-
-            <div className="rental-actions-group">
-              <button className="btn-proceed-booking" onClick={handleProceedToRentalCheckout}>
-                <Sparkles size={18} /> Reserve & Proceed to Booking <ArrowRight size={18} />
-              </button>
-
-              <button
-                className={`btn-wishlist-rental ${isWishlisted ? 'active' : ''}`}
-                onClick={() => {
-                  toggleWishlist(rentalItem);
-                  addToast(isWishlisted ? `Removed from Wishlist` : `Saved to Wishlist!`, 'info');
-                }}
-              >
-                <Heart size={20} fill={isWishlisted ? '#e11d48' : 'none'} color={isWishlisted ? '#e11d48' : 'currentColor'} />
-              </button>
-            </div>
+            <button className="btn-reserve-rental-now" onClick={handleProceedToRentalCheckout}>
+              <Sparkles size={18} /> Reserve Outfit for Event Dates ➔
+            </button>
           </div>
         </div>
       </div>
