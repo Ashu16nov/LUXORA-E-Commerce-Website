@@ -117,7 +117,7 @@ const Home = () => {
             <Link to="/rentals" className="btn btn-gold btn-hero-primary">
               <Sparkles size={18} /> Explore Designer Rentals
             </Link>
-            <Link to="/products?category=Women" className="btn btn-secondary btn-hero-secondary">
+            <Link to="/products?category=Women" className="btn btn-outline-light btn-hero-secondary">
               Shop Women's Couture
             </Link>
             <Link to="/products?category=Men" className="btn btn-outline-light btn-hero-secondary">
