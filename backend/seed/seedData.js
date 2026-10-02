@@ -51,6 +51,138 @@ const products = [
     "trending": true
   },
   {
+    "name": "Y2K Ribbed Tank Top",
+    "brand": "Zara GenZ",
+    "category": "Women",
+    "subCategory": "GenZ",
+    "price": 699,
+    "originalPrice": 1299,
+    "discount": 46,
+    "rating": 4.8,
+    "numReviews": 124,
+    "stock": 20,
+    "description": "Trendy ribbed stretch knit Y2K crop tank top with scoop neckline and minimalist aesthetic.",
+    "images": [
+      "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=900&q=85",
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=85"
+    ],
+    "sizes": ["XS", "S", "M", "L"],
+    "colors": ["Black", "White", "Pastel Pink"],
+    "offer": true,
+    "featured": true,
+    "trending": true
+  },
+  {
+    "name": "Ripped Distressed Accidental Jeans",
+    "brand": "Urban GenZ",
+    "category": "Women",
+    "subCategory": "GenZ",
+    "price": 2199,
+    "originalPrice": 3499,
+    "discount": 37,
+    "rating": 4.9,
+    "numReviews": 88,
+    "stock": 18,
+    "description": "High-waist accidental ripped denim jeans with baggy fit, distressed knee slash details, and urban streetwear vibe.",
+    "images": [
+      "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=900&q=85",
+      "https://images.unsplash.com/photo-1542272604-780287c80084?w=900&q=85"
+    ],
+    "sizes": ["26", "28", "30", "32"],
+    "colors": ["Washed Blue", "Vintage Grey"],
+    "offer": true,
+    "featured": true,
+    "trending": true
+  },
+  {
+    "name": "Fancy Velvet Bralette Bustier",
+    "brand": "LUXORA GenZ",
+    "category": "Women",
+    "subCategory": "GenZ",
+    "price": 1199,
+    "originalPrice": 1999,
+    "discount": 40,
+    "rating": 4.7,
+    "numReviews": 62,
+    "stock": 15,
+    "description": "Luxury plush velvet bralette top with sweetheart neckline, delicate lace trim, and adjustable straps.",
+    "images": [
+      "https://images.unsplash.com/photo-1564222256577-45e728f2c611?w=900&q=85",
+      "https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=900&q=85"
+    ],
+    "sizes": ["S", "M", "L"],
+    "colors": ["Burgundy", "Emerald", "Black"],
+    "offer": true,
+    "featured": true,
+    "trending": true
+  },
+  {
+    "name": "Cut-Out Satin Micro Mini Dress",
+    "brand": "Mango GenZ",
+    "category": "Women",
+    "subCategory": "GenZ",
+    "price": 1899,
+    "originalPrice": 2999,
+    "discount": 36,
+    "rating": 4.8,
+    "numReviews": 95,
+    "stock": 12,
+    "description": "Glamorous satin mini bodycon dress featuring side cut-outs, tie-up halter neck, and asymmetrical hemline.",
+    "images": [
+      "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=900&q=85",
+      "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=900&q=85"
+    ],
+    "sizes": ["XS", "S", "M"],
+    "colors": ["Crimson Red", "Champagne Gold"],
+    "offer": true,
+    "featured": true,
+    "trending": true
+  },
+  {
+    "name": "Seamless Lace Bralette Crop Top",
+    "brand": "H&M GenZ",
+    "category": "Women",
+    "subCategory": "GenZ",
+    "price": 899,
+    "originalPrice": 1499,
+    "discount": 40,
+    "rating": 4.6,
+    "numReviews": 73,
+    "stock": 25,
+    "description": "Soft stretch seamless floral lace bralette with padded cups and stylish criss-cross back straps.",
+    "images": [
+      "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=900&q=85",
+      "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=900&q=85"
+    ],
+    "sizes": ["S", "M", "L"],
+    "colors": ["White", "Black", "Nude"],
+    "offer": true,
+    "featured": true,
+    "trending": true
+  },
+  {
+    "name": "Aesthetic Mesh Backless Party Top",
+    "brand": "LUXORA GenZ",
+    "category": "Women",
+    "subCategory": "GenZ",
+    "price": 1499,
+    "originalPrice": 2499,
+    "discount": 40,
+    "rating": 4.9,
+    "numReviews": 110,
+    "stock": 16,
+    "description": "Chic sheer mesh long-sleeve crop top with open back detailing and ruched front accent.",
+    "images": [
+      "https://images.unsplash.com/photo-1583391733975-d2279b9bf8b7?w=900&q=85",
+      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=900&q=85"
+    ],
+    "sizes": ["S", "M", "L"],
+    "colors": ["Black Mesh", "Iridescent Silver"],
+    "offer": true,
+    "featured": true,
+    "trending": true
+  },
+  {
     "name": "Classic White Shirt",
     "brand": "LUXORA",
     "category": "Men",

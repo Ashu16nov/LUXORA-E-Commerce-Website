@@ -32,6 +32,7 @@ import './Home.css';
 const Home = () => {
   const [trendingProducts, setTrendingProducts] = useState([]);
   const [offerProducts, setOfferProducts] = useState([]);
+  const [genZProducts, setGenZProducts] = useState([]);
   const [productTab, setProductTab] = useState('trending'); // 'trending' | 'offers'
   const [allRentals, setAllRentals] = useState([]);
   const [filteredRentals, setFilteredRentals] = useState([]);
@@ -57,6 +58,10 @@ const Home = () => {
         // Filter products with offers
         const offers = productsList.filter((p) => p.offer);
         setOfferProducts(offers.length > 0 ? offers.slice(0, 8) : productsList.slice(0, 8));
+
+        // Filter Gen Z fancy products
+        const genZ = productsList.filter((p) => p.subCategory === 'GenZ' || p.genZ);
+        setGenZProducts(genZ.length > 0 ? genZ.slice(0, 8) : productsList.slice(0, 8));
 
         // Fetch rental products
         const rentalRes = await axios.get('http://localhost:5000/api/rentals/products');
@@ -230,6 +235,30 @@ const Home = () => {
               <span className="category-link-text">Explore Accessories <ArrowRight size={14} /></span>
             </div>
           </Link>
+        </div>
+      </section>
+
+      {/* 4.5. GEN Z FANCY CLOSET & STREETWEAR TRENDS SHOWCASE */}
+      <section className="container genz-showcase-section mt-5">
+        <div className="genz-banner-card">
+          <div className="genz-header-content">
+            <span className="genz-glow-badge">
+              <Zap size={14} className="zap-pulse" /> ⚡ GEN Z CLOSET & STREETWEAR TRENDS
+            </span>
+            <h2>Fancy Crop Tops, Y2K Tanks, Accidental Jeans & Bralettes</h2>
+            <p>
+              Elevate your street style with ultra-chic Y2K ribbed tank tops, cut-out satin mini dresses, accidental ripped jeans, corset bustiers, lace bralettes & backless party tops!
+            </p>
+          </div>
+          <Link to="/products?category=Women" className="btn-genz-explore">
+            Explore All Gen Z Outfits <ArrowRight size={16} />
+          </Link>
+        </div>
+
+        <div className="genz-products-grid mt-4">
+          {genZProducts.map((prod) => (
+            <ProductCard key={prod._id} product={prod} />
+          ))}
         </div>
       </section>
 

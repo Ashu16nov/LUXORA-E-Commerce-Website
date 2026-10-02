@@ -47,62 +47,76 @@ const ProductCard = ({ product }) => {
     setShowQuickView(true);
   };
 
+  const mainImage = Array.isArray(product.images) && product.images.length > 0
+    ? product.images[0]
+    : 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600';
+
   return (
     <>
-      <div className="product-card">
+      <div className="product-card myntra-card-style">
+        {/* Full Image Container */}
         <div className="product-image-container">
-          {product.offer && <span className="product-badge">Sale</span>}
-          {product.trending && <span className="product-badge badge-gold">Trending</span>}
+          {product.offer && <span className="product-badge badge-sale">Sale</span>}
+          {product.subCategory === 'GenZ' && <span className="product-badge badge-genz">Gen Z ✨</span>}
+          {product.trending && !product.offer && product.subCategory !== 'GenZ' && (
+            <span className="product-badge badge-gold">Trending</span>
+          )}
 
-          <div className="card-top-actions">
-            <button
-              className={`product-wishlist ${isWishlisted ? 'active' : ''}`}
-              onClick={handleWishlistToggle}
-              aria-label="Wishlist"
-            >
-              <Heart
-                size={18}
-                fill={isWishlisted ? '#e11d48' : 'none'}
-                color={isWishlisted ? '#e11d48' : 'currentColor'}
-              />
-            </button>
-          </div>
+          {/* Top-Right Wishlist Heart Button */}
+          <button
+            className={`product-wishlist ${isWishlisted ? 'active' : ''}`}
+            onClick={handleWishlistToggle}
+            aria-label="Wishlist"
+            title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
+          >
+            <Heart
+              size={17}
+              fill={isWishlisted ? '#ff3f6c' : 'none'}
+              color={isWishlisted ? '#ff3f6c' : 'currentColor'}
+            />
+          </button>
 
-          <Link to={`/product/${product._id}`}>
-            <img src={product.images[0]} alt={product.name} className="product-image" />
+          {/* Full Container Image */}
+          <Link to={`/product/${product._id}`} className="card-image-link">
+            <img src={mainImage} alt={product.name} className="product-image" loading="lazy" />
           </Link>
 
-          <button className="quick-view-btn" onClick={openQuickView}>
-            <Eye size={16} /> Quick View
-          </button>
-        </div>
-
-        <div className="product-info">
-          <div className="brand-rating-row">
-            <p className="product-brand">{product.brand || 'LUXORA'}</p>
-            <div className="card-star-rating">
-              <Star size={12} fill="#f59e0b" color="#f59e0b" />
-              <span>{product.rating || 4.8}</span>
-            </div>
+          {/* Bottom-Left Floating Rating Pill (Matching Uploaded Screenshot) */}
+          <div className="card-rating-pill-myntra">
+            <span className="rate-score">
+              {product.rating || 4.4} <Star size={10} fill="#059669" color="#059669" />
+            </span>
+            <span className="rate-sep">|</span>
+            <span className="rate-count">{product.numReviews || Math.floor(Math.random() * 80 + 20)}</span>
           </div>
 
+          {/* Hover Overlay Action Button */}
+          <div className="card-hover-actions">
+            <button className="quick-view-btn" onClick={openQuickView}>
+              <Eye size={15} /> Quick View
+            </button>
+            <button className="btn-add-cart-overlay" onClick={handleAddToCart}>
+              <ShoppingBag size={15} /> Add to Cart
+            </button>
+          </div>
+        </div>
+
+        {/* Product Details Info Section */}
+        <div className="product-info">
+          <h4 className="card-brand">{product.brand || 'Biba'}</h4>
           <Link to={`/product/${product._id}`}>
-            <h3 className="product-title">{product.name}</h3>
+            <h3 className="card-title" title={product.name}>{product.name}</h3>
           </Link>
 
           <div className="product-price">
-            <span>{formatPrice(product.price)}</span>
+            <span className="current-price">{formatPrice(product.price)}</span>
             {product.originalPrice && (
-              <span className="product-original-price">{formatPrice(product.originalPrice)}</span>
+              <span className="original-price">{formatPrice(product.originalPrice)}</span>
             )}
-            {product.discount && (
-              <span className="product-discount">{product.discount}% OFF</span>
+            {product.discount > 0 && (
+              <span className="discount-tag">({product.discount}% OFF)</span>
             )}
           </div>
-
-          <button className="btn-add-cart-card" onClick={handleAddToCart}>
-            <ShoppingBag size={15} /> Add to Cart
-          </button>
         </div>
       </div>
 
