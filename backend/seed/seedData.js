@@ -25,6 +25,32 @@ const users = [
 
 const products = [
   {
+    "name": "Women Ethnic Motifs Printed Kurta",
+    "brand": "Biba",
+    "category": "Women",
+    "subCategory": "Kurtas",
+    "price": 909,
+    "originalPrice": 1299,
+    "discount": 30,
+    "rating": 4.4,
+    "numReviews": 56,
+    "stock": 15,
+    "description": "Pink & white ethnic motifs printed straight calf-length kurta. Features a classic V-neck, three-quarter regular sleeves, straight hemline, side slits, and crafted from 100% premium breathable woven cotton.",
+    "images": [
+      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=900&q=85",
+      "https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=900&q=85",
+      "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=900&q=85",
+      "https://images.unsplash.com/photo-1583391733975-d2279b9bf8b7?w=900&q=85",
+      "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=900&q=85",
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=85"
+    ],
+    "sizes": ["S", "M", "L", "XL", "XXL", "3XL", "4XL"],
+    "colors": ["Pink", "White"],
+    "offer": true,
+    "featured": true,
+    "trending": true
+  },
+  {
     "name": "Classic White Shirt",
     "brand": "LUXORA",
     "category": "Men",

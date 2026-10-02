@@ -21,8 +21,14 @@ const ProductCard = ({ product }) => {
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    addToCart(product, 1, defaultSize);
-    addToast(`Added "${product.name}" to cart!`, 'success', 'Cart Updated');
+    const res = addToCart(product, 1, defaultSize);
+    if (res && res.limitReached) {
+      addToast(res.message, 'error', 'Limit Exceeded');
+    } else if (res && res.capped) {
+      addToast(res.message, 'warning', 'Limit Cap Applied');
+    } else {
+      addToast(`Added "${product.name}" to cart!`, 'success', 'Cart Updated');
+    }
   };
 
   const handleWishlistToggle = (e) => {

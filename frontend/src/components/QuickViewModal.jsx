@@ -27,9 +27,16 @@ const QuickViewModal = ({ product, onClose }) => {
   const isWishlisted = isInWishlist(product._id);
 
   const handleAddToCart = () => {
-    addToCart(product, quantity, selectedSize);
-    addToast(`Added ${quantity}x "${product.name}" (${selectedSize}) to bag!`, 'success', 'Added to Shopping Bag');
-    onClose();
+    const res = addToCart(product, quantity, selectedSize);
+    if (res && res.limitReached) {
+      addToast(res.message, 'error', 'Limit Exceeded');
+    } else if (res && res.capped) {
+      addToast(res.message, 'warning', 'Limit Cap Applied');
+      onClose();
+    } else {
+      addToast(`Added ${quantity}x "${product.name}" (${selectedSize}) to bag!`, 'success', 'Added to Shopping Bag');
+      onClose();
+    }
   };
 
   const handleToggleWishlist = () => {
@@ -119,11 +126,22 @@ const QuickViewModal = ({ product, onClose }) => {
 
             {/* Quantity Counter */}
             <div className="qv-qty-section">
-              <span className="qv-qty-label">Quantity:</span>
+              <span className="qv-qty-label">Quantity: (Max 3 pieces)</span>
               <div className="qv-qty-control">
                 <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
                 <span>{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)}>+</button>
+                <button 
+                  onClick={() => {
+                    if (quantity >= 3) {
+                      addToast('Maximum 3 pieces allowed per item.', 'warning');
+                      return;
+                    }
+                    setQuantity(quantity + 1);
+                  }}
+                  disabled={quantity >= 3}
+                >
+                  +
+                </button>
               </div>
             </div>
 

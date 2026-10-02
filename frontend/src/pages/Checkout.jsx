@@ -53,6 +53,13 @@ const Checkout = () => {
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
+
+    const itemExceedingLimit = cartItems.find((x) => x.qty > 3);
+    if (itemExceedingLimit) {
+      addToast(`Order cannot be processed. Maximum limit of 3 pieces allowed per item for "${itemExceedingLimit.name}".`, 'error', 'Limit Exceeded');
+      return;
+    }
+
     setLoading(true);
     
     try {

@@ -96,7 +96,19 @@ const Cart = () => {
               <div className="qty-controls">
                 <button onClick={() => updateQty(item.product, item.size, item.qty > 1 ? item.qty - 1 : 1)}>-</button>
                 <span>{item.qty}</span>
-                <button onClick={() => updateQty(item.product, item.size, item.qty + 1)}>+</button>
+                <button 
+                  onClick={() => {
+                    if (item.qty >= 3) {
+                      addToast(`⚠️ Maximum 3 pieces allowed per dress item.`, 'warning', 'Limit Reached');
+                      return;
+                    }
+                    updateQty(item.product, item.size, item.qty + 1);
+                  }}
+                  disabled={item.qty >= 3}
+                  title={item.qty >= 3 ? "Maximum 3 pieces allowed per item" : "Increase quantity"}
+                >
+                  +
+                </button>
               </div>
 
               <button

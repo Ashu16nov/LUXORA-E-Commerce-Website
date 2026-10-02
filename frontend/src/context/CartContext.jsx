@@ -11,26 +11,66 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
 
+  const MAX_ITEM_LIMIT = 3;
+
   const addToCart = (product, qty, size) => {
-    const existItem = cartItems.find((x) => x.product === product._id && x.size === size);
+    const pId = product._id || product.id;
+    const existItem = cartItems.find((x) => x.product === pId && x.size === size);
+    const currentQty = existItem ? existItem.qty : 0;
+    const newQty = currentQty + qty;
+
+    if (newQty > MAX_ITEM_LIMIT) {
+      const allowedAdd = Math.max(0, MAX_ITEM_LIMIT - currentQty);
+      if (allowedAdd <= 0) {
+        return {
+          success: false,
+          limitReached: true,
+          message: `Maximum order limit of ${MAX_ITEM_LIMIT} pieces reached for "${product.name}".`
+        };
+      }
+      
+      setCartItems(
+        cartItems.map((x) =>
+          x.product === pId && x.size === size ? { ...x, qty: MAX_ITEM_LIMIT } : x
+        )
+      );
+
+      return {
+        success: true,
+        capped: true,
+        addedQty: allowedAdd,
+        message: `Added ${allowedAdd} piece(s). (Maximum ${MAX_ITEM_LIMIT} pieces allowed per item)`
+      };
+    }
 
     if (existItem) {
       setCartItems(
         cartItems.map((x) =>
-          x.product === existItem.product && x.size === size ? { ...existItem, qty: existItem.qty + qty } : x
+          x.product === pId && x.size === size ? { ...existItem, qty: newQty } : x
         )
       );
     } else {
+      const imgUrl = Array.isArray(product.images) && product.images.length > 0 
+        ? product.images[0] 
+        : (product.image || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500');
+
       setCartItems([...cartItems, { 
-        product: product._id, 
+        product: pId, 
         name: product.name, 
-        image: product.images[0], 
+        image: imgUrl, 
         price: product.price, 
         brand: product.brand,
-        qty, 
+        stock: product.stock !== undefined ? product.stock : 15,
+        qty: Math.min(qty, MAX_ITEM_LIMIT), 
         size 
       }]);
     }
+
+    return {
+      success: true,
+      capped: false,
+      addedQty: qty
+    };
   };
 
   const removeFromCart = (id, size) => {
@@ -38,11 +78,13 @@ export const CartProvider = ({ children }) => {
   };
 
   const updateQty = (id, size, qty) => {
+    const finalQty = Math.min(Math.max(1, qty), MAX_ITEM_LIMIT);
     setCartItems(
       cartItems.map((x) =>
-        x.product === id && x.size === size ? { ...x, qty } : x
+        x.product === id && x.size === size ? { ...x, qty: finalQty } : x
       )
     );
+    return finalQty;
   };
 
   const clearCart = () => {
@@ -50,7 +92,7 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQty, clearCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQty, clearCart, MAX_ITEM_LIMIT }}>
       {children}
     </CartContext.Provider>
   );
