@@ -57,8 +57,7 @@ const ProductCard = ({ product }) => {
         {/* Full Image Container */}
         <div className="product-image-container">
           {product.offer && <span className="product-badge badge-sale">Sale</span>}
-          {product.subCategory === 'GenZ' && <span className="product-badge badge-genz">Gen Z ✨</span>}
-          {product.trending && !product.offer && product.subCategory !== 'GenZ' && (
+          {product.trending && !product.offer && (
             <span className="product-badge badge-gold">Trending</span>
           )}
 

@@ -52,7 +52,7 @@ const products = [
   },
   {
     "name": "Y2K Ribbed Tank Top",
-    "brand": "Zara GenZ",
+    "brand": "Zara",
     "category": "Women",
     "subCategory": "GenZ",
     "price": 699,
@@ -74,7 +74,7 @@ const products = [
   },
   {
     "name": "Ripped Distressed Accidental Jeans",
-    "brand": "Urban GenZ",
+    "brand": "Urban Outfitters",
     "category": "Women",
     "subCategory": "GenZ",
     "price": 2199,
@@ -96,7 +96,7 @@ const products = [
   },
   {
     "name": "Fancy Velvet Bralette Bustier",
-    "brand": "LUXORA GenZ",
+    "brand": "LUXORA",
     "category": "Women",
     "subCategory": "GenZ",
     "price": 1199,
@@ -118,7 +118,7 @@ const products = [
   },
   {
     "name": "Cut-Out Satin Micro Mini Dress",
-    "brand": "Mango GenZ",
+    "brand": "Mango",
     "category": "Women",
     "subCategory": "GenZ",
     "price": 1899,
@@ -140,7 +140,7 @@ const products = [
   },
   {
     "name": "Seamless Lace Bralette Crop Top",
-    "brand": "H&M GenZ",
+    "brand": "H&M",
     "category": "Women",
     "subCategory": "GenZ",
     "price": 899,
@@ -162,7 +162,7 @@ const products = [
   },
   {
     "name": "Aesthetic Mesh Backless Party Top",
-    "brand": "LUXORA GenZ",
+    "brand": "LUXORA",
     "category": "Women",
     "subCategory": "GenZ",
     "price": 1499,
