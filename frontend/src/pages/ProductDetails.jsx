@@ -23,27 +23,18 @@ import {
   RotateCcw,
   Sparkles,
   Ruler,
-  Maximize2
+  Maximize2,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import './ProductDetails.css';
 
-// Default complementary camera angle photos if a dress product has limited images
-const fallbackDressAngles = [
-  'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=900&q=85', // Front Seated
-  'https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=900&q=85', // Neckline & Bodice
-  'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=900&q=85', // Full Standing
-  'https://images.unsplash.com/photo-1583391733975-d2279b9bf8b7?w=900&q=85', // 3/4 Side Angle
-  'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=900&q=85', // Fabric/Pose View
-  'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=85'  // Back View
-];
-
+// Angle labels for multi-angle photography of the SAME dress
 const angleLabels = [
-  'Front View (Seated)',
-  'Neckline & Bodice Detail',
-  'Full Silhouette Standing',
-  '3/4 Side Angle View',
-  'Fabric & Print Detail',
-  'Back View'
+  '1. Front View',
+  '2. Back View',
+  '3. Side / 3⁄4 View',
+  '4. Close-Up / Detail View'
 ];
 
 const ProductDetails = () => {
@@ -51,7 +42,8 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Gallery & Lightbox states
+  // Gallery Active Image & Lightbox states
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [lightboxImage, setLightboxImage] = useState(null);
   const [lightboxAngleIndex, setLightboxAngleIndex] = useState(0);
 
@@ -81,6 +73,7 @@ const ProductDetails = () => {
       try {
         const { data } = await axios.get(`http://localhost:5000/api/products/${id}`);
         setProduct(data);
+        setActiveImageIndex(0);
 
         if (data.sizes && data.sizes.length > 0) {
           setSelectedSize(data.sizes[0]);
@@ -123,16 +116,18 @@ const ProductDetails = () => {
   const existingCartQty = existingInCartItem ? existingInCartItem.qty : 0;
   const remainingAllowedQty = Math.max(0, MAX_ITEM_LIMIT - existingCartQty);
 
-  // Construct multi-angle images gallery array
-  let productImages = [];
-  if (Array.isArray(product.images) && product.images.length > 1) {
-    productImages = product.images;
-  } else if (Array.isArray(product.images) && product.images.length === 1) {
-    // Fill remaining angles with fallback angle photography
-    productImages = [product.images[0], ...fallbackDressAngles.slice(1, 6)];
-  } else {
-    productImages = fallbackDressAngles;
-  }
+  // Store & extract images belonging strictly to THIS product (never mix unrelated dresses)
+  const productImages = (Array.isArray(product.images) && product.images.length > 0)
+    ? product.images
+    : ['https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=85'];
+
+  const handlePrevImage = () => {
+    setActiveImageIndex((prev) => (prev - 1 + productImages.length) % productImages.length);
+  };
+
+  const handleNextImage = () => {
+    setActiveImageIndex((prev) => (prev + 1) % productImages.length);
+  };
 
   // Pincode check logic
   const handleCheckPincode = (e) => {
@@ -241,33 +236,74 @@ const ProductDetails = () => {
       </nav>
 
       <div className="myntra-product-layout mt-3">
-        {/* 2. Left Side: 2-Column Multi-Angle Image Grid */}
+        {/* 2. Left Side: Multi-Angle Interactive Image Gallery of the SAME Product */}
         <div className="myntra-gallery-container">
-          <div className="myntra-image-grid">
-            {productImages.map((imgUrl, idx) => (
-              <div 
-                key={idx} 
-                className="myntra-image-tile"
-                onClick={() => {
-                  setLightboxImage(imgUrl);
-                  setLightboxIndex(idx);
-                }}
-              >
-                <img 
-                  src={imgUrl} 
-                  alt={`${product.name} - Angle ${idx + 1}`} 
-                  loading={idx < 2 ? "eager" : "lazy"}
-                />
-                <span className="angle-pill">{angleLabels[idx] || `Angle ${idx + 1}`}</span>
-                <button className="tile-zoom-btn" title="Click to Expand View">
-                  <Maximize2 size={16} />
+          {/* Main Large Image Display View */}
+          <div className="main-image-wrap">
+            <img 
+              src={productImages[activeImageIndex] || productImages[0]} 
+              alt={`${product.name} - ${angleLabels[activeImageIndex] || 'View'}`} 
+              className="main-image-view"
+            />
+
+            {/* Prev/Next Navigation Arrows Overlay */}
+            {productImages.length > 1 && (
+              <>
+                <button 
+                  className="gallery-nav-arrow arrow-prev" 
+                  onClick={handlePrevImage}
+                  title="Previous Angle Image"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft size={22} />
                 </button>
-              </div>
-            ))}
+                <button 
+                  className="gallery-nav-arrow arrow-next" 
+                  onClick={handleNextImage}
+                  title="Next Angle Image"
+                  aria-label="Next image"
+                >
+                  <ChevronRight size={22} />
+                </button>
+              </>
+            )}
+
+            {/* Angle Name Badge */}
+            <span className="main-angle-label">
+              {angleLabels[activeImageIndex] || `Angle ${activeImageIndex + 1}`}
+            </span>
+
+            {/* Lightbox Zoom Trigger */}
+            <button 
+              className="main-zoom-btn"
+              onClick={() => {
+                setLightboxImage(productImages[activeImageIndex] || productImages[0]);
+                setLightboxAngleIndex(activeImageIndex);
+              }}
+              title="Click for Fullscreen Zoom"
+            >
+              <Maximize2 size={15} /> Lightbox Zoom
+            </button>
           </div>
 
-          <div className="gallery-tip-note">
-            <Eye size={14} /> Click on any photo tile to open full-resolution high quality lightbox view
+          {/* Clickable Small Thumbnails Row for the SAME Product */}
+          {productImages.length > 1 && (
+            <div className="gallery-thumbs-row mt-3">
+              {productImages.map((imgUrl, idx) => (
+                <button
+                  key={idx}
+                  className={`thumb-tile-btn ${activeImageIndex === idx ? 'active' : ''}`}
+                  onClick={() => setActiveImageIndex(idx)}
+                >
+                  <img src={imgUrl} alt={`${product.name} - Angle ${idx + 1}`} />
+                  <span className="thumb-angle-badge">{angleLabels[idx] || `Angle ${idx + 1}`}</span>
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className="gallery-tip-note mt-2">
+            <ShieldCheck size={14} color="#059669" /> Authentic multi-angle photography of the <strong>SAME Garment</strong> (Front, Back, Side & Close-up)
           </div>
         </div>
 
@@ -573,7 +609,7 @@ const ProductDetails = () => {
             </div>
             <div className="rev-photos-thumb mt-2 flex gap-2">
               <img src={productImages[0]} alt="Review photo 1" className="rev-mini-img" />
-              <img src={productImages[1]} alt="Review photo 2" className="rev-mini-img" />
+              {productImages[1] && <img src={productImages[1]} alt="Review photo 2" className="rev-mini-img" />}
             </div>
             <div className="rev-author-bar mt-2">
               <span>Asha Jadhav</span> | <span>19 Sept 2026</span>
@@ -600,7 +636,7 @@ const ProductDetails = () => {
               <span className="rev-title-text">Amazing product quality is so good comfortable</span>
             </div>
             <div className="rev-photos-thumb mt-2 flex gap-2">
-              <img src={productImages[2]} alt="Review photo" className="rev-mini-img" />
+              <img src={productImages[2] || productImages[0]} alt="Review photo" className="rev-mini-img" />
             </div>
             <div className="rev-author-bar mt-2">
               <span>Ritu Singh</span> | <span>20 Aug 2026</span>

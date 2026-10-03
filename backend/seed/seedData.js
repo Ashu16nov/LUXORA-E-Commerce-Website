@@ -40,9 +40,7 @@ const products = [
       "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=900&q=85",
       "https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=900&q=85",
       "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=900&q=85",
-      "https://images.unsplash.com/photo-1583391733975-d2279b9bf8b7?w=900&q=85",
-      "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=900&q=85",
-      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=85"
+      "https://images.unsplash.com/photo-1583391733975-d2279b9bf8b7?w=900&q=85"
     ],
     "sizes": ["S", "M", "L", "XL", "XXL", "3XL", "4XL"],
     "colors": ["Pink", "White"],
