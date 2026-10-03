@@ -40,14 +40,13 @@
   align-items: start;
 }
 
-/* 3. LEFT COLUMN: MULTI-ANGLE GALLERY (SAME PRODUCT ONLY) */
+/* 3. LEFT COLUMN: SINGLE PRODUCT IMAGE CONTAINER (3:4 RATIO) */
 .myntra-gallery-container {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
 }
 
-/* Large Main Image Display */
 .main-image-wrap {
   position: relative;
   width: 100%;
@@ -64,58 +63,11 @@
   height: 100%;
   object-fit: cover;
   object-position: top center;
-  transition: transform 0.4s ease, opacity 0.3s ease;
+  transition: transform 0.4s ease;
 }
 
 .main-image-wrap:hover .main-image-view {
-  transform: scale(1.08);
-}
-
-/* Prev / Next Navigation Arrows Overlay */
-.gallery-nav-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #282c3f;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  backdrop-filter: blur(6px);
-  transition: all 0.25s ease;
-  z-index: 10;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-}
-
-.arrow-prev { left: 1rem; }
-.arrow-next { right: 1rem; }
-
-.gallery-nav-arrow:hover {
-  background: #ff3f6c;
-  color: #ffffff;
-  border-color: #ff3f6c;
-  transform: translateY(-50%) scale(1.1);
-}
-
-/* Angle Label Badge */
-.main-angle-label {
-  position: absolute;
-  bottom: 0.85rem;
-  left: 0.85rem;
-  background: rgba(40, 44, 63, 0.88);
-  color: #ffffff;
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 0.3rem 0.75rem;
-  border-radius: 4px;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  z-index: 5;
+  transform: scale(1.06);
 }
 
 /* Lightbox Zoom Trigger */
