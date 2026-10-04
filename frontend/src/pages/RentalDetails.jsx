@@ -19,7 +19,8 @@ import {
   Heart,
   ChevronLeft,
   ChevronRight,
-  Eye
+  Eye,
+  Maximize2
 } from 'lucide-react';
 import './RentalDetails.css';
 
