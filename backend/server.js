@@ -8,6 +8,7 @@ const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const rentalRoutes = require('./routes/rentalRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/rentals', rentalRoutes);
+app.use('/api/admin', adminRoutes);
 
 const Product = require('./models/Product');
 const RentalProduct = require('./models/RentalProduct');

@@ -47,36 +47,17 @@ const AdminDashboard = () => {
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
-      const [prodsRes, rentalsRes, ordersRes, rentalOrdersRes, usersRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/products?limit=100').catch(() => ({ data: { products: [], count: 0 } })),
-        axios.get('http://localhost:5000/api/rentals/products').catch(() => ({ data: [] })),
-        axios.get('http://localhost:5000/api/orders', config).catch(() => ({ data: [] })),
-        axios.get('http://localhost:5000/api/rentals/admin/all-orders', config).catch(() => ({ data: [] })),
-        axios.get('http://localhost:5000/api/auth/users', config).catch(() => ({ data: [] })),
-      ]);
-
-      const prods = prodsRes.data.products || [];
-      const rentals = Array.isArray(rentalsRes.data) ? rentalsRes.data : [];
-      const orders = Array.isArray(ordersRes.data) ? ordersRes.data : [];
-      const rentalOrders = Array.isArray(rentalOrdersRes.data) ? rentalOrdersRes.data : [];
-      const users = Array.isArray(usersRes.data) ? usersRes.data : [];
-
-      // Calculate totals
-      const retailRev = orders.reduce((sum, o) => sum + (o.totalPrice || 0), 0);
-      const rentalRev = rentalOrders.reduce((sum, r) => sum + (r.totalPrice || 0), 0);
-
-      const lowStockProds = prods.filter(p => p.stock < 5);
-      const lowStockRent = rentals.filter(r => (r.stockUnits || 0) < 2);
+      const { data } = await axios.get('http://localhost:5000/api/admin/dashboard', config);
 
       setStats({
-        totalProducts: prods.length,
-        totalRentals: rentals.length,
-        totalOrders: orders.length + rentalOrders.length,
-        totalUsers: users.length,
-        lowStockProducts: lowStockProds,
-        lowStockRentals: lowStockRent,
-        recentOrders: orders.slice(0, 5),
-        totalRevenue: retailRev + rentalRev,
+        totalProducts: data.totalProducts,
+        totalRentals: data.totalRentals,
+        totalOrders: data.totalOrders,
+        totalUsers: data.totalUsers,
+        lowStockProducts: data.lowStockProducts,
+        lowStockRentals: data.lowStockRentals,
+        recentOrders: data.recentOrders,
+        totalRevenue: data.totalRevenue,
       });
     } catch (err) {
       console.error('Error loading admin dashboard stats:', err);
