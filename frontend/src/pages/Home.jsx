@@ -276,11 +276,13 @@ const Home = () => {
             {filteredRentals.slice(0, 5).map((item) => (
               <div key={item._id} className="home-rental-card-enhanced">
                 <div className="home-rental-img-wrap">
-                  <img 
-                    src={item.images[0]} 
-                    alt={item.name} 
-                    onError={(e) => { e.target.onerror = null; e.target.src = "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=800&q=80"; }} 
-                  />
+                  <Link to={`/rentals/${item._id}`} style={{display: 'block', height: '100%'}}>
+                    <img 
+                      src={item.images[0]} 
+                      alt={item.name} 
+                      onError={(e) => { e.target.onerror = null; e.target.src = "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=800&q=80"; }} 
+                    />
+                  </Link>
                   <span className="stock-tag"><Zap size={12} /> 3 Units Left</span>
                   <span className="category-tag">{item.category}</span>
                   <button
