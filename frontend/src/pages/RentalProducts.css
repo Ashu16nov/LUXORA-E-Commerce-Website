@@ -70,8 +70,8 @@
   justify-content: space-between;
   align-items: center;
   gap: 1.5rem;
-  margin-top: 3.5rem !important;
-  margin-bottom: 2rem !important;
+  margin-top: 2rem !important;
+  margin-bottom: 1rem !important;
 }
 
 .rental-category-tabs {
@@ -135,8 +135,8 @@
 .rental-filters-row {
   display: flex;
   gap: 2rem;
-  margin-top: 1.5rem !important;
-  margin-bottom: 2.5rem !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 2rem !important;
   font-size: 0.85rem;
   color: #524B43;
 }
