@@ -67,7 +67,7 @@ const Home = () => {
         const rentalRes = await axios.get('http://localhost:5000/api/rentals/products');
         const rentalList = Array.isArray(rentalRes.data) ? rentalRes.data : [];
         setAllRentals(rentalList);
-        setFilteredRentals(rentalList.slice(0, 4));
+        setFilteredRentals(rentalList.slice(0, 5));
 
         setLoading(false);
       } catch (error) {
@@ -81,12 +81,12 @@ const Home = () => {
   const handleFilterRentals = (cat) => {
     setActiveRentalCategory(cat);
     if (cat === 'All') {
-      setFilteredRentals(allRentals.slice(0, 4));
+      setFilteredRentals(allRentals.slice(0, 5));
     } else {
       const filtered = allRentals.filter((r) =>
         r.category.toLowerCase().includes(cat.toLowerCase())
       );
-      setFilteredRentals(filtered.slice(0, 4));
+      setFilteredRentals(filtered.slice(0, 5));
     }
   };
 
@@ -276,7 +276,11 @@ const Home = () => {
             {filteredRentals.slice(0, 5).map((item) => (
               <div key={item._id} className="home-rental-card-enhanced">
                 <div className="home-rental-img-wrap">
-                  <img src={item.images[0]} alt={item.name} />
+                  <img 
+                    src={item.images[0]} 
+                    alt={item.name} 
+                    onError={(e) => { e.target.onerror = null; e.target.src = "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=800&q=80"; }} 
+                  />
                   <span className="stock-tag"><Zap size={12} /> 3 Units Left</span>
                   <span className="category-tag">{item.category}</span>
                   <button
@@ -310,24 +314,13 @@ const Home = () => {
 
                   <h3 className="card-item-name">{item.name}</h3>
 
-                  <div className="card-price-box">
-                    <div className="daily-price">
-                      <span className="price-label">Daily Rental Rate</span>
-                      <span className="price-amount">{formatPrice(item.dailyRate)} <small>/ day</small></span>
-                    </div>
-                    <div className="retail-price">
-                      <span className="price-label">Original Retail</span>
-                      <span className="original-amount">{formatPrice(item.originalValue)}</span>
-                    </div>
+                  <div className="price-simple-row mb-3">
+                    <span className="price-amount" style={{fontWeight: '800', fontSize: '1.1rem', color: '#1B1917'}}>{formatPrice(item.dailyRate)} <small style={{fontSize: '0.75rem', fontWeight: '500', color: '#64748B'}}>/ day</small></span>
                   </div>
 
-                  <div className="deposit-info-row">
-                    <span>Refundable Deposit: <strong>{formatPrice(item.securityDeposit)}</strong></span>
-                  </div>
-
-                  <div className="rental-card-btn-group">
+                  <div className="rental-card-btn-group mt-auto">
                     <Link to={`/rentals/${item._id}`} className="btn-rent-card-action">
-                      <Calendar size={15} /> Rent Outfit Now
+                      <Calendar size={15} /> Rent Now
                     </Link>
                     <button
                       className="btn-rent-quickview"

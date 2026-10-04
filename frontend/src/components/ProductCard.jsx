@@ -75,9 +75,14 @@ const ProductCard = ({ product }) => {
             />
           </button>
 
-          {/* Full Container Image */}
           <Link to={`/product/${product._id}`} className="card-image-link">
-            <img src={mainImage} alt={product.name} className="product-image" loading="lazy" />
+            <img 
+              src={mainImage} 
+              alt={product.name} 
+              className="product-image" 
+              loading="lazy" 
+              onError={(e) => { e.target.onerror = null; e.target.src = "https://images.unsplash.com/photo-1594938298596-eb5fd3822858?w=800&q=80"; }}
+            />
           </Link>
 
           {/* Bottom-Left Floating Rating Pill (Matching Uploaded Screenshot) */}
