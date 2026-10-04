@@ -54,16 +54,17 @@ const RentalDetails = () => {
     const fetchRental = async () => {
       try {
         const { data } = await axios.get(`http://localhost:5000/api/rentals/products/${id}`);
-        setRentalItem(data);
-        const mainImage = Array.isArray(data.images) && data.images.length > 0 
-          ? data.images[0] 
+        const itemData = data.product || data;
+        setRentalItem(itemData);
+        const mainImage = Array.isArray(itemData.images) && itemData.images.length > 0 
+          ? itemData.images[0] 
           : 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=900&q=85';
         setImagesList([mainImage]);
         setSelectedImage(mainImage);
         setActiveImgIndex(0);
 
-        if (data.sizes && data.sizes.length > 0) {
-          setSelectedSize(data.sizes[0]);
+        if (itemData.sizes && itemData.sizes.length > 0) {
+          setSelectedSize(itemData.sizes[0]);
         }
         setLoading(false);
       } catch (err) {
