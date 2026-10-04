@@ -955,17 +955,11 @@
   border-color: #D4AF37;
   background: rgba(255, 255, 255, 0.12);
   box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
-}
   backdrop-filter: blur(8px);
 }
 
 .newsletter-form input::placeholder {
   color: #94A3B8;
-}
-
-.newsletter-form input:focus {
-  border-color: #D4AF37;
-  background: rgba(255, 255, 255, 0.12);
 }
 
 /* RESPONSIVE MEDIA QUERIES */
