@@ -7,7 +7,7 @@ const getProducts = async (req, res) => {
   try {
     const { category, brand, minPrice, maxPrice, size, search, sort, page: pageQuery } = req.query;
 
-    const pageSize = req.query.limit ? Number(req.query.limit) : 8;
+    const pageSize = req.query.limit ? Number(req.query.limit) : 10;
     const page = Number(pageQuery) || 1;
 
     let query = {};

@@ -112,14 +112,8 @@ const ProductCard = ({ product }) => {
             <h3 className="card-title" title={product.name}>{product.name}</h3>
           </Link>
 
-          <div className="product-price">
-            <span className="current-price">{formatPrice(product.price)}</span>
-            {product.originalPrice && (
-              <span className="original-price">{formatPrice(product.originalPrice)}</span>
-            )}
-            {product.discount > 0 && (
-              <span className="discount-tag">({product.discount}% OFF)</span>
-            )}
+          <div className="product-price" style={{marginTop: '0.25rem'}}>
+            <span className="current-price" style={{fontWeight: '800', color: '#1B1917'}}>{formatPrice(product.price)}</span>
           </div>
         </div>
       </div>
