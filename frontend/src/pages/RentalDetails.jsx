@@ -143,24 +143,27 @@ const RentalDetails = () => {
   };
 
   return (
-    <div className="container rental-details-container">
-      {/* Top Breadcrumb */}
-      <div className="rental-breadcrumb">
-        <Link to="/rentals">Rentals Closet</Link> / <span>{rentalItem.name}</span>
-      </div>
+    <div className="container product-details-page myntra-theme">
+      <nav className="myntra-breadcrumb" aria-label="breadcrumb">
+        <Link to="/rentals">Rentals Closet</Link> / <span className="active-crumb">{rentalItem.name}</span>
+      </nav>
 
-      <div className="rental-details-grid">
+      <div className="myntra-product-layout mt-3">
         {/* Left Column: Gallery */}
-        <div className="rental-gallery-col">
-          <div className="rental-main-image-box">
-            <img src={selectedImage || imagesList[0]} alt={rentalItem.name} />
-            <span className="stock-counter-badge">
-              ⚡ {rentalItem.stockUnits || 3} Concurrent Units Available
-            </span>
-
-            <div className="zoom-indicator">
-              <Eye size={13} /> Hover to Zoom
-            </div>
+        <div className="myntra-gallery-container">
+          <div className="main-image-wrap single-dress-view">
+            <img 
+              src={selectedImage || imagesList[0]} 
+              alt={rentalItem.name} 
+              className="main-image-view"
+            />
+            
+            <button 
+              className="main-zoom-btn"
+              title="Click for Fullscreen Zoom"
+            >
+              <Maximize2 size={15} /> Hover to Zoom
+            </button>
           </div>
 
           <div className="sanitization-guarantee-box">
@@ -173,81 +176,59 @@ const RentalDetails = () => {
         </div>
 
         {/* Right Column: Specifications & Date Picker */}
-        <div className="rental-spec-col">
-          <div className="rental-brand-header">
-            <span className="rental-brand-tag">{rentalItem.brand}</span>
-            <button
-              className={`rental-wishlist-toggle ${isWishlisted ? 'active' : ''}`}
-              onClick={() => {
-                toggleWishlist(rentalItem);
-                addToast(
-                  isWishlisted ? `Removed from Wishlist` : `Saved ${rentalItem.name} to Wishlist!`,
-                  'info'
-                );
-              }}
-              title="Wishlist"
-            >
-              <Heart size={18} fill={isWishlisted ? '#e11d48' : 'none'} color={isWishlisted ? '#e11d48' : '#64748b'} />
-            </button>
+        <div className="myntra-info-panel">
+          <h1 className="myntra-brand">{rentalItem.brand}</h1>
+          <h2 className="myntra-title">{rentalItem.name}</h2>
+
+          <div className="myntra-rating-pill">
+            <span className="rating-score">{rentalItem.rating || 4.9} <Star size={13} fill="#059669" color="#059669" /></span>
+            <span className="rating-divider">|</span>
+            <span className="rating-count">{rentalItem.numReviews || 12} Ratings</span>
           </div>
 
-          <h1 className="rental-item-title">{rentalItem.name}</h1>
+          <div className="myntra-divider"></div>
 
-          <div className="rental-rating-row">
-            <Star size={16} fill="#f59e0b" color="#f59e0b" />
-            <span>{rentalItem.rating || 4.9} ({rentalItem.numReviews || 12} Verified Event Reviews)</span>
+          {/* Price Box */}
+          <div className="myntra-price-box">
+            <span className="myntra-price">{formatPrice(rentalItem.dailyRate)} <small style={{fontSize: '1rem', fontWeight: 500, color: '#64748B'}}>/ day</small></span>
+            <span className="myntra-mrp" style={{marginLeft: '1rem'}}>Retail Value: <s>{formatPrice(rentalItem.originalValue)}</s></span>
           </div>
+          <p className="myntra-tax-text">Includes LUXORA Pure-Hygiene Guarantee</p>
 
-          <div className="rental-rate-hero-box">
-            <div className="hero-daily-rate">
-              <span className="rate-lbl">Daily Rental Rate</span>
-              <span className="rate-val">{formatPrice(rentalItem.dailyRate)} <small>/ day</small></span>
+          <p className="rental-description mt-3 mb-3">{rentalItem.description}</p>
+
+          <div className="myntra-divider"></div>
+
+          {/* Select Size */}
+          <div className="myntra-size-section mt-4">
+            <div className="myntra-size-header">
+              <h3>SELECT SIZE</h3>
             </div>
-            <div className="hero-original-val">
-              <span className="orig-lbl">Retail Replacement Value</span>
-              <span className="orig-val">{formatPrice(rentalItem.originalValue)}</span>
+
+            <div className="myntra-size-grid mt-2">
+              {(rentalItem.sizes || []).map((sz) => (
+                <button
+                  key={sz}
+                  className={`myntra-size-pill ${selectedSize === sz ? 'selected' : ''}`}
+                  onClick={() => setSelectedSize(sz)}
+                >
+                  {sz}
+                </button>
+              ))}
             </div>
           </div>
-
-          <p className="rental-description">{rentalItem.description}</p>
-
-          {/* Garment Specifications */}
-          <div className="rental-specs-card">
-            <h4>Garment Specifications & Material</h4>
-            <div className="specs-pills-grid">
-              {rentalItem.fabric && <div className="spec-item"><span>Fabric:</span> <strong>{rentalItem.fabric}</strong></div>}
-              {rentalItem.fitType && <div className="spec-item"><span>Silhouette & Fit:</span> <strong>{rentalItem.fitType}</strong></div>}
-              {rentalItem.occasion && <div className="spec-item"><span>Best For:</span> <strong>{rentalItem.occasion}</strong></div>}
-            </div>
-          </div>
-
-          {/* Size Choice */}
-          {rentalItem.sizes && rentalItem.sizes.length > 0 && (
-            <div className="rental-size-section">
-              <h4>Choose Outfit Size</h4>
-              <div className="sizes-row">
-                {rentalItem.sizes.map((sz) => (
-                  <button
-                    key={sz}
-                    className={`size-chip ${selectedSize === sz ? 'selected' : ''}`}
-                    onClick={() => setSelectedSize(sz)}
-                  >
-                    {sz}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Rental Duration & Date Picker Box */}
-          <div className="rental-booking-box">
-            <h3><Calendar size={18} /> Select Rental Duration & Event Start Date</h3>
-
-            <div className="duration-selector-row">
+          <div className="myntra-qty-section mt-4" style={{border: '1px solid #eaeaec', padding: '1rem', borderRadius: '4px'}}>
+            <div className="qty-label-row">
+              <h3>SELECT RENTAL DURATION</h3>
+            </div>
+            
+            <div className="duration-selector-row" style={{display: 'flex', gap: '10px', marginTop: '10px'}}>
               {[3, 7, 10, 14, 30].map((days) => (
                 <button
                   key={days}
-                  className={`duration-chip ${rentalDays === days ? 'active' : ''}`}
+                  className={`myntra-size-pill ${rentalDays === days ? 'selected' : ''}`}
                   onClick={() => setRentalDays(days)}
                 >
                   {days} Days
@@ -255,37 +236,38 @@ const RentalDetails = () => {
               ))}
             </div>
 
-            <div className="date-input-group">
-              <label>Event Start / Delivery Date:</label>
+            <div className="date-input-group mt-4">
+              <h3>START DATE</h3>
               <input
                 type="date"
                 value={startDate}
                 min={new Date().toISOString().split('T')[0]}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="rental-date-picker"
+                className="myntra-date-picker"
+                style={{width: '100%', padding: '0.8rem', border: '1px solid #d4d5d9', borderRadius: '4px', marginTop: '0.5rem', fontFamily: 'inherit'}}
               />
             </div>
 
-            <div className="booking-summary-receipt">
-              <div className="receipt-line">
+            <div className="booking-summary-receipt mt-4" style={{background: '#f9f9f9', padding: '1rem', borderRadius: '4px', fontSize: '0.9rem'}}>
+              <div className="receipt-line" style={{display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem'}}>
                 <span>Rental Charge ({rentalDays} Days @ {formatPrice(rentalItem.dailyRate)}/day):</span>
                 <strong>{formatPrice(rentalChargeTotal)}</strong>
               </div>
-              <div className="receipt-line">
+              <div className="receipt-line" style={{display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem'}}>
                 <span>100% Refundable Security Deposit:</span>
-                <strong className="text-gold">{formatPrice(securityDeposit)}</strong>
+                <strong style={{color: '#d4af37'}}>{formatPrice(securityDeposit)}</strong>
               </div>
-              <div className="receipt-line total-line">
+              <div className="receipt-line total-line" style={{display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #eaeaec', paddingTop: '0.5rem', marginTop: '0.5rem', fontWeight: 'bold'}}>
                 <span>Total Amount Payable Now:</span>
                 <span className="total-amount">{formatPrice(grandTotalPayable)}</span>
               </div>
-              <p className="return-note-text">
+              <p className="return-note-text" style={{marginTop: '0.8rem', fontSize: '0.8rem', color: '#64748b'}}>
                 <RotateCcw size={13} /> Scheduled Return Pickup on: <strong>{calculateEndDate()}</strong>
               </p>
             </div>
 
-            <button className="btn-reserve-rental-now" onClick={handleProceedToRentalCheckout}>
-              <Sparkles size={18} /> Reserve Outfit for Event Dates ➔
+            <button className="myntra-btn-add-bag w-100 mt-4" onClick={handleProceedToRentalCheckout}>
+              <Calendar size={18} style={{marginRight: '8px'}} /> RESERVE OUTFIT
             </button>
           </div>
         </div>

@@ -151,8 +151,8 @@
 
 .rental-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.75rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.25rem;
 }
 
 .rental-card {
@@ -174,7 +174,7 @@
 
 .rental-card-image-wrapper {
   position: relative;
-  aspect-ratio: 3/4;
+  aspect-ratio: 4/5;
   background: #F3ECE2;
 }
 

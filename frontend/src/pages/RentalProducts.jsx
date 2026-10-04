@@ -135,7 +135,11 @@ const RentalProducts = () => {
             {rentals.map((item) => (
               <div key={item._id} className="rental-card">
                 <div className="rental-card-image-wrapper">
-                  <img src={item.images[0]} alt={item.name} />
+                  <img 
+                    src={item.images[0]} 
+                    alt={item.name} 
+                    onError={(e) => { e.target.onerror = null; e.target.src = "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=800&q=80"; }}
+                  />
                   <span className="rental-stock-badge">
                     ⚡ {item.stockUnits || 3} Units Available
                   </span>
@@ -161,33 +165,13 @@ const RentalProducts = () => {
 
                   <h3 className="rental-card-title">{item.name}</h3>
 
-                  <div className="fashion-spec-tags">
-                    {item.fabric && (
-                      <span className="spec-tag"><Layers size={12} /> {item.fabric}</span>
-                    )}
-                    {item.fitType && (
-                      <span className="spec-tag"><Award size={12} /> {item.fitType}</span>
-                    )}
-                  </div>
-                  
-                  <div className="rental-pricing-box">
-                    <div className="rate-container">
-                      <span className="daily-rate-lbl">Daily Rental</span>
-                      <span className="daily-rate-val">{formatPrice(item.dailyRate)} <small>/ day</small></span>
-                    </div>
-                    <div className="retail-val-box">
-                      <span className="retail-lbl">Original Retail Value</span>
-                      <span className="retail-val">{formatPrice(item.originalValue)}</span>
-                    </div>
+                  <div className="price-simple-row mb-3" style={{marginTop: '0.5rem', marginBottom: '1rem'}}>
+                    <span className="price-amount" style={{fontWeight: '800', fontSize: '1.1rem', color: '#1B1917'}}>{formatPrice(item.dailyRate)} <small style={{fontSize: '0.75rem', fontWeight: '500', color: '#64748B'}}>/ day</small></span>
                   </div>
 
-                  <div className="rental-deposit-row">
-                    <span>Refundable Deposit: <strong>{formatPrice(item.securityDeposit)}</strong></span>
-                  </div>
-
-                  <div className="rental-card-actions">
-                    <Link to={`/rentals/${item._id}`} className="btn-rent-details">
-                      <Calendar size={16} /> Choose Rent Dates & Book
+                  <div className="rental-card-actions mt-auto" style={{marginTop: 'auto'}}>
+                    <Link to={`/rentals/${item._id}`} className="btn-rent-details" style={{flex: 1}}>
+                      <Calendar size={16} /> Rent Now
                     </Link>
                     <button className="btn-rent-qv" onClick={() => setQuickViewItem(item)} title="Quick View">
                       <Eye size={16} />
