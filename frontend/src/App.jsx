@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -29,6 +29,46 @@ import AdminUsers from './pages/admin/AdminUsers';
 import { WishlistProvider } from './context/WishlistContext';
 import { ToastProvider } from './context/ToastContext';
 import { CurrencyProvider } from './context/CurrencyContext';
+const AppLayout = () => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
+  return (
+    <div className="app-container" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      {!isAdminRoute && <Navbar />}
+      <main style={{ flex: 1, paddingTop: isAdminRoute ? '0px' : '130px' }}>
+        <Routes>
+          {/* Public & Customer Routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/rentals" element={<RentalProducts />} />
+          <Route path="/rentals/:id" element={<RentalDetails />} />
+          <Route path="/rentals/checkout" element={<RentalCheckout />} />
+          <Route path="/my-rentals" element={<MyRentals />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/myorders" element={<MyOrders />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/offers" element={<Offers />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/checkout" element={<Checkout />} />
+
+          {/* Admin Module Routes */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="products" element={<AdminProducts />} />
+            <Route path="rentals" element={<AdminRentals />} />
+            <Route path="orders" element={<AdminOrders />} />
+            <Route path="users" element={<AdminUsers />} />
+          </Route>
+        </Routes>
+      </main>
+      {!isAdminRoute && <Footer />}
+    </div>
+  );
+};
 
 function App() {
   return (
@@ -36,39 +76,7 @@ function App() {
       <WishlistProvider>
         <ToastProvider>
           <Router>
-            <div className="app-container" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-              <Navbar />
-              <main style={{ flex: 1, paddingTop: '130px' }}>
-                <Routes>
-                  {/* Public & Customer Routes */}
-                  <Route path="/" element={<Home />} />
-                  <Route path="/products" element={<Products />} />
-                  <Route path="/product/:id" element={<ProductDetails />} />
-                  <Route path="/rentals" element={<RentalProducts />} />
-                  <Route path="/rentals/:id" element={<RentalDetails />} />
-                  <Route path="/rentals/checkout" element={<RentalCheckout />} />
-                  <Route path="/my-rentals" element={<MyRentals />} />
-                  <Route path="/cart" element={<Cart />} />
-                  <Route path="/wishlist" element={<Wishlist />} />
-                  <Route path="/myorders" element={<MyOrders />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/offers" element={<Offers />} />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="/checkout" element={<Checkout />} />
-
-                  {/* Admin Module Routes */}
-                  <Route path="/admin" element={<AdminLayout />}>
-                    <Route index element={<AdminDashboard />} />
-                    <Route path="products" element={<AdminProducts />} />
-                    <Route path="rentals" element={<AdminRentals />} />
-                    <Route path="orders" element={<AdminOrders />} />
-                    <Route path="users" element={<AdminUsers />} />
-                  </Route>
-                </Routes>
-              </main>
-              <Footer />
-            </div>
+            <AppLayout />
           </Router>
         </ToastProvider>
       </WishlistProvider>
