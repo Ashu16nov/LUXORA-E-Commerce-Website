@@ -390,27 +390,28 @@
 
 .myntra-btn-add-bag {
   flex: 3;
-  background: #ff3f6c;
-  color: #ffffff;
+  background: linear-gradient(135deg, #1B1917 0%, #2C2723 100%);
+  color: #FFFDF9;
   border: none;
-  padding: 1rem 1.5rem;
-  font-size: 1rem;
+  padding: 1.1rem 1.5rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: 1px;
-  border-radius: 4px;
+  letter-spacing: 1.5px;
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  box-shadow: 0 4px 14px rgba(255, 63, 108, 0.35);
-  transition: all 0.25s ease;
+  box-shadow: 0 8px 25px rgba(27, 25, 23, 0.25);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  text-transform: uppercase;
 }
 
 .myntra-btn-add-bag:hover:not(.disabled) {
-  background: #e6335c;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(255, 63, 108, 0.45);
+  background: linear-gradient(135deg, #2C2723 0%, #3D3630 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(27, 25, 23, 0.35), 0 0 15px rgba(212, 175, 55, 0.2);
 }
 
 .myntra-btn-add-bag.disabled {
@@ -422,13 +423,13 @@
 .myntra-btn-wishlist {
   flex: 2;
   background: #ffffff;
-  color: #282c3f;
-  border: 1px solid #d4d5d9;
-  padding: 1rem;
+  color: #1B1917;
+  border: 1px solid #D4AF37;
+  padding: 1.1rem;
   font-size: 0.95rem;
   font-weight: 700;
-  letter-spacing: 0.8px;
-  border-radius: 4px;
+  letter-spacing: 1px;
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;

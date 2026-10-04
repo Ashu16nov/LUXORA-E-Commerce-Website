@@ -82,15 +82,26 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--primary-color);
   margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background: var(--accent-gold);
+  color: #fff;
+}
+
+::-moz-selection {
+  background: var(--accent-gold);
+  color: #fff;
 }
 
 a {
   text-decoration: none;
   color: inherit;
-  transition: color 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 a:hover {
@@ -165,22 +176,21 @@ button {
 .justify-between { justify-content: space-between; }
 .justify-center { justify-content: center; }
 
-/* Product Card - Myntra Catalog Style */
 .myntra-card-style {
   position: relative;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   overflow: hidden;
   background-color: #ffffff;
-  border: 1px solid #eaeaec;
-  border-radius: 4px;
+  border: 1px solid #f0f0f2;
+  border-radius: 8px; /* Slightly more rounded for modern feel */
   display: flex;
   flex-direction: column;
 }
 
 .myntra-card-style:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  border-color: #d4d5d9;
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+  border-color: #eaeaec;
 }
 
 .myntra-card-style .product-image-container {
