@@ -199,10 +199,18 @@ button {
   position: relative;
   overflow: hidden;
   width: 100%;
+  padding-bottom: 125%; /* 5/4 Aspect Ratio */
   flex-shrink: 0;
-  aspect-ratio: 4/5;
   background-color: #f4f4f4;
   display: block;
+}
+
+.myntra-card-style .product-image-container > a {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .myntra-card-style .card-image-link {

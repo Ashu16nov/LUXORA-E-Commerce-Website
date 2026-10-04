@@ -574,11 +574,19 @@
 
 .home-rental-img-wrap {
   position: relative;
-  aspect-ratio: 1/1;
   width: 100%;
+  padding-bottom: 125%; /* 5/4 Aspect Ratio */
   flex-shrink: 0;
   background: #EFE8DE;
   overflow: hidden;
+}
+
+.home-rental-img-wrap > a {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .home-rental-img-wrap img {
