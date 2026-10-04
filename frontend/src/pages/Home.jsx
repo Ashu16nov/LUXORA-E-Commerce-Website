@@ -273,7 +273,7 @@ const Home = () => {
           </div>
 
           <div className="home-rental-grid-4">
-            {filteredRentals.map((item) => (
+            {filteredRentals.slice(0, 4).map((item) => (
               <div key={item._id} className="home-rental-card-enhanced">
                 <div className="home-rental-img-wrap">
                   <img src={item.images[0]} alt={item.name} />
@@ -378,7 +378,7 @@ const Home = () => {
           <div className="loader"></div>
         ) : (
           <div className="grid grid-cols-4">
-            {(productTab === 'trending' ? trendingProducts : offerProducts).map((product) => (
+            {(productTab === 'trending' ? trendingProducts : offerProducts).slice(0, 4).map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
           </div>
