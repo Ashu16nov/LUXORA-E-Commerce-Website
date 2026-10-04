@@ -238,29 +238,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 4.5. GEN Z FANCY CLOSET & STREETWEAR TRENDS SHOWCASE */}
-      <section className="container genz-showcase-section mt-5">
-        <div className="genz-banner-card">
-          <div className="genz-header-content">
-            <span className="genz-glow-badge">
-              <Zap size={14} className="zap-pulse" /> ⚡ GEN Z CLOSET & STREETWEAR TRENDS
-            </span>
-            <h2>Fancy Crop Tops, Y2K Tanks, Accidental Jeans & Bralettes</h2>
-            <p>
-              Elevate your street style with ultra-chic Y2K ribbed tank tops, cut-out satin mini dresses, accidental ripped jeans, corset bustiers, lace bralettes & backless party tops!
-            </p>
-          </div>
-          <Link to="/products?category=Women" className="btn-genz-explore">
-            Explore All Gen Z Outfits <ArrowRight size={16} />
-          </Link>
-        </div>
 
-        <div className="genz-products-grid mt-4">
-          {genZProducts.map((prod) => (
-            <ProductCard key={prod._id} product={prod} />
-          ))}
-        </div>
-      </section>
 
       {/* 5. LUXORA CLOTH RENTAL SHOWCASE */}
       <section className="home-rental-showcase-section">
@@ -407,10 +385,6 @@ const Home = () => {
         )}
       </section>
 
-      {/* 7. EDITORIAL RUNWAY CAROUSEL */}
-      <div className="runway-carousel-wrapper">
-        <Carousel />
-      </div>
 
       {/* 8. VERIFIED REVIEWS & TESTIMONIALS */}
       <section className="testimonials-section container">
