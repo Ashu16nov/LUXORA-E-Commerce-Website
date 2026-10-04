@@ -234,7 +234,7 @@ const Products = () => {
             <>
               <p className="mb-4 text-sm count-text">Showing <strong>{products.length}</strong> of <strong>{totalCount}</strong> luxury pieces</p>
               
-              <div className={viewMode === 'grid' ? 'grid grid-cols-3' : 'list-view-container'}>
+              <div className={viewMode === 'grid' ? 'grid grid-cols-5' : 'list-view-container'}>
                 {products.map(product => (
                   <ProductCard key={product._id} product={product} />
                 ))}

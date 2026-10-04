@@ -58,7 +58,7 @@ const Offers = () => {
           <p>Flat 50% Off & Above</p>
         </div>
         
-        <div className="grid grid-cols-4">
+        <div className="grid grid-cols-5">
           {clearanceDeals.length > 0 ? (
             clearanceDeals.map(product => (
               <ProductCard key={product._id} product={product} />
@@ -76,9 +76,9 @@ const Offers = () => {
           <p>Hottest items on discount right now</p>
         </div>
         
-        <div className="grid grid-cols-4">
+        <div className="grid grid-cols-5">
           {trendingDeals.length > 0 ? (
-            trendingDeals.slice(0, 4).map(product => (
+            trendingDeals.slice(0, 5).map(product => (
               <ProductCard key={product._id} product={product} />
             ))
           ) : (
@@ -94,9 +94,9 @@ const Offers = () => {
           <p>Everything under ₹1500</p>
         </div>
         
-        <div className="grid grid-cols-4">
+        <div className="grid grid-cols-5">
           {under1500.length > 0 ? (
-            under1500.slice(0, 8).map(product => (
+            under1500.slice(0, 10).map(product => (
               <ProductCard key={product._id} product={product} />
             ))
           ) : (

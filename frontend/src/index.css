@@ -169,6 +169,8 @@ button {
 .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
 .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
 .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-cols-5 { grid-template-columns: repeat(5, 1fr); }
+.grid-cols-6 { grid-template-columns: repeat(6, 1fr); }
 
 .flex { display: flex; }
 .flex-col { flex-direction: column; }
@@ -197,7 +199,7 @@ button {
   position: relative;
   overflow: hidden;
   width: 100%;
-  aspect-ratio: 3/4;
+  aspect-ratio: 4/5;
   background-color: #f4f4f4;
   display: block;
 }

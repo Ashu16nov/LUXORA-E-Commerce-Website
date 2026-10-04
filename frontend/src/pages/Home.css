@@ -436,10 +436,10 @@
   box-shadow: 0 6px 16px rgba(27, 25, 23, 0.25);
 }
 
-.home-rental-grid-4 {
+.home-rental-grid-5 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.85rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
   margin-bottom: 3.5rem;
 }
 
@@ -574,7 +574,7 @@
 
 .home-rental-img-wrap {
   position: relative;
-  aspect-ratio: 3/4;
+  aspect-ratio: 4/5;
   background: #EFE8DE;
   overflow: hidden;
 }
@@ -965,7 +965,7 @@
 /* RESPONSIVE MEDIA QUERIES */
 @media (max-width: 1200px) {
   .hero-content h1 { font-size: 3.2rem; }
-  .categories-grid-4, .home-rental-grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .categories-grid-4, .home-rental-grid-5 { grid-template-columns: repeat(3, 1fr); }
   .features-strip-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
 }
 
@@ -978,6 +978,6 @@
   .ai-promo-content { flex-direction: column; text-align: center; }
   .testimonials-grid { grid-template-columns: 1fr; }
   .newsletter-form { flex-direction: column; }
-  .categories-grid-4, .home-rental-grid-4 { grid-template-columns: 1fr; }
+  .categories-grid-4, .home-rental-grid-5 { grid-template-columns: repeat(2, 1fr); }
   .catalog-header-flex { flex-direction: column; align-items: flex-start; }
 }
