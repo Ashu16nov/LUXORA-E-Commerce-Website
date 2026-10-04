@@ -23,39 +23,7 @@ import {
 } from 'lucide-react';
 import './RentalDetails.css';
 
-// Multi-angle generator helper for luxury rentals
-const getMultiAngleImages = (item) => {
-  if (!item) return [];
-  const baseImages = Array.isArray(item.images) && item.images.length > 0 ? item.images : [];
-  const primaryImg = baseImages[0] || 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=900&q=85';
-
-  const angleLibrary = {
-    Women: [
-      primaryImg,
-      'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=900&q=85',
-      'https://images.unsplash.com/photo-1550639525-c97d455acf70?w=900&q=85',
-      'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&q=85'
-    ],
-    Men: [
-      primaryImg,
-      'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=900&q=85',
-      'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=900&q=85',
-      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=900&q=85'
-    ]
-  };
-
-  const categoryAngles = angleLibrary[item.category] || angleLibrary['Women'];
-  const combined = [...baseImages];
-  categoryAngles.forEach((img) => {
-    if (!combined.includes(img) && combined.length < 4) {
-      combined.push(img);
-    }
-  });
-
-  return combined;
-};
-
-const angleLabels = ['Front View', 'Side Angle', 'Fabric Detail', 'Back View'];
+// Removed getMultiAngleImages helper to prevent unrelated dummy images
 
 const RentalDetails = () => {
   const { id } = useParams();
@@ -86,9 +54,11 @@ const RentalDetails = () => {
       try {
         const { data } = await axios.get(`http://localhost:5000/api/rentals/products/${id}`);
         setRentalItem(data);
-        const multiAngles = getMultiAngleImages(data);
-        setImagesList(multiAngles);
-        setSelectedImage(multiAngles[0]);
+        const mainImage = Array.isArray(data.images) && data.images.length > 0 
+          ? data.images[0] 
+          : 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=900&q=85';
+        setImagesList([mainImage]);
+        setSelectedImage(mainImage);
         setActiveImgIndex(0);
 
         if (data.sizes && data.sizes.length > 0) {
@@ -188,38 +158,10 @@ const RentalDetails = () => {
               ⚡ {rentalItem.stockUnits || 3} Concurrent Units Available
             </span>
 
-            {/* Navigation Arrows */}
-            {imagesList.length > 1 && (
-              <>
-                <button className="gallery-arrow prev-arrow" onClick={handlePrevImage} title="Previous Angle">
-                  <ChevronLeft size={20} />
-                </button>
-                <button className="gallery-arrow next-arrow" onClick={handleNextImage} title="Next Angle">
-                  <ChevronRight size={20} />
-                </button>
-              </>
-            )}
-
             <div className="zoom-indicator">
               <Eye size={13} /> Hover to Zoom
             </div>
           </div>
-
-          {/* Multi-Angle Thumbnails */}
-          {imagesList.length > 0 && (
-            <div className="rental-thumbnails-row">
-              {imagesList.map((img, idx) => (
-                <button
-                  key={idx}
-                  className={`rental-thumb-btn ${activeImgIndex === idx ? 'active' : ''}`}
-                  onClick={() => handleSelectImage(img, idx)}
-                >
-                  <img src={img} alt={`${rentalItem.name} - ${angleLabels[idx] || 'Angle'}`} />
-                  <span className="thumb-angle-label">{angleLabels[idx] || `Angle ${idx + 1}`}</span>
-                </button>
-              ))}
-            </div>
-          )}
 
           <div className="sanitization-guarantee-box">
             <Award size={24} className="badge-icon-gold" />
