@@ -56,130 +56,136 @@ const Profile = () => {
   if (!user) return null;
 
   return (
-    <div className="profile-page">
-      <div className="profile-container container">
-        <div className="profile-header">
-          <div className="user-avatar-circle font-gold">
-            {name.substring(0, 2).toUpperCase()}
-          </div>
-          <div>
-            <h1>Welcome, {name}</h1>
-            <p>Manage your account settings, saved addresses, and active orders.</p>
-          </div>
+    <div className="lux-profile-page container">
+      {/* Luxury Profile Header */}
+      <div className="lux-profile-header">
+        <div className="lux-avatar">
+          {name ? name.substring(0, 2).toUpperCase() : 'LU'}
         </div>
-
-        {/* Quick Dashboard Links */}
-        <div className="profile-quick-nav">
-          <Link to="/myorders" className="p-nav-card">
-            <Package size={24} className="p-nav-icon" />
-            <div>
-              <strong>Order History & Tracking</strong>
-              <span>Track retail & rental deliveries</span>
-            </div>
-          </Link>
-          <Link to="/my-rentals" className="p-nav-card">
-            <Calendar size={24} className="p-nav-icon" />
-            <div>
-              <strong>My Active Rentals 👑</strong>
-              <span>Manage rental returns & deposit status</span>
-            </div>
-          </Link>
-          <Link to="/wishlist" className="p-nav-card">
-            <Heart size={24} className="p-nav-icon" />
-            <div>
-              <strong>Saved Wishlist</strong>
-              <span>View your favorite luxury pieces</span>
-            </div>
-          </Link>
+        <div className="lux-profile-title-area">
+          <h1>My Account</h1>
+          <p>Welcome back, {name}</p>
         </div>
+      </div>
 
-        <form onSubmit={submitHandler} className="profile-form">
-          <div className="form-section">
-            <h3>Personal Information</h3>
-            <div className="form-group">
-              <label className="form-label">Full Name</label>
-              <input 
-                type="text" 
-                className="form-input" 
-                value={name} 
-                onChange={(e) => setName(e.target.value)} 
-                required 
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Email Address (Account ID)</label>
-              <input 
-                type="email" 
-                className="form-input" 
-                value={email} 
-                disabled 
-                style={{ backgroundColor: '#f3ece2', color: '#786F66' }}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">New Password (Leave blank to keep current)</label>
-              <input 
-                type="password" 
-                className="form-input" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
-                placeholder="••••••••"
-              />
-            </div>
+      <div className="lux-profile-layout">
+        {/* Sidebar Navigation */}
+        <aside className="lux-profile-sidebar">
+          <nav className="lux-sidebar-nav">
+            <Link to="/profile" className="sidebar-link active">
+              <User size={18} /> Personal Details
+            </Link>
+            <Link to="/myorders" className="sidebar-link">
+              <Package size={18} /> Order History
+            </Link>
+            <Link to="/my-rentals" className="sidebar-link">
+              <Calendar size={18} /> Active Rentals
+            </Link>
+            <Link to="/wishlist" className="sidebar-link">
+              <Heart size={18} /> Saved Wishlist
+            </Link>
+          </nav>
+          
+          <div className="sidebar-help-card">
+            <ShieldCheck size={20} className="gold-icon" />
+            <h4>Need Assistance?</h4>
+            <p>Our luxury concierge is available 24/7 for styling and support.</p>
+            <a href="mailto:concierge@luxora.com">Contact Concierge</a>
           </div>
+        </aside>
 
-          <div className="form-section">
-            <h3>Default Shipping & Return Address</h3>
-            <div className="form-group">
-              <label className="form-label">Street Address / Suite</label>
-              <input 
-                type="text" 
-                className="form-input" 
-                value={street} 
-                onChange={(e) => setStreet(e.target.value)} 
-                placeholder="123 Luxury Avenue, Suite 100"
-              />
-            </div>
-            
-            <div className="address-grid">
-              <div className="form-group">
-                <label className="form-label">City</label>
-                <input 
-                  type="text" 
-                  className="form-input" 
-                  value={city} 
-                  onChange={(e) => setCity(e.target.value)} 
-                  placeholder="Mumbai / Delhi / Paris"
-                />
+        {/* Main Content Area */}
+        <main className="lux-profile-content">
+          <form onSubmit={submitHandler} className="lux-profile-form">
+            <div className="lux-form-section">
+              <h3>Account Information</h3>
+              <p className="lux-section-desc">Update your personal details and account settings.</p>
+              
+              <div className="lux-form-grid">
+                <div className="lux-input-group">
+                  <label>Full Name</label>
+                  <input 
+                    type="text" 
+                    value={name} 
+                    onChange={(e) => setName(e.target.value)} 
+                    required 
+                  />
+                </div>
+                <div className="lux-input-group">
+                  <label>Email Address</label>
+                  <input 
+                    type="email" 
+                    value={email} 
+                    disabled 
+                    className="disabled-input"
+                  />
+                </div>
               </div>
-              <div className="form-group">
-                <label className="form-label">Postal Code</label>
+
+              <div className="lux-input-group mt-4">
+                <label>New Password <span className="label-hint">(Leave blank to keep current)</span></label>
                 <input 
-                  type="text" 
-                  className="form-input" 
-                  value={postalCode} 
-                  onChange={(e) => setPostalCode(e.target.value)} 
-                  placeholder="400001"
+                  type="password" 
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)} 
+                  placeholder="••••••••"
                 />
               </div>
             </div>
-            
-            <div className="form-group">
-              <label className="form-label">Country</label>
-              <input 
-                type="text" 
-                className="form-input" 
-                value={country} 
-                onChange={(e) => setCountry(e.target.value)} 
-                placeholder="India"
-              />
-            </div>
-          </div>
 
-          <button type="submit" className="profile-submit-btn" disabled={loading}>
-            {loading ? 'Saving...' : <><Save size={20} /> Save Profile Changes</>}
-          </button>
-        </form>
+            <div className="lux-form-section mt-5">
+              <h3>Shipping Preferences</h3>
+              <p className="lux-section-desc">Manage your default address for retail and rental deliveries.</p>
+              
+              <div className="lux-input-group">
+                <label>Street Address / Suite</label>
+                <input 
+                  type="text" 
+                  value={street} 
+                  onChange={(e) => setStreet(e.target.value)} 
+                  placeholder="123 Luxury Avenue, Suite 100"
+                />
+              </div>
+              
+              <div className="lux-form-grid mt-4">
+                <div className="lux-input-group">
+                  <label>City</label>
+                  <input 
+                    type="text" 
+                    value={city} 
+                    onChange={(e) => setCity(e.target.value)} 
+                    placeholder="Mumbai / Delhi / Paris"
+                  />
+                </div>
+                <div className="lux-input-group">
+                  <label>Postal Code</label>
+                  <input 
+                    type="text" 
+                    value={postalCode} 
+                    onChange={(e) => setPostalCode(e.target.value)} 
+                    placeholder="400001"
+                  />
+                </div>
+              </div>
+              
+              <div className="lux-input-group mt-4">
+                <label>Country</label>
+                <input 
+                  type="text" 
+                  value={country} 
+                  onChange={(e) => setCountry(e.target.value)} 
+                  placeholder="India"
+                />
+              </div>
+            </div>
+
+            <div className="lux-form-actions">
+              <button type="submit" className="btn-lux-save" disabled={loading}>
+                {loading ? 'Saving Changes...' : 'Save Preferences'}
+              </button>
+            </div>
+          </form>
+        </main>
       </div>
     </div>
   );

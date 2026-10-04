@@ -1,139 +1,254 @@
-.profile-page {
-  padding-top: 3rem;
-  padding-bottom: 5rem;
+.lux-profile-page {
+  padding: 4rem 0 6rem;
+  min-height: calc(100vh - 300px);
 }
 
-.profile-container {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.profile-header {
+.lux-profile-header {
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid #E6DFD5;
-  padding-bottom: 1.5rem;
+  margin-bottom: 3rem;
 }
 
-.user-avatar-circle {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: #111827;
+.lux-avatar {
+  width: 80px;
+  height: 80px;
+  background: #1B1917;
   color: #D4AF37;
-  border: 2px solid #D4AF37;
+  font-size: 1.8rem;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
-  font-weight: 800;
-  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid #D4AF37;
 }
 
-.profile-header h1 {
-  font-size: 2.2rem;
+.lux-profile-title-area h1 {
   font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  color: #1B1917;
   margin-bottom: 0.2rem;
 }
 
-.profile-header p {
+.lux-profile-title-area p {
   color: #786F66;
+  font-size: 1rem;
 }
 
-.profile-quick-nav {
+.lux-profile-layout {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-  margin-bottom: 2.5rem;
+  grid-template-columns: 280px 1fr;
+  gap: 3rem;
+  align-items: start;
 }
 
-.p-nav-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  background: #FFFDF9;
-  border: 1px solid #E6DFD5;
-  border-radius: 14px;
-  padding: 1.25rem;
-  text-decoration: none;
-  color: #1B1917;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-}
-
-.p-nav-card:hover {
-  border-color: #C5A059;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(197, 160, 89, 0.15);
-}
-
-.p-nav-icon {
-  color: #C5A059;
-  flex-shrink: 0;
-}
-
-.p-nav-card strong {
-  display: block;
-  font-size: 0.9rem;
-  margin-bottom: 0.15rem;
-}
-
-.p-nav-card span {
-  font-size: 0.75rem;
-  color: #786F66;
-}
-
-.profile-form {
+/* Sidebar */
+.lux-profile-sidebar {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
-.form-section {
+.lux-sidebar-nav {
+  display: flex;
+  flex-direction: column;
   background: #FFFDF9;
   border: 1px solid #E6DFD5;
-  border-radius: 16px;
-  padding: 2rem;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-.form-section h3 {
-  font-size: 1.2rem;
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  color: #786F66;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #F3ECE2;
+  transition: all 0.3s ease;
+}
+
+.sidebar-link:last-child {
+  border-bottom: none;
+}
+
+.sidebar-link:hover {
+  background: #F9F6F0;
+  color: #1B1917;
+}
+
+.sidebar-link.active {
+  background: #1B1917;
+  color: #D4AF37;
+  border-left: 4px solid #D4AF37;
+}
+
+.sidebar-help-card {
+  background: #F9F6F0;
+  border: 1px solid #E6DFD5;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.sidebar-help-card .gold-icon {
+  color: #D4AF37;
+  margin-bottom: 0.75rem;
+}
+
+.sidebar-help-card h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #1B1917;
+}
+
+.sidebar-help-card p {
+  font-size: 0.85rem;
+  color: #786F66;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.sidebar-help-card a {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1B1917;
+  text-decoration: underline;
+  text-decoration-color: #D4AF37;
+  text-underline-offset: 4px;
+}
+
+/* Main Content */
+.lux-profile-content {
+  background: #FFFDF9;
+  border: 1px solid #E6DFD5;
+  border-radius: 12px;
+  padding: 3rem;
+}
+
+.lux-form-section h3 {
   font-family: 'Playfair Display', serif;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid #E6DFD5;
-  padding-bottom: 0.75rem;
+  font-size: 1.6rem;
+  color: #1B1917;
+  margin-bottom: 0.3rem;
 }
 
-.address-grid {
+.lux-section-desc {
+  color: #786F66;
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #F3ECE2;
+  padding-bottom: 1.5rem;
+}
+
+.lux-form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
-.profile-submit-btn {
+.lux-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lux-input-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1B1917;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.label-hint {
+  text-transform: none;
+  font-weight: 400;
+  color: #9CA3AF;
+  font-size: 0.75rem;
+  letter-spacing: 0;
+}
+
+.lux-input-group input {
+  padding: 1rem 1.25rem;
+  border: 1px solid #D4D5D9;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: #FFFFFF;
+  color: #1B1917;
+  transition: all 0.3s ease;
+}
+
+.lux-input-group input:focus {
+  outline: none;
+  border-color: #D4AF37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.lux-input-group input.disabled-input {
+  background: #F3ECE2;
+  color: #9CA3AF;
+  cursor: not-allowed;
+  border-color: #E6DFD5;
+}
+
+.lux-form-actions {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-lux-save {
   background: #1B1917;
   color: #FFFDF9;
   border: none;
-  padding: 1rem 2rem;
-  border-radius: 10px;
-  font-size: 1rem;
+  padding: 1.1rem 2.5rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.profile-submit-btn:hover {
-  background: #C5A059;
+.btn-lux-save:hover:not(:disabled) {
+  background: #D4AF37;
   color: #1B1917;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.25);
 }
 
-@media (max-width: 768px) {
-  .profile-quick-nav { grid-template-columns: 1fr; }
-  .address-grid { grid-template-columns: 1fr; }
+.btn-lux-save:disabled {
+  background: #9CA3AF;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .lux-profile-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .lux-profile-sidebar {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .lux-form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .lux-profile-content {
+    padding: 1.5rem;
+  }
+  
+  .btn-lux-save {
+    width: 100%;
+  }
 }
