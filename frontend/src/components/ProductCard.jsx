@@ -56,10 +56,6 @@ const ProductCard = ({ product }) => {
       <div className="product-card myntra-card-style">
         {/* Full Image Container */}
         <div className="product-image-container">
-          {product.offer && <span className="product-badge badge-sale">Sale</span>}
-          {product.trending && !product.offer && (
-            <span className="product-badge badge-gold">Trending</span>
-          )}
 
           {/* Top-Right Wishlist Heart Button */}
           <button
