@@ -7,7 +7,7 @@ import { Plus, Edit, Trash2, Search, Filter, ShieldCheck, X, Sparkles, Layers, A
 import './AdminRentals.css';
 
 const AdminRentals = () => {
-  const { user } = useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
   const { formatPrice } = useContext(CurrencyContext);
   const { addToast } = useContext(ToastContext);
 
@@ -40,7 +40,7 @@ const AdminRentals = () => {
 
   useEffect(() => {
     fetchRentals();
-  }, [user]);
+  }, [user, token]);
 
   const fetchRentals = async () => {
     setLoading(true);
@@ -97,8 +97,9 @@ const AdminRentals = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    if (!token) return;
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      const config = { headers: { Authorization: `Bearer ${token}` } };
       const sizesArray = formData.sizes.split(',').map(s => s.trim()).filter(Boolean);
       const imagesArray = [formData.imageUrl || 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800'];
 
@@ -136,8 +137,9 @@ const AdminRentals = () => {
   };
 
   const handleQuickStockUpdate = async (itemId, newStock) => {
+    if (!token) return;
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      const config = { headers: { Authorization: `Bearer ${token}` } };
       await axios.put(`http://localhost:5000/api/rentals/products/${itemId}`, { stockUnits: newStock }, config);
       setRentals(prev => prev.map(r => r._id === itemId ? { ...r, stockUnits: newStock } : r));
       addToast(`Updated rental stock units to ${newStock}`, 'info');
@@ -147,9 +149,10 @@ const AdminRentals = () => {
   };
 
   const handleDeleteRental = async (itemId, name) => {
+    if (!token) return;
     if (!window.confirm(`Are you sure you want to remove "${name}" from the rental wardrobe?`)) return;
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      const config = { headers: { Authorization: `Bearer ${token}` } };
       await axios.delete(`http://localhost:5000/api/rentals/products/${itemId}`, config);
       addToast(`Removed "${name}" from rentals`, 'info');
       fetchRentals();

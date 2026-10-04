@@ -7,7 +7,7 @@ import { ShoppingBag, Calendar, CheckCircle2, Clock, Truck, ShieldCheck, User, S
 import './AdminOrders.css';
 
 const AdminOrders = () => {
-  const { user } = useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
   const { formatPrice } = useContext(CurrencyContext);
   const { addToast } = useContext(ToastContext);
 
@@ -19,13 +19,16 @@ const AdminOrders = () => {
 
   useEffect(() => {
     fetchOrders();
-  }, [user]);
+  }, [user, token]);
 
   const fetchOrders = async () => {
-    if (!user || !user.token) return;
+    if (!user || !token) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      const config = { headers: { Authorization: `Bearer ${token}` } };
       const [resRetail, resRental] = await Promise.all([
         axios.get('http://localhost:5000/api/orders', config).catch(() => ({ data: [] })),
         axios.get('http://localhost:5000/api/rentals/admin/all-orders', config).catch(() => ({ data: [] })),
@@ -41,7 +44,7 @@ const AdminOrders = () => {
 
   const handleMarkDelivered = async (orderId) => {
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      const config = { headers: { Authorization: `Bearer ${token}` } };
       await axios.put(`http://localhost:5000/api/orders/${orderId}/deliver`, {}, config);
       addToast('Marked order as Delivered!', 'success', 'Order Fulfilled');
       fetchOrders();

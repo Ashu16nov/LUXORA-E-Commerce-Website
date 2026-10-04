@@ -6,7 +6,7 @@ import { Users, Shield, ShieldCheck, Trash2, Search, UserCheck, UserX } from 'lu
 import './AdminUsers.css';
 
 const AdminUsers = () => {
-  const { user } = useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
   const { addToast } = useContext(ToastContext);
 
   const [users, setUsers] = useState([]);
@@ -15,13 +15,16 @@ const AdminUsers = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, [user]);
+  }, [user, token]);
 
   const fetchUsers = async () => {
-    if (!user || !user.token) return;
+    if (!user || !token) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      const config = { headers: { Authorization: `Bearer ${token}` } };
       const { data } = await axios.get('http://localhost:5000/api/auth/users', config);
       setUsers(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -35,7 +38,7 @@ const AdminUsers = () => {
     if (!window.confirm(`${actionText} for ${targetUser.name}?`)) return;
 
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      const config = { headers: { Authorization: `Bearer ${token}` } };
       await axios.put(`http://localhost:5000/api/auth/users/${targetUser._id}/role`, { isAdmin: !targetUser.isAdmin }, config);
       addToast(`Updated permissions for ${targetUser.name}!`, 'success', 'Role Updated');
       fetchUsers();
@@ -53,7 +56,7 @@ const AdminUsers = () => {
     if (!window.confirm(`Are you sure you want to permanently delete user "${targetUser.name}"?`)) return;
 
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      const config = { headers: { Authorization: `Bearer ${token}` } };
       await axios.delete(`http://localhost:5000/api/auth/users/${targetUser._id}`, config);
       addToast(`Deleted user ${targetUser.name}`, 'info');
       fetchUsers();

@@ -19,7 +19,7 @@ import {
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
-  const { user } = useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
   const { formatPrice } = useContext(CurrencyContext);
 
   const [stats, setStats] = useState({
@@ -36,13 +36,16 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
-  }, [user]);
+  }, [user, token]);
 
   const fetchDashboardData = async () => {
-    if (!user || !user.token) return;
+    if (!user || !token) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      const config = { headers: { Authorization: `Bearer ${token}` } };
 
       const [prodsRes, rentalsRes, ordersRes, rentalOrdersRes, usersRes] = await Promise.all([
         axios.get('http://localhost:5000/api/products?limit=100').catch(() => ({ data: { products: [], count: 0 } })),

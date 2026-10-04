@@ -7,7 +7,7 @@ import { Plus, Edit, Trash2, Search, Filter, RefreshCw, X, Sparkles, AlertCircle
 import './AdminProducts.css';
 
 const AdminProducts = () => {
-  const { user } = useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
   const { formatPrice } = useContext(CurrencyContext);
   const { addToast } = useContext(ToastContext);
 
@@ -39,7 +39,7 @@ const AdminProducts = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [user]);
+  }, [user, token]);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -94,8 +94,9 @@ const AdminProducts = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    if (!token) return;
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      const config = { headers: { Authorization: `Bearer ${token}` } };
       const sizesArray = formData.sizes.split(',').map(s => s.trim()).filter(Boolean);
       const imagesArray = [formData.imageUrl || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800'];
 
@@ -132,8 +133,9 @@ const AdminProducts = () => {
   };
 
   const handleQuickStockUpdate = async (productId, newStock) => {
+    if (!token) return;
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      const config = { headers: { Authorization: `Bearer ${token}` } };
       await axios.put(`http://localhost:5000/api/products/${productId}`, { stock: newStock }, config);
       setProducts(prev => prev.map(p => p._id === productId ? { ...p, stock: newStock } : p));
       addToast(`Updated stock count to ${newStock}`, 'info');
@@ -143,9 +145,10 @@ const AdminProducts = () => {
   };
 
   const handleDeleteProduct = async (productId, name) => {
+    if (!token) return;
     if (!window.confirm(`Are you sure you want to delete "${name}" from inventory?`)) return;
     try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      const config = { headers: { Authorization: `Bearer ${token}` } };
       await axios.delete(`http://localhost:5000/api/products/${productId}`, config);
       addToast(`Deleted "${name}"`, 'info');
       fetchProducts();
