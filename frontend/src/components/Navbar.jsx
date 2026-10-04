@@ -150,14 +150,6 @@ const Navbar = () => {
               Shop All
             </Link>
             <Link
-              to="/rentals"
-              className={`nav-rental-link ${isActive('/rentals') ? 'active-link' : ''}`}
-            >
-              <Sparkles size={14} className="sparkle-icon-pulse" />
-              <span>Designer Rentals</span>
-              <Crown size={13} className="crown-icon" />
-            </Link>
-            <Link
               to="/products?category=Women"
               className={`nav-link ${isCategoryActive('Women') ? 'active-link' : ''}`}
             >
@@ -174,6 +166,14 @@ const Navbar = () => {
               className={`nav-link ${isActive('/offers') ? 'active-link' : ''}`}
             >
               Offers
+            </Link>
+            <Link
+              to="/rentals"
+              className={`nav-rental-link ${isActive('/rentals') ? 'active-link' : ''}`}
+            >
+              <Sparkles size={14} className="sparkle-icon-pulse" />
+              <span>Designer Rentals</span>
+              <Crown size={13} className="crown-icon" />
             </Link>
           </div>
 
@@ -339,9 +339,6 @@ const Navbar = () => {
               <Link to="/products" onClick={() => setIsMenuOpen(false)}>
                 Shop All <ArrowRight size={14} />
               </Link>
-              <Link to="/rentals" className="mobile-rental-highlight" onClick={() => setIsMenuOpen(false)}>
-                <span><Sparkles size={16} /> Designer Rentals 👑</span> <ArrowRight size={14} />
-              </Link>
               <Link to="/products?category=Women" onClick={() => setIsMenuOpen(false)}>
                 Women's Collection <ArrowRight size={14} />
               </Link>
@@ -350,6 +347,9 @@ const Navbar = () => {
               </Link>
               <Link to="/offers" onClick={() => setIsMenuOpen(false)}>
                 Special Offers <ArrowRight size={14} />
+              </Link>
+              <Link to="/rentals" className="mobile-rental-highlight" onClick={() => setIsMenuOpen(false)}>
+                <span><Sparkles size={16} /> Designer Rentals 👑</span> <ArrowRight size={14} />
               </Link>
             </nav>
 
