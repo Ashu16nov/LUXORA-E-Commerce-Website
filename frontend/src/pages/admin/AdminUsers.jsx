@@ -25,7 +25,7 @@ const AdminUsers = () => {
     setLoading(true);
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const { data } = await axios.get('http://localhost:5000/api/auth/users', config);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/auth/users`, config);
       setUsers(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Error fetching users:', err);
@@ -39,7 +39,7 @@ const AdminUsers = () => {
 
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      await axios.put(`http://localhost:5000/api/auth/users/${targetUser._id}/role`, { isAdmin: !targetUser.isAdmin }, config);
+      await axios.put(`${import.meta.env.VITE_API_BASE_URL}/auth/users/${targetUser._id}/role`, { isAdmin: !targetUser.isAdmin }, config);
       addToast(`Updated permissions for ${targetUser.name}!`, 'success', 'Role Updated');
       fetchUsers();
     } catch (err) {
@@ -57,7 +57,7 @@ const AdminUsers = () => {
 
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      await axios.delete(`http://localhost:5000/api/auth/users/${targetUser._id}`, config);
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/auth/users/${targetUser._id}`, config);
       addToast(`Deleted user ${targetUser.name}`, 'info');
       fetchUsers();
     } catch (err) {

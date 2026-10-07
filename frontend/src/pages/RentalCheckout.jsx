@@ -102,7 +102,7 @@ const RentalCheckout = () => {
         rentalDays: totalDays
       };
 
-      await axios.post('http://localhost:5000/api/rentals/book', payload, config);
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/rentals/book`, payload, config);
       setLoading(false);
       localStorage.removeItem('luxora_active_rental_booking');
       

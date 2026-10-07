@@ -30,7 +30,7 @@ const RentalProducts = () => {
       if (search) params.append('search', search);
       if (sort) params.append('sort', sort);
 
-      const { data } = await axios.get(`http://localhost:5000/api/rentals/products?${params.toString()}`);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/rentals/products?${params.toString()}`);
       setRentals(Array.isArray(data) ? data : []);
       setLoading(false);
     } catch (error) {

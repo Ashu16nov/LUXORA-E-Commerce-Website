@@ -30,8 +30,8 @@ const AdminOrders = () => {
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
       const [resRetail, resRental] = await Promise.all([
-        axios.get('http://localhost:5000/api/orders', config).catch(() => ({ data: [] })),
-        axios.get('http://localhost:5000/api/rentals/admin/all-orders', config).catch(() => ({ data: [] })),
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/orders`, config).catch(() => ({ data: [] })),
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/rentals/admin/all-orders`, config).catch(() => ({ data: [] })),
       ]);
 
       setRetailOrders(Array.isArray(resRetail.data) ? resRetail.data : []);
@@ -45,7 +45,7 @@ const AdminOrders = () => {
   const handleMarkDelivered = async (orderId) => {
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      await axios.put(`http://localhost:5000/api/orders/${orderId}/deliver`, {}, config);
+      await axios.put(`${import.meta.env.VITE_API_BASE_URL}/orders/${orderId}/deliver`, {}, config);
       addToast('Marked order as Delivered!', 'success', 'Order Fulfilled');
       fetchOrders();
     } catch (err) {

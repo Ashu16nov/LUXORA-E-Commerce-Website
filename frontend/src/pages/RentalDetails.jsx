@@ -53,7 +53,7 @@ const RentalDetails = () => {
   useEffect(() => {
     const fetchRental = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/rentals/products/${id}`);
+        const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/rentals/products/${id}`);
         const itemData = data.product || data;
         setRentalItem(itemData);
         const mainImage = Array.isArray(itemData.images) && itemData.images.length > 0 

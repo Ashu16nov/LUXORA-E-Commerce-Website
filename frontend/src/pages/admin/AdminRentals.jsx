@@ -45,7 +45,7 @@ const AdminRentals = () => {
   const fetchRentals = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get('http://localhost:5000/api/rentals/products');
+      const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/rentals/products`);
       setRentals(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Error fetching rental items:', err);
@@ -121,10 +121,10 @@ const AdminRentals = () => {
       };
 
       if (editingRental) {
-        await axios.put(`http://localhost:5000/api/rentals/products/${editingRental._id}`, payload, config);
+        await axios.put(`${import.meta.env.VITE_API_BASE_URL}/rentals/products/${editingRental._id}`, payload, config);
         addToast(`Updated rental garment "${formData.name}"!`, 'success', 'Rental Updated');
       } else {
-        await axios.post('http://localhost:5000/api/rentals/products', payload, config);
+        await axios.post(`${import.meta.env.VITE_API_BASE_URL}/rentals/products`, payload, config);
         addToast(`Added new rental garment "${formData.name}"!`, 'success', 'Rental Created');
       }
 
@@ -140,7 +140,7 @@ const AdminRentals = () => {
     if (!token) return;
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      await axios.put(`http://localhost:5000/api/rentals/products/${itemId}`, { stockUnits: newStock }, config);
+      await axios.put(`${import.meta.env.VITE_API_BASE_URL}/rentals/products/${itemId}`, { stockUnits: newStock }, config);
       setRentals(prev => prev.map(r => r._id === itemId ? { ...r, stockUnits: newStock } : r));
       addToast(`Updated rental stock units to ${newStock}`, 'info');
     } catch (err) {
@@ -153,7 +153,7 @@ const AdminRentals = () => {
     if (!window.confirm(`Are you sure you want to remove "${name}" from the rental wardrobe?`)) return;
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      await axios.delete(`http://localhost:5000/api/rentals/products/${itemId}`, config);
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/rentals/products/${itemId}`, config);
       addToast(`Removed "${name}" from rentals`, 'info');
       fetchRentals();
     } catch (err) {

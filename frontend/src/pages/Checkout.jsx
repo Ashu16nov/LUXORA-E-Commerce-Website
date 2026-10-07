@@ -93,7 +93,7 @@ const Checkout = () => {
         totalPrice: total,
       };
 
-      const { data } = await axios.post('http://localhost:5000/api/orders', orderPayload, config);
+      const { data } = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/orders`, orderPayload, config);
 
       if (clearCart) clearCart();
       setCreatedOrder(data);

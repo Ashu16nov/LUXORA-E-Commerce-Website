@@ -48,7 +48,7 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5000/api/products');
+        const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/products`);
         const productsList = Array.isArray(data) ? data : data.products || [];
 
         // Filter trending products
@@ -64,7 +64,7 @@ const Home = () => {
         setGenZProducts(genZ.length > 0 ? genZ.slice(0, 8) : productsList.slice(0, 8));
 
         // Fetch rental products
-        const rentalRes = await axios.get('http://localhost:5000/api/rentals/products');
+        const rentalRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/rentals/products`);
         const rentalList = Array.isArray(rentalRes.data) ? rentalRes.data : [];
         setAllRentals(rentalList);
         setFilteredRentals(rentalList.slice(0, 5));

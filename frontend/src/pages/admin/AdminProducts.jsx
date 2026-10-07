@@ -44,7 +44,7 @@ const AdminProducts = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get('http://localhost:5000/api/products?limit=100');
+      const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/products?limit=100`);
       setProducts(data.products || []);
     } catch (err) {
       console.error('Error loading products:', err);
@@ -117,10 +117,10 @@ const AdminProducts = () => {
       };
 
       if (editingProduct) {
-        await axios.put(`http://localhost:5000/api/products/${editingProduct._id}`, payload, config);
+        await axios.put(`${import.meta.env.VITE_API_BASE_URL}/products/${editingProduct._id}`, payload, config);
         addToast(`Updated "${formData.name}" successfully!`, 'success', 'Stock Updated');
       } else {
-        await axios.post('http://localhost:5000/api/products', payload, config);
+        await axios.post(`${import.meta.env.VITE_API_BASE_URL}/products`, payload, config);
         addToast(`Created new product "${formData.name}"!`, 'success', 'Product Added');
       }
 
@@ -136,7 +136,7 @@ const AdminProducts = () => {
     if (!token) return;
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      await axios.put(`http://localhost:5000/api/products/${productId}`, { stock: newStock }, config);
+      await axios.put(`${import.meta.env.VITE_API_BASE_URL}/products/${productId}`, { stock: newStock }, config);
       setProducts(prev => prev.map(p => p._id === productId ? { ...p, stock: newStock } : p));
       addToast(`Updated stock count to ${newStock}`, 'info');
     } catch (err) {
@@ -149,7 +149,7 @@ const AdminProducts = () => {
     if (!window.confirm(`Are you sure you want to delete "${name}" from inventory?`)) return;
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      await axios.delete(`http://localhost:5000/api/products/${productId}`, config);
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/products/${productId}`, config);
       addToast(`Deleted "${name}"`, 'info');
       fetchProducts();
     } catch (err) {

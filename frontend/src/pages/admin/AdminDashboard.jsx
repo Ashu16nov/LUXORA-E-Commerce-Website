@@ -47,7 +47,7 @@ const AdminDashboard = () => {
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
-      const { data } = await axios.get('http://localhost:5000/api/admin/dashboard', config);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/dashboard`, config);
 
       setStats({
         totalProducts: data.totalProducts,

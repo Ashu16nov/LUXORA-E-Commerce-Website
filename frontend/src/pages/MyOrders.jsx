@@ -31,8 +31,8 @@ const MyOrders = () => {
       };
 
       const [resRetail, resRental] = await Promise.all([
-        axios.get('http://localhost:5000/api/orders/myorders', config).catch(() => ({ data: [] })),
-        axios.get('http://localhost:5000/api/rentals/my-orders', config).catch(() => ({ data: [] })),
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/orders/myorders`, config).catch(() => ({ data: [] })),
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/rentals/my-orders`, config).catch(() => ({ data: [] })),
       ]);
 
       setRetailOrders(Array.isArray(resRetail.data) ? resRetail.data : []);

@@ -44,7 +44,7 @@ const Products = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      let url = `http://localhost:5000/api/products?page=${pageParam}&`;
+      let url = `${import.meta.env.VITE_API_BASE_URL}/products?page=${pageParam}&`;
       if (category) url += `category=${category}&`;
       if (search) url += `search=${search}&`;
       if (filters.brand) url += `brand=${filters.brand}&`;

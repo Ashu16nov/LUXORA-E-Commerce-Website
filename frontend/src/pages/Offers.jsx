@@ -13,7 +13,7 @@ const Offers = () => {
       try {
         // Fetch a few pages to get enough products for the offers page
         for(let i=1; i<=5; i++) {
-          const res = await axios.get(`http://localhost:5000/api/products?page=${i}`);
+          const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/products?page=${i}`);
           if (res.data.products && res.data.products.length > 0) {
             allProducts = [...allProducts, ...res.data.products];
           } else {

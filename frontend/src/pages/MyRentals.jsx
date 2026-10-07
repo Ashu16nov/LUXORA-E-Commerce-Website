@@ -32,7 +32,7 @@ const MyRentals = () => {
       const config = {
         headers: { Authorization: `Bearer ${user.token}` },
       };
-      const { data } = await axios.get('http://localhost:5000/api/rentals/my-rentals', config);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/rentals/my-rentals`, config);
       setRentals(Array.isArray(data) ? data : []);
       setLoading(false);
     } catch (error) {
@@ -56,7 +56,7 @@ const MyRentals = () => {
       const config = {
         headers: { Authorization: `Bearer ${user.token}` },
       };
-      const { data } = await axios.put(`http://localhost:5000/api/rentals/${orderId}/return`, {}, config);
+      const { data } = await axios.put(`${import.meta.env.VITE_API_BASE_URL}/rentals/${orderId}/return`, {}, config);
       addToast(data.message || 'Garment return initiated! Refund processed.', 'success', 'Return Initiated');
       setReturningId(null);
       fetchMyRentals();

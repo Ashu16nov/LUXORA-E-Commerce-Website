@@ -59,7 +59,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/products/${id}`);
         setProduct(data);
 
         if (data.sizes && data.sizes.length > 0) {
@@ -184,13 +184,13 @@ const ProductDetails = () => {
         headers: { Authorization: `Bearer ${user.token}` },
       };
       await axios.post(
-        `http://localhost:5000/api/products/${id}/reviews`,
+        `${import.meta.env.VITE_API_BASE_URL}/products/${id}/reviews`,
         { rating: newRating, comment: newComment },
         config
       );
       addToast('Thank you! Your verified customer review has been published.', 'success', 'Review Submitted');
 
-      const { data } = await axios.get(`http://localhost:5000/api/products/${id}`);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/products/${id}`);
       setProduct(data);
       setNewComment('');
     } catch (err) {
