@@ -1,19 +1,29 @@
 const nodemailer = require('nodemailer');
 
 const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
+  const userEmail = process.env.EMAIL?.trim();
+  const appPassword = process.env.APP_PASSWORD?.trim();
+
+  if (!userEmail || !appPassword) {
+    const errorMsg = 'Server email configuration missing. Please ensure EMAIL and APP_PASSWORD environment variables are set in Render Dashboard.';
+    console.error(`[LUXORA CONFIG ERROR] ${errorMsg}`);
+    throw new Error(errorMsg);
+  }
+
   try {
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 465,
       secure: true,
       auth: {
-        user: process.env.EMAIL,
-        pass: process.env.APP_PASSWORD,
+        user: userEmail,
+        pass: appPassword,
       },
       tls: {
         rejectUnauthorized: false,
       },
-      family: 4, // Force IPv4 to prevent IPv6 ENETUNREACH network unreachable errors
+      family: 4, // Force IPv4 socket connection on cloud servers like Render
+      connectionTimeout: 15000,
     });
 
     const htmlContent = `
@@ -47,7 +57,7 @@ const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
                     <div style="text-align: center; margin-bottom: 25px;">
                       <h2 style="color: #F3E5AB; font-size: 24px; font-weight: 500; margin: 0 0 10px 0; font-family: 'Times New Roman', serif;">Security Access Code</h2>
                       <p style="color: #9CA3AF; font-size: 14px; line-height: 1.6; margin: 0;">
-                        Welcome back to the world of exclusive high fashion and curated craftsmanship.
+                        Welcome to the world of exclusive high fashion and curated craftsmanship.
                       </p>
                     </div>
 
@@ -55,7 +65,7 @@ const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
                     <div style="background: rgba(31, 41, 55, 0.6); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 14px; padding: 30px; text-align: center; margin-bottom: 25px;">
                       <p style="color: #E5E7EB; font-size: 15px; margin: 0 0 20px 0; line-height: 1.5;">
                         Dear <strong style="color: #ffffff;">${userName}</strong>,<br/>
-                        Use the single-use verification code below to authorize your sign-in request:
+                        Use the single-use verification code below to authorize your request:
                       </p>
 
                       <!-- OTP DISPLAY BOX -->
@@ -95,7 +105,7 @@ const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
     `;
 
     const mailOptions = {
-      from: `"LUXORA Atelier" <${process.env.EMAIL}>`,
+      from: `"LUXORA Atelier" <${userEmail}>`,
       to: email,
       subject: `✨ ${otp} is your LUXORA Security Verification Code`,
       html: htmlContent,
