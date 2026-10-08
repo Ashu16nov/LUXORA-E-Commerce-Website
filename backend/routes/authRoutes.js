@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const {
   registerUser,
+  sendOtp,
+  verifyOtp,
   authUser,
   getUserProfile,
   updateUserProfile,
@@ -13,6 +15,8 @@ const { protect, admin } = require('../middleware/authMiddleware');
 
 router.post('/register', registerUser);
 router.post('/login', authUser);
+router.post('/send-otp', sendOtp);
+router.post('/verify-otp', verifyOtp);
 router.route('/me').get(protect, getUserProfile).put(protect, updateUserProfile);
 
 // Admin routes

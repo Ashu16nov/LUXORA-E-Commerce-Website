@@ -9,7 +9,7 @@ setTimeout(async () => {
   const hash1 = await bcrypt.hash('test@123', salt);
   await User.updateOne({email: 'test@gmail.com'}, {password: hash1});
   
-  const hash2 = await bcrypt.hash('password123', salt);
+  const hash2 = await bcrypt.hash('password123@', salt);
   await User.updateOne({email: 'admin@luxora.com'}, {password: hash2});
   
   console.log('Fixed passwords via updateOne');

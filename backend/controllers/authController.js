@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
+const sendOtpEmail = require('../utils/sendEmail');
 
 // @desc    Register a new user
 // @route   POST /api/auth/register
@@ -30,6 +31,77 @@ const registerUser = async (req, res) => {
     });
   } else {
     res.status(400).json({ message: 'Invalid user data' });
+  }
+};
+
+// @desc    Send OTP to user email for login
+// @route   POST /api/auth/send-otp
+// @access  Public
+const sendOtp = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user || !(await user.matchPassword(password))) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.otp = otp;
+    user.otpExpire = new Date(Date.now() + 10 * 60 * 1000);
+    await user.save();
+
+    console.log(`[LUXORA OTP GENERATED] Email: ${email} | OTP: ${otp}`);
+
+    await sendOtpEmail(user.email, otp, user.name);
+
+    res.json({
+      success: true,
+      message: `Security OTP sent to ${user.email}`,
+    });
+  } catch (error) {
+    console.error(`Send OTP Error: ${error.message}`);
+    res.status(500).json({ message: error.message || 'Failed to send security OTP' });
+  }
+};
+
+// @desc    Verify OTP & authenticate user
+// @route   POST /api/auth/verify-otp
+// @access  Public
+const verifyOtp = async (req, res) => {
+  const { email, password, otp } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user || !(await user.matchPassword(password))) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    if (!user.otp || user.otp !== String(otp).trim()) {
+      return res.status(400).json({ message: 'Invalid OTP code. Please check your email.' });
+    }
+
+    if (user.otpExpire && new Date(user.otpExpire) < new Date()) {
+      return res.status(400).json({ message: 'OTP code has expired. Please request a new code.' });
+    }
+
+    user.otp = null;
+    user.otpExpire = null;
+    await user.save();
+
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      address: user.address,
+      token: generateToken(user._id),
+    });
+  } catch (error) {
+    console.error(`Verify OTP Error: ${error.message}`);
+    res.status(500).json({ message: 'Server error during OTP verification' });
   }
 };
 
@@ -163,6 +235,8 @@ const updateUserAdmin = async (req, res) => {
 
 module.exports = {
   registerUser,
+  sendOtp,
+  verifyOtp,
   authUser,
   getUserProfile,
   updateUserProfile,

@@ -48,6 +48,19 @@ export const AuthProvider = ({ children }) => {
     return res.data;
   };
 
+  const sendOtp = async (email, password) => {
+    const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/send-otp`, { email, password });
+    return res.data;
+  };
+
+  const verifyOtp = async (email, password, otp) => {
+    const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/verify-otp`, { email, password, otp });
+    setToken(res.data.token);
+    localStorage.setItem('token', res.data.token);
+    setUser(res.data);
+    return res.data;
+  };
+
   const logout = () => {
     setToken(null);
     setUser(null);
@@ -55,7 +68,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, updateProfile }}>
+    <AuthContext.Provider value={{ user, token, login, register, logout, updateProfile, sendOtp, verifyOtp }}>
       {children}
     </AuthContext.Provider>
   );

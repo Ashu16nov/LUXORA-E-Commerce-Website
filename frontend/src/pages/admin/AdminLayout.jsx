@@ -23,10 +23,10 @@ const AdminLayout = () => {
     <div className="admin-layout">
       {/* Sidebar */}
       <aside className="admin-sidebar">
-        <div className="admin-sidebar-header">
+        <Link to="/" className="admin-sidebar-header" style={{ textDecoration: 'none', display: 'block' }}>
           <span className="admin-badge"><Sparkles size={14} /> LUXORA CONTROL ATELIER</span>
           <h2 className="luxora-title">LUXORA ADMIN</h2>
-        </div>
+        </Link>
 
         <nav className="admin-nav-links">
           <NavLink to="/admin" end className={({ isActive }) => `admin-nav-item ${isActive ? 'active' : ''}`}>
