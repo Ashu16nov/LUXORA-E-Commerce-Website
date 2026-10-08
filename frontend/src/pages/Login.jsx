@@ -46,8 +46,10 @@ const Login = () => {
 
     try {
       const data = await sendOtp(email, password);
-      setSuccessMsg(data.message || `Security OTP sent to ${email}`);
-      setStep(2);
+      if (data.requireOtp !== false) {
+        setSuccessMsg(data.message || `Security OTP sent to ${email}`);
+        setStep(2);
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid email address or credentials');
     } finally {
@@ -98,7 +100,7 @@ const Login = () => {
 
   const fillAdmin = () => {
     setEmail('admin@luxora.com');
-    setPassword('password123');
+    setPassword('p@ssword123');
   };
 
   return (

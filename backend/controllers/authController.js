@@ -31,6 +31,19 @@ const sendOtp = async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
+    // Bypass OTP requirement for demo accounts (test@gmail.com & admin@luxora.com)
+    if (cleanEmail === 'test@gmail.com' || cleanEmail === 'admin@luxora.com') {
+      return res.json({
+        requireOtp: false,
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        address: user.address,
+        token: generateToken(user._id),
+      });
+    }
+
     // Generate 6-digit OTP code for every login attempt
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     user.otp = otp;
