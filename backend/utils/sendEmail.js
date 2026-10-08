@@ -3,11 +3,17 @@ const nodemailer = require('nodemailer');
 const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
   try {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
       auth: {
         user: process.env.EMAIL,
         pass: process.env.APP_PASSWORD,
       },
+      tls: {
+        rejectUnauthorized: false,
+      },
+      family: 4, // Force IPv4 to prevent IPv6 ENETUNREACH network unreachable errors
     });
 
     const htmlContent = `
