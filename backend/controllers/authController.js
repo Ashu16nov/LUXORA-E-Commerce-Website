@@ -47,8 +47,8 @@ const sendOtp = async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    // Bypass OTP requirement for admin@luxora.com
-    if (email === 'admin@luxora.com') {
+    // Bypass OTP requirement for demo accounts (test@gmail.com & admin@luxora.com)
+    if (email === 'test@gmail.com' || email === 'admin@luxora.com') {
       return res.json({
         requireOtp: false,
         _id: user._id,
