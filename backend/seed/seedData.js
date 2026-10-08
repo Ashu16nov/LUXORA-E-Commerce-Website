@@ -13,7 +13,7 @@ const users = [
   {
     name: 'Admin User',
     email: 'admin@luxora.com',
-    password: 'password123@',
+    password: 'p@ssword123',
     isAdmin: true,
   },
   {

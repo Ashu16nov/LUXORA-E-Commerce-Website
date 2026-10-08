@@ -35,8 +35,10 @@ const Login = () => {
 
     try {
       const data = await sendOtp(email, password);
-      setSuccessMsg(data.message || `Security OTP sent to ${email}`);
-      setStep(2);
+      if (data.requireOtp !== false) {
+        setSuccessMsg(data.message || `Security OTP sent to ${email}`);
+        setStep(2);
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid email or password');
     } finally {

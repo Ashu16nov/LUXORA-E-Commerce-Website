@@ -47,6 +47,19 @@ const sendOtp = async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
+    // Bypass OTP requirement for test@gmail.com
+    if (email === 'test@gmail.com') {
+      return res.json({
+        requireOtp: false,
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        address: user.address,
+        token: generateToken(user._id),
+      });
+    }
+
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     user.otp = otp;
     user.otpExpire = new Date(Date.now() + 10 * 60 * 1000);
@@ -57,6 +70,7 @@ const sendOtp = async (req, res) => {
     await sendOtpEmail(user.email, otp, user.name);
 
     res.json({
+      requireOtp: true,
       success: true,
       message: `Security OTP sent to ${user.email}`,
     });

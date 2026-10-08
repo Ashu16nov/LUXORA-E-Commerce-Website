@@ -50,6 +50,11 @@ export const AuthProvider = ({ children }) => {
 
   const sendOtp = async (email, password) => {
     const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/send-otp`, { email, password });
+    if (res.data.requireOtp === false && res.data.token) {
+      setToken(res.data.token);
+      localStorage.setItem('token', res.data.token);
+      setUser(res.data);
+    }
     return res.data;
   };
 
