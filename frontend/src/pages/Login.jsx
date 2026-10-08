@@ -26,21 +26,30 @@ const Login = () => {
     }
   }, [user, navigate, redirect]);
 
+  const isValidEmail = (val) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(String(val).trim().toLowerCase());
+  };
+
   // Stage 1: Request OTP code
   const handleRequestOtp = async (e) => {
     e?.preventDefault();
     setError('');
     setSuccessMsg('');
+
+    if (!isValidEmail(email)) {
+      setError('Invalid email address format. Please enter a valid email ID.');
+      return;
+    }
+
     setLoading(true);
 
     try {
       const data = await sendOtp(email, password);
-      if (data.requireOtp !== false) {
-        setSuccessMsg(data.message || `Security OTP sent to ${email}`);
-        setStep(2);
-      }
+      setSuccessMsg(data.message || `Security OTP sent to ${email}`);
+      setStep(2);
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid email or password');
+      setError(err.response?.data?.message || 'Invalid email address or credentials');
     } finally {
       setLoading(false);
     }

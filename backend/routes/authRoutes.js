@@ -4,6 +4,8 @@ const {
   registerUser,
   sendOtp,
   verifyOtp,
+  sendSignupOtp,
+  verifySignupOtp,
   authUser,
   getUserProfile,
   updateUserProfile,
@@ -17,6 +19,8 @@ router.post('/register', registerUser);
 router.post('/login', authUser);
 router.post('/send-otp', sendOtp);
 router.post('/verify-otp', verifyOtp);
+router.post('/send-signup-otp', sendSignupOtp);
+router.post('/verify-signup-otp', verifySignupOtp);
 router.route('/me').get(protect, getUserProfile).put(protect, updateUserProfile);
 
 // Admin routes
