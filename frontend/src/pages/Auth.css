@@ -4,7 +4,7 @@
   align-items: flex-start;
   min-height: calc(100vh - 100px);
   background-color: #FAF5EF;
-  padding: 1.75rem 1.5rem 3.5rem;
+  padding: 1rem 1.5rem 2.5rem;
 }
 
 .auth-split-container {
@@ -16,7 +16,7 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: var(--shadow-warm);
-  margin-top: 1.75rem;
+  margin-top: 1.5rem;
 }
 
 .auth-image-side {

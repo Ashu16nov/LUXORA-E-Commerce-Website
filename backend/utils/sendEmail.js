@@ -1,10 +1,13 @@
-// LUXORA Official Email Dispatcher via Brevo Transactional HTTPS REST API
-const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
-  const brevoApiKey = process.env.BREVO_API_KEY?.trim();
-  const senderEmail = (process.env.EMAIL || 'mranonymous16nov@gmail.com').trim();
+const nodemailer = require('nodemailer');
 
-  if (!brevoApiKey) {
-    throw new Error('Brevo API key is missing. Please set BREVO_API_KEY in your .env or Render Dashboard.');
+const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
+  const userEmail = process.env.EMAIL?.trim();
+  const appPassword = process.env.APP_PASSWORD?.trim();
+
+  if (!userEmail || !appPassword) {
+    const errorMsg = 'Server email configuration missing. Please ensure EMAIL and APP_PASSWORD environment variables are set in .env.';
+    console.error(`[LUXORA CONFIG ERROR] ${errorMsg}`);
+    throw new Error(errorMsg);
   }
 
   const htmlContent = `
@@ -85,48 +88,67 @@ const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
     </html>
   `;
 
-  const textContent = `LUXORA ATELIER - Haute Couture & Seamless Luxury
+  const mailOptions = {
+    from: `"LUXORA Atelier" <${userEmail}>`,
+    to: email,
+    subject: `✨ ${otp} is your LUXORA Security Verification Code`,
+    text: `Your LUXORA Security Verification Code is: ${otp}. It is valid for 10 minutes.`,
+    html: htmlContent,
+  };
 
-Dear ${userName},
-
-Your single-use security verification code is: ${otp}
-
-This code is valid for 10 minutes. Please do not share this code with anyone.
-
-If you did not request this security code, please ignore this email.
-
-© 2026 LUXORA House of Fashion. Secure Encrypted Access.`;
-
+  // Attempt 1: Port 587 (STARTTLS, universal, forced IPv4, 5s timeout)
   try {
-    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
-      method: 'POST',
-      headers: {
-        'accept': 'application/json',
-        'api-key': brevoApiKey,
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        sender: { name: 'LUXORA Atelier', email: senderEmail },
-        to: [{ email: email.trim().toLowerCase(), name: userName }],
-        replyTo: { name: 'LUXORA Atelier Support', email: senderEmail },
-        subject: `LUXORA Verification Code: ${otp}`,
-        htmlContent,
-        textContent,
-      }),
+    const transporter587 = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      auth: { user: userEmail, pass: appPassword },
+      tls: { rejectUnauthorized: false },
+      family: 4,
+      connectionTimeout: 5000,
+      greetingTimeout: 5000,
+      socketTimeout: 6000,
     });
+    const info = await transporter587.sendMail(mailOptions);
+    console.log(`[LUXORA EMAIL SUCCESS - Port 587] OTP sent to ${email} (ID: ${info.messageId})`);
+    return { success: true, messageId: info.messageId };
+  } catch (err587) {
+    console.warn(`[LUXORA EMAIL WARN] Port 587 failed: ${err587.message}. Trying Port 465 fallback...`);
+  }
 
-    const data = await response.json();
+  // Attempt 2: Port 465 (SSL, 5s timeout)
+  try {
+    const transporter465 = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: { user: userEmail, pass: appPassword },
+      tls: { rejectUnauthorized: false },
+      family: 4,
+      connectionTimeout: 5000,
+      greetingTimeout: 5000,
+      socketTimeout: 6000,
+    });
+    const info = await transporter465.sendMail(mailOptions);
+    console.log(`[LUXORA EMAIL SUCCESS - Port 465] OTP sent to ${email} (ID: ${info.messageId})`);
+    return { success: true, messageId: info.messageId };
+  } catch (err465) {
+    console.warn(`[LUXORA EMAIL WARN] Port 465 failed: ${err465.message}. Trying Gmail Service fallback...`);
+  }
 
-    if (!response.ok) {
-      console.error(`[LUXORA BREVO API ERROR] Status ${response.status}:`, data);
-      throw new Error(data.message || 'Failed to dispatch email via Brevo API');
-    }
-
-    console.log(`[LUXORA BREVO API SUCCESS] Verification OTP sent to ${email} (MessageId: ${data.messageId})`);
-    return { success: true, messageId: data.messageId };
-  } catch (error) {
-    console.error(`[LUXORA EMAIL ERROR] Failed to send email to ${email}:`, error.message);
-    throw error;
+  // Attempt 3: Default Gmail Service
+  try {
+    const transporterGmail = nodemailer.createTransport({
+      service: 'gmail',
+      auth: { user: userEmail, pass: appPassword },
+      connectionTimeout: 5000,
+    });
+    const info = await transporterGmail.sendMail(mailOptions);
+    console.log(`[LUXORA EMAIL SUCCESS - Gmail Service] OTP sent to ${email} (ID: ${info.messageId})`);
+    return { success: true, messageId: info.messageId };
+  } catch (errService) {
+    console.error(`[LUXORA EMAIL ERROR] All SMTP attempts failed: ${errService.message}`);
+    throw errService;
   }
 };
 
