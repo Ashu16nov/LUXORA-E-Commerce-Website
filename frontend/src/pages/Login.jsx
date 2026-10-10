@@ -100,7 +100,7 @@ const Login = () => {
 
   const fillAdmin = () => {
     setEmail('admin@luxora.com');
-    setPassword('p@ssword123');
+    setPassword('password123');
   };
 
   return (
