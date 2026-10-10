@@ -1,9 +1,11 @@
-const nodemailer = require('nodemailer');
-
+// LUXORA Official Email Dispatcher via Brevo Transactional HTTPS REST API
 const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
-  const userEmail = process.env.EMAIL?.trim();
-  const appPassword = process.env.APP_PASSWORD?.trim();
   const brevoApiKey = process.env.BREVO_API_KEY?.trim();
+  const senderEmail = (process.env.EMAIL || 'mranonymous16nov@gmail.com').trim();
+
+  if (!brevoApiKey) {
+    throw new Error('Brevo API key is missing. Please set BREVO_API_KEY in your .env or Render Dashboard.');
+  }
 
   const htmlContent = `
     <!DOCTYPE html>
@@ -26,7 +28,7 @@ const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
                     ✨ LUXORA ATELIER
                   </div>
                   <h1 style="color: #ffffff; margin: 0; font-size: 32px; letter-spacing: 6px; font-weight: 700; font-family: 'Times New Roman', serif;">LUXORA</h1>
-                  <p style="color: #9CA3AF; margin: 6px 0 0 0; font-size: 11px; letter-spacing: 3px; text-transform: uppercase;">Haute Couture & Seamless Luxury</p>
+                  <p style="color: #9CA3AF; margin: 6px 0 0 0; font-size: 11px; letter-spacing: 3px; text-transform: uppercase;">Haute Couture &amp; Seamless Luxury</p>
                 </td>
               </tr>
 
@@ -70,7 +72,7 @@ const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
                     "Elegance is not standing out, but being remembered."
                   </p>
                   <p style="color: #4B5563; font-size: 11px; margin: 0;">
-                    — GIORGIO ARMANI &bull; © 2026 LUXORA House of Fashion &bull; 256-Bit SSL Encrypted Access
+                    — GIORGIO ARMANI &bull; &copy; 2026 LUXORA House of Fashion &bull; 256-Bit SSL Encrypted Access
                   </p>
                 </td>
               </tr>
@@ -83,104 +85,35 @@ const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
     </html>
   `;
 
-  // 1. If Brevo HTTP REST API Key is configured, use HTTPS port 443 (never blocked on Render/cloud)
-  if (brevoApiKey) {
-    try {
-      const response = await fetch('https://api.brevo.com/v3/smtp/email', {
-        method: 'POST',
-        headers: {
-          'accept': 'application/json',
-          'api-key': brevoApiKey,
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          sender: { name: 'LUXORA Atelier', email: userEmail || 'support@luxora.com' },
-          to: [{ email }],
-          subject: `✨ ${otp} is your LUXORA Security Verification Code`,
-          htmlContent,
-        }),
-      });
+  try {
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'api-key': brevoApiKey,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        sender: { name: 'LUXORA Atelier', email: senderEmail },
+        to: [{ email: email.trim().toLowerCase() }],
+        subject: `✨ ${otp} is your LUXORA Security Verification Code`,
+        htmlContent,
+      }),
+    });
 
-      if (response.ok) {
-        const result = await response.json();
-        console.log(`[LUXORA EMAIL SUCCESS - Brevo HTTPS API] OTP sent to ${email} (MessageId: ${result.messageId})`);
-        return { success: true, method: 'brevo_https', messageId: result.messageId };
-      } else {
-        const errorData = await response.text();
-        console.warn(`[LUXORA EMAIL WARN] Brevo API returned ${response.status}: ${errorData}. Trying SMTP fallback...`);
-      }
-    } catch (brevoErr) {
-      console.warn(`[LUXORA EMAIL WARN] Brevo HTTPS request failed: ${brevoErr.message}. Trying SMTP fallback...`);
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error(`[LUXORA BREVO API ERROR] Status ${response.status}:`, data);
+      throw new Error(data.message || 'Failed to dispatch email via Brevo API');
     }
+
+    console.log(`[LUXORA BREVO API SUCCESS] Verification OTP sent to ${email} (MessageId: ${data.messageId})`);
+    return { success: true, messageId: data.messageId };
+  } catch (error) {
+    console.error(`[LUXORA EMAIL ERROR] Failed to send email to ${email}:`, error.message);
+    throw error;
   }
-
-  // 2. SMTP Transport using Nodemailer (works seamlessly locally and on unblocked hosts)
-  if (userEmail && appPassword) {
-    const mailOptions = {
-      from: `"LUXORA Atelier" <${userEmail}>`,
-      to: email,
-      subject: `✨ ${otp} is your LUXORA Security Verification Code`,
-      html: htmlContent,
-    };
-
-    // Attempt Port 587 (STARTTLS, universal, forced IPv4, 4s timeout)
-    try {
-      const transporter587 = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        auth: { user: userEmail, pass: appPassword },
-        tls: { rejectUnauthorized: false },
-        family: 4,
-        connectionTimeout: 4000,
-        greetingTimeout: 4000,
-        socketTimeout: 5000,
-      });
-      const info = await transporter587.sendMail(mailOptions);
-      console.log(`[LUXORA EMAIL SUCCESS - Port 587] OTP sent to ${email} (ID: ${info.messageId})`);
-      return { success: true, method: 'smtp_587', messageId: info.messageId };
-    } catch (err587) {
-      console.warn(`[LUXORA EMAIL WARN] Port 587 failed: ${err587.message}. Trying Port 465...`);
-    }
-
-    // Attempt Port 465 (SSL, 4s timeout)
-    try {
-      const transporter465 = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: { user: userEmail, pass: appPassword },
-        tls: { rejectUnauthorized: false },
-        family: 4,
-        connectionTimeout: 4000,
-        greetingTimeout: 4000,
-        socketTimeout: 5000,
-      });
-      const info = await transporter465.sendMail(mailOptions);
-      console.log(`[LUXORA EMAIL SUCCESS - Port 465] OTP sent to ${email} (ID: ${info.messageId})`);
-      return { success: true, method: 'smtp_465', messageId: info.messageId };
-    } catch (err465) {
-      console.warn(`[LUXORA EMAIL WARN] Port 465 failed: ${err465.message}.`);
-    }
-  }
-
-  // 3. Graceful Cloud Fallback:
-  // Render Free Tier blocks outbound SMTP traffic (ports 25, 465, 587).
-  // Instead of crashing the request with a 500 timeout error and blocking the user,
-  // we record the OTP in MongoDB and return a fallback result so verification proceeds cleanly.
-  console.log(`========================================================================`);
-  console.log(`[LUXORA SECURITY OTP DISPATCH] (Cloud / SMTP Fallback Mode)`);
-  console.log(`>> RECIPIENT EMAIL: ${email}`);
-  console.log(`>> 6-DIGIT OTP PIN: [ ${otp} ]`);
-  console.log(`>> REASON: Cloud host blocked outbound SMTP ports (Render free tier policy).`);
-  console.log(`========================================================================`);
-
-  return {
-    success: false,
-    fallback: true,
-    otp,
-    message: 'OTP generated and verified against database'
-  };
 };
 
 module.exports = sendOtpEmail;

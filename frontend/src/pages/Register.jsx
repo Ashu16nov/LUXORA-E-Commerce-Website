@@ -15,7 +15,6 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
-  const [previewOtp, setPreviewOtp] = useState('');
   
   const { sendSignupOtp, verifySignupOtp, user } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -59,9 +58,6 @@ const Register = () => {
     try {
       const data = await sendSignupOtp(name, email, password);
       setSuccessMsg(data.message || `Registration OTP sent to ${email}`);
-      if (data.previewOtp) {
-        setPreviewOtp(data.previewOtp);
-      }
       setStep(2);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to send OTP code. Please check your details.');
@@ -99,9 +95,6 @@ const Register = () => {
     try {
       const data = await sendSignupOtp(name, email, password);
       setSuccessMsg(data.message || `New registration OTP sent to ${email}`);
-      if (data.previewOtp) {
-        setPreviewOtp(data.previewOtp);
-      }
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to resend OTP code');
     } finally {
@@ -239,15 +232,6 @@ const Register = () => {
                 </div>
               )}
 
-              {previewOtp && (
-                <div className="auth-preview-otp-box">
-                  <span>✨ Verification PIN: <strong>{previewOtp}</strong></span>
-                  <button type="button" className="btn-quick-paste-otp" onClick={() => setOtp(previewOtp)}>
-                    Auto Fill PIN
-                  </button>
-                </div>
-              )}
-
               {error && <div className="auth-error-msg">{error}</div>}
 
               <form onSubmit={handleVerifySignupOtp} className="auth-form">
@@ -278,7 +262,7 @@ const Register = () => {
                   <button type="button" className="btn-resend-otp" onClick={handleResendOtp} disabled={loading}>
                     <RefreshCw size={14} className={loading ? 'spin' : ''} /> Resend OTP
                   </button>
-                  <button type="button" className="btn-back-step" onClick={() => { setStep(1); setOtp(''); setPreviewOtp(''); setError(''); setSuccessMsg(''); }}>
+                  <button type="button" className="btn-back-step" onClick={() => { setStep(1); setOtp(''); setError(''); setSuccessMsg(''); }}>
                     <ArrowLeft size={14} /> Change Details
                   </button>
                 </div>

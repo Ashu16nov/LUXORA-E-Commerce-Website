@@ -52,15 +52,12 @@ const sendOtp = async (req, res) => {
 
     console.log(`[LUXORA LOGIN OTP] Email: ${user.email} | OTP: ${otp}`);
 
-    const emailResult = await sendOtpEmail(user.email, otp, user.name);
+    await sendOtpEmail(user.email, otp, user.name);
 
     res.json({
       requireOtp: true,
       success: true,
-      message: emailResult.success !== false
-        ? `Security OTP sent to ${user.email}`
-        : `Security OTP code generated for ${user.email}`,
-      previewOtp: emailResult.fallback ? otp : undefined,
+      message: `Security OTP sent to ${user.email}`,
     });
   } catch (error) {
     console.error(`Send OTP Error: ${error.message}`);
@@ -149,14 +146,11 @@ const sendSignupOtp = async (req, res) => {
 
     console.log(`[LUXORA SIGNUP OTP] Email: ${cleanEmail} | OTP: ${otp}`);
 
-    const emailResult = await sendOtpEmail(cleanEmail, otp, name);
+    await sendOtpEmail(cleanEmail, otp, name);
 
     res.json({
       success: true,
-      message: emailResult.success !== false
-        ? `Registration OTP sent to ${cleanEmail}`
-        : `Registration OTP code generated for ${cleanEmail}`,
-      previewOtp: emailResult.fallback ? otp : undefined,
+      message: `Registration OTP sent to ${cleanEmail}`,
     });
   } catch (error) {
     console.error(`Send Signup OTP Error: ${error.message}`);

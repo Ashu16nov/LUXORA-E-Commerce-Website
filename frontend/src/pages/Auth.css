@@ -4,7 +4,7 @@
   align-items: flex-start;
   min-height: calc(100vh - 100px);
   background-color: #FAF5EF;
-  padding: 1rem 1.5rem 2.5rem;
+  padding: 1.75rem 1.5rem 3.5rem;
 }
 
 .auth-split-container {
@@ -16,6 +16,7 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: var(--shadow-warm);
+  margin-top: 1.75rem;
 }
 
 .auth-image-side {
@@ -337,45 +338,6 @@
 
 .spin {
   animation: spin 1s linear infinite;
-}
-
-.auth-preview-otp-box {
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.16) 0%, rgba(197, 160, 89, 0.08) 100%);
-  border: 1px dashed #D4AF37;
-  border-radius: 10px;
-  padding: 0.65rem 0.9rem;
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.8rem;
-  color: #4A443E;
-}
-
-.auth-preview-otp-box strong {
-  color: #B38F24;
-  letter-spacing: 2px;
-  font-family: 'Courier New', monospace;
-  font-size: 1rem;
-  margin-left: 0.25rem;
-}
-
-.btn-quick-paste-otp {
-  background: #D4AF37;
-  color: #111827;
-  border: none;
-  border-radius: 6px;
-  padding: 0.3rem 0.65rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 2px 6px rgba(212, 175, 55, 0.25);
-}
-
-.btn-quick-paste-otp:hover {
-  background: #C5A059;
-  transform: translateY(-1px);
 }
 
 @media (max-width: 768px) {

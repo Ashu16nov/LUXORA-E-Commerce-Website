@@ -41,7 +41,7 @@ const AppLayout = () => {
   return (
     <div className="app-container" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       {!isAdminRoute && <Navbar />}
-      <main style={{ flex: 1, paddingTop: isAdminRoute ? '0px' : isAuthRoute ? '95px' : '130px' }}>
+      <main style={{ flex: 1, paddingTop: isAdminRoute ? '0px' : isAuthRoute ? '110px' : '130px' }}>
         <Routes>
           {/* Public & Customer Routes */}
           <Route path="/" element={<Home />} />
