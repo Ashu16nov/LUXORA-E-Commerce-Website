@@ -85,6 +85,18 @@ const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
     </html>
   `;
 
+  const textContent = `LUXORA ATELIER - Haute Couture & Seamless Luxury
+
+Dear ${userName},
+
+Your single-use security verification code is: ${otp}
+
+This code is valid for 10 minutes. Please do not share this code with anyone.
+
+If you did not request this security code, please ignore this email.
+
+© 2026 LUXORA House of Fashion. Secure Encrypted Access.`;
+
   try {
     const response = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
@@ -95,9 +107,11 @@ const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
       },
       body: JSON.stringify({
         sender: { name: 'LUXORA Atelier', email: senderEmail },
-        to: [{ email: email.trim().toLowerCase() }],
-        subject: `✨ ${otp} is your LUXORA Security Verification Code`,
+        to: [{ email: email.trim().toLowerCase(), name: userName }],
+        replyTo: { name: 'LUXORA Atelier Support', email: senderEmail },
+        subject: `LUXORA Verification Code: ${otp}`,
         htmlContent,
+        textContent,
       }),
     });
 
