@@ -1,9 +1,16 @@
 const nodemailer = require('nodemailer');
 
-const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
+const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member', purpose = 'Security Access Code') => {
   const userEmail = (process.env.EMAIL || 'mranonymous16nov@gmail.com').trim();
   const appPassword = process.env.APP_PASSWORD?.trim();
   const brevoApiKey = process.env.BREVO_API_KEY?.trim();
+
+  const isReset = purpose.toLowerCase().includes('reset');
+  const emailTitle = isReset ? 'Password Reset Code' : 'Security Access Code';
+  const emailSubject = isReset ? `LUXORA Atelier Password Reset Code: ${otp}` : `LUXORA Atelier Verification Code: ${otp}`;
+  const actionDescription = isReset 
+    ? 'Use the single-use verification code below to reset your LUXORA account password:' 
+    : 'Use the single-use verification code below to authorize your request:';
 
   const htmlContent = `
     <!DOCTYPE html>
@@ -34,7 +41,7 @@ const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
               <tr>
                 <td style="padding: 40px 40px 30px;">
                   <div style="text-align: center; margin-bottom: 25px;">
-                    <h2 style="color: #F3E5AB; font-size: 24px; font-weight: 500; margin: 0 0 10px 0; font-family: 'Times New Roman', serif;">Security Access Code</h2>
+                    <h2 style="color: #F3E5AB; font-size: 24px; font-weight: 500; margin: 0 0 10px 0; font-family: 'Times New Roman', serif;">${emailTitle}</h2>
                     <p style="color: #9CA3AF; font-size: 14px; line-height: 1.6; margin: 0;">
                       Welcome to the world of exclusive high fashion and curated craftsmanship.
                     </p>
@@ -44,7 +51,7 @@ const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
                   <div style="background: rgba(31, 41, 55, 0.6); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 14px; padding: 30px; text-align: center; margin-bottom: 25px;">
                     <p style="color: #E5E7EB; font-size: 15px; margin: 0 0 20px 0; line-height: 1.5;">
                       Dear <strong style="color: #ffffff;">${userName}</strong>,<br/>
-                      Use the single-use verification code below to authorize your request:
+                      ${actionDescription}
                     </p>
 
                     <!-- OTP DISPLAY BOX -->
@@ -97,9 +104,9 @@ const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
           sender: { name: 'LUXORA Atelier', email: userEmail },
           to: [{ email: email.trim().toLowerCase(), name: userName }],
           replyTo: { email: userEmail, name: 'LUXORA Atelier' },
-          subject: `LUXORA Atelier Verification Code: ${otp}`,
+          subject: emailSubject,
           htmlContent,
-          textContent: `LUXORA ATELIER: Your security verification code is: ${otp}. It is valid for 10 minutes.`,
+          textContent: `LUXORA ATELIER: Your verification code is: ${otp}. It is valid for 10 minutes.`,
         }),
       });
 
@@ -120,8 +127,8 @@ const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
     const mailOptions = {
       from: `"LUXORA Atelier" <${userEmail}>`,
       to: email,
-      subject: `✨ ${otp} is your LUXORA Security Verification Code`,
-      text: `Your LUXORA Security Verification Code is: ${otp}. It is valid for 10 minutes.`,
+      subject: emailSubject,
+      text: `Your LUXORA Verification Code is: ${otp}. It is valid for 10 minutes.`,
       html: htmlContent,
     };
 

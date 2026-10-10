@@ -166,7 +166,7 @@ const Login = () => {
                 <div className="form-group">
                   <label className="form-label">
                     Password
-                    <Link to="#" className="forgot-password">Forgot password?</Link>
+                    <Link to="/forgot-password" className="forgot-password">Forgot password?</Link>
                   </label>
                   <div className="input-wrapper">
                     <Lock size={18} />

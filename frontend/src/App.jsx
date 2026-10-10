@@ -8,6 +8,7 @@ import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
 import Offers from './pages/Offers';
 import Profile from './pages/Profile';
 import Checkout from './pages/Checkout';
@@ -32,7 +33,7 @@ import { CurrencyProvider } from './context/CurrencyContext';
 const AppLayout = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const isAuthRoute = location.pathname === '/login' || location.pathname === '/register';
+  const isAuthRoute = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/forgot-password';
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
@@ -56,6 +57,7 @@ const AppLayout = () => {
           <Route path="/myorders" element={<MyOrders />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/offers" element={<Offers />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/checkout" element={<Checkout />} />

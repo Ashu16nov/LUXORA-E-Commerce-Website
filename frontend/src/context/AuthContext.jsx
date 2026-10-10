@@ -79,6 +79,16 @@ export const AuthProvider = ({ children }) => {
     return res.data;
   };
 
+  const forgotPassword = async (email) => {
+    const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/forgot-password`, { email });
+    return res.data;
+  };
+
+  const resetPassword = async (email, otp, newPassword) => {
+    const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/reset-password`, { email, otp, newPassword });
+    return res.data;
+  };
+
   const logout = () => {
     setToken(null);
     setUser(null);
@@ -86,7 +96,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, updateProfile, sendOtp, verifyOtp, sendSignupOtp, verifySignupOtp }}>
+    <AuthContext.Provider value={{ user, token, login, register, logout, updateProfile, sendOtp, verifyOtp, sendSignupOtp, verifySignupOtp, forgotPassword, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );

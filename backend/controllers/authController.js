@@ -314,6 +314,96 @@ const updateUserAdmin = async (req, res) => {
   }
 };
 
+// @desc    Send OTP to registered email for password reset
+// @route   POST /api/auth/forgot-password
+// @access  Public
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email || !isValidEmail(email)) {
+    return res.status(400).json({ message: 'Please enter a valid registered email address.' });
+  }
+
+  try {
+    const cleanEmail = email.trim().toLowerCase();
+    const user = await User.findOne({ email: cleanEmail });
+
+    if (!user) {
+      return res.status(404).json({ message: 'No registered Luxora account found with this email address.' });
+    }
+
+    // Generate 6-digit OTP code for password reset
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.resetOtp = otp;
+    user.resetOtpExpire = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    await user.save();
+
+    console.log(`[LUXORA FORGOT PASSWORD OTP] Email: ${user.email} | OTP: ${otp}`);
+
+    await sendOtpEmail(user.email, otp, user.name, 'Password Reset');
+
+    res.json({
+      success: true,
+      message: `Password reset OTP has been sent to ${user.email}`,
+    });
+  } catch (error) {
+    console.error(`Forgot Password Error: ${error.message}`);
+    res.status(500).json({ message: error.message || 'Failed to send password reset code' });
+  }
+};
+
+// @desc    Verify OTP and reset password
+// @route   POST /api/auth/reset-password
+// @access  Public
+const resetPassword = async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+
+  if (!email || !isValidEmail(email)) {
+    return res.status(400).json({ message: 'Invalid email address.' });
+  }
+
+  if (!otp || String(otp).trim().length < 6) {
+    return res.status(400).json({ message: 'Please provide the 6-digit OTP code.' });
+  }
+
+  if (!newPassword || newPassword.length < 6) {
+    return res.status(400).json({ message: 'Password must be at least 6 characters long.' });
+  }
+
+  try {
+    const cleanEmail = email.trim().toLowerCase();
+    const user = await User.findOne({ email: cleanEmail });
+
+    if (!user) {
+      return res.status(404).json({ message: 'No account found with this email address.' });
+    }
+
+    if (!user.resetOtp || user.resetOtp !== String(otp).trim()) {
+      return res.status(400).json({ message: 'Invalid OTP verification code. Please check your email.' });
+    }
+
+    if (user.resetOtpExpire && new Date(user.resetOtpExpire) < new Date()) {
+      return res.status(400).json({ message: 'Verification OTP has expired. Please request a new code.' });
+    }
+
+    // Update password (pre-save hook will automatically hash with bcrypt)
+    user.password = newPassword;
+    user.resetOtp = null;
+    user.resetOtpExpire = null;
+    await user.save();
+
+    console.log(`[LUXORA PASSWORD RESET SUCCESS] Email: ${user.email}`);
+
+    res.json({
+      success: true,
+      message: 'Your password has been successfully reset. You may now sign in.',
+    });
+  } catch (error) {
+    console.error(`Reset Password Error: ${error.message}`);
+    res.status(500).json({ message: 'Server error while resetting password' });
+  }
+};
+
 module.exports = {
   registerUser,
   sendOtp,
@@ -325,5 +415,7 @@ module.exports = {
   updateUserProfile,
   getUsers,
   deleteUser,
-  updateUserAdmin
+  updateUserAdmin,
+  forgotPassword,
+  resetPassword,
 };

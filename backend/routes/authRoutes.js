@@ -11,7 +11,9 @@ const {
   updateUserProfile,
   getUsers,
   deleteUser,
-  updateUserAdmin
+  updateUserAdmin,
+  forgotPassword,
+  resetPassword
 } = require('../controllers/authController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
@@ -21,6 +23,8 @@ router.post('/send-otp', sendOtp);
 router.post('/verify-otp', verifyOtp);
 router.post('/send-signup-otp', sendSignupOtp);
 router.post('/verify-signup-otp', verifySignupOtp);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
 router.route('/me').get(protect, getUserProfile).put(protect, updateUserProfile);
 
 // Admin routes
