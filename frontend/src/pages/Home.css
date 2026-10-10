@@ -292,7 +292,10 @@
 
 .category-card.women { background-image: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=80'); }
 .category-card.men { background-image: url('https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=900&q=80'); }
-.category-card.kids { background-image: url('https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=900&q=80'); }
+.category-card.kids { 
+  background-image: url('https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=900&q=80'); 
+  background-position: top center; 
+}
 .category-card.accessories { background-image: url('https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=900&q=80'); }
 
 .category-content {

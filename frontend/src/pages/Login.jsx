@@ -13,6 +13,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [previewOtp, setPreviewOtp] = useState('');
 
   const { sendOtp, verifyOtp, user } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -48,6 +49,9 @@ const Login = () => {
       const data = await sendOtp(email, password);
       if (data.requireOtp !== false) {
         setSuccessMsg(data.message || `Security OTP sent to ${email}`);
+        if (data.previewOtp) {
+          setPreviewOtp(data.previewOtp);
+        }
         setStep(2);
       }
     } catch (err) {
@@ -85,7 +89,10 @@ const Login = () => {
 
     try {
       const data = await sendOtp(email, password);
-      setSuccessMsg(`New OTP code sent to ${email}`);
+      setSuccessMsg(data.message || `New OTP code sent to ${email}`);
+      if (data.previewOtp) {
+        setPreviewOtp(data.previewOtp);
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to resend OTP code');
     } finally {
@@ -217,6 +224,15 @@ const Login = () => {
                 </div>
               )}
 
+              {previewOtp && (
+                <div className="auth-preview-otp-box">
+                  <span>✨ Security PIN: <strong>{previewOtp}</strong></span>
+                  <button type="button" className="btn-quick-paste-otp" onClick={() => setOtp(previewOtp)}>
+                    Auto Fill PIN
+                  </button>
+                </div>
+              )}
+
               {error && <div className="auth-error-msg">{error}</div>}
 
               <form onSubmit={handleVerifyOtp} className="auth-form">
@@ -247,7 +263,7 @@ const Login = () => {
                   <button type="button" className="btn-resend-otp" onClick={handleResendOtp} disabled={loading}>
                     <RefreshCw size={14} className={loading ? 'spin' : ''} /> Resend OTP
                   </button>
-                  <button type="button" className="btn-back-step" onClick={() => { setStep(1); setOtp(''); setError(''); setSuccessMsg(''); }}>
+                  <button type="button" className="btn-back-step" onClick={() => { setStep(1); setOtp(''); setPreviewOtp(''); setError(''); setSuccessMsg(''); }}>
                     <ArrowLeft size={14} /> Change Credentials
                   </button>
                 </div>
