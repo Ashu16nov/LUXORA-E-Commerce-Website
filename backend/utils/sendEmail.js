@@ -96,7 +96,8 @@ const sendOtpEmail = async (email, otp, userName = 'Valued Atelier Member') => {
         body: JSON.stringify({
           sender: { name: 'LUXORA Atelier', email: userEmail },
           to: [{ email: email.trim().toLowerCase(), name: userName }],
-          subject: `✨ ${otp} is your LUXORA Security Verification Code`,
+          replyTo: { email: userEmail, name: 'LUXORA Atelier' },
+          subject: `LUXORA Atelier Verification Code: ${otp}`,
           htmlContent,
           textContent: `LUXORA ATELIER: Your security verification code is: ${otp}. It is valid for 10 minutes.`,
         }),
